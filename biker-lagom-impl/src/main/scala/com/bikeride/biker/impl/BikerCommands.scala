@@ -12,27 +12,27 @@ object CreateBiker {
   implicit val format: Format[CreateBiker] = Json.format
 }
 
-case class ChangeBikerName(biker: BikerState) extends BikerCommand with ReplyType[Done]
+case class ChangeBikerName(biker: BikerChange) extends BikerCommand with ReplyType[Done]
 object ChangeBikerName {
   implicit val format: Format[ChangeBikerName] = Json.format
 }
 
-case class ChangeBikerAvatarB64(biker: BikerState) extends BikerCommand with ReplyType[Done]
+case class ChangeBikerAvatarB64(biker: BikerChange) extends BikerCommand with ReplyType[Done]
 object ChangeBikerAvatarB64 {
   implicit val format: Format[ChangeBikerAvatarB64] = Json.format
 }
 
-case class ChangeBikerBloodType(biker: BikerState) extends BikerCommand with ReplyType[Done]
+case class ChangeBikerBloodType(biker: BikerChange) extends BikerCommand with ReplyType[Done]
 object ChangeBikerBloodType {
   implicit val format: Format[ChangeBikerBloodType] = Json.format
 }
 
-case class ChangeBikerMobile(biker: BikerState) extends BikerCommand with ReplyType[Done]
+case class ChangeBikerMobile(biker: BikerChange) extends BikerCommand with ReplyType[Done]
 object ChangeBikerMobile {
   implicit val format: Format[ChangeBikerMobile] = Json.format
 }
 
-case class ChangeBikerEmail(biker: BikerState) extends BikerCommand with ReplyType[Done]
+case class ChangeBikerEmail(biker: BikerChange) extends BikerCommand with ReplyType[Done]
 object ChangeBikerEmail {
   implicit val format: Format[ChangeBikerEmail] = Json.format
 }

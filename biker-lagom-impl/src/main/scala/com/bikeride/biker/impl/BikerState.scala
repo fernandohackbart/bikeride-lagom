@@ -13,3 +13,13 @@ case class BikerState (id: UUID,
 object BikerState {
   implicit val format: Format[BikerState] = Json.format
 }
+
+case class BikerChange (id: UUID,
+                       name:  Option[String] = None,
+                       avatarb64: Option[String] = None,
+                       bloodType: Option[String] = None,
+                       mobile: Option[String] = None,
+                       email: Option[String] = None)
+object BikerChange {
+  implicit val format: Format[BikerChange] = Json.format
+}

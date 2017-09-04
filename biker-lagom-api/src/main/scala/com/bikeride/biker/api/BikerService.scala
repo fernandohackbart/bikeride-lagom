@@ -10,18 +10,17 @@ import scala.collection.Seq
 trait BikerService extends Service {
 
   def createBiker: ServiceCall[BikerFields, BikerID]
-  def changeBikerName(id: UUID): ServiceCall[BikerFields, BikerID]
-  def changeBikerAvatar64(id: UUID): ServiceCall[BikerFields, BikerID]
-  def changeBikerBloodType(id: UUID): ServiceCall[BikerFields, BikerID]
-  def changeBikerMobile(id: UUID): ServiceCall[BikerFields, BikerID]
-  def changeBikerEmail(id: UUID): ServiceCall[BikerFields, BikerID]
+  def changeBikerName(id: UUID): ServiceCall[BikerChangeFields, BikerID]
+  def changeBikerAvatar64(id: UUID): ServiceCall[BikerChangeFields, BikerID]
+  def changeBikerBloodType(id: UUID): ServiceCall[BikerChangeFields, BikerID]
+  def changeBikerMobile(id: UUID): ServiceCall[BikerChangeFields, BikerID]
+  def changeBikerEmail(id: UUID): ServiceCall[BikerChangeFields, BikerID]
   def activateBiker(id: UUID): ServiceCall[NotUsed, BikerID]
   def deactivateBiker(id: UUID): ServiceCall[NotUsed, BikerID]
   def getBikerIsActive(id: UUID): ServiceCall[NotUsed, BikerIsActive]
   def getBikerAvatarB64(id: UUID): ServiceCall[NotUsed, BikerAvatarB64]
   def getBiker(id: UUID): ServiceCall[NotUsed, Biker]
   def getBikers(pageNo: Option[Int], pageSize: Option[Int]): ServiceCall[NotUsed,Seq[Biker]]
-  def searchBikers: ServiceCall[BikerQueryFields,Seq[Biker]]
 
   override final def descriptor = {
     import Service._
@@ -38,8 +37,7 @@ trait BikerService extends Service {
         restCall(Method.GET,"/api/biker/:id/isactive", getBikerIsActive _),
         restCall(Method.GET,"/api/biker/:id/avatarb64", getBikerAvatarB64 _),
         restCall(Method.GET,"/api/biker/:id", getBiker _),
-        restCall(Method.GET,"/api/bikers?pageNo&pageSize", getBikers _),
-        restCall(Method.GET,"/api/bikers/search", searchBikers)
+        restCall(Method.GET,"/api/bikers?pageNo&pageSize", getBikers _)
       ).withAutoAcl(true)
   }
 }
@@ -54,17 +52,18 @@ case class BikerFields(name: String,
                        bloodType: Option[String] = None,
                        mobile: Option[String] = None,
                        email: Option[String] = None,
-                       active: Boolean)
+                       active: Option[Boolean] = Some(true))
 object  BikerFields {
   implicit val format: Format[BikerFields] = Json.format
 }
 
-case class BikerQueryFields(name: Option[String] = None,
-                       bloodType: Option[String] = None,
-                       mobile: Option[String] = None,
-                       email: Option[String] = None)
-object  BikerQueryFields {
-  implicit val format: Format[BikerQueryFields] = Json.format
+case class BikerChangeFields(name: Option[String] = None,
+                             avatarb64: Option[String] = None,
+                             bloodType: Option[String] = None,
+                             mobile: Option[String] = None,
+                             email: Option[String] = None)
+object  BikerChangeFields {
+  implicit val format: Format[BikerChangeFields] = Json.format
 }
 
 case class Biker(bikerID: BikerID, bikerFields: BikerFields)

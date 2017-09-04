@@ -26,37 +26,37 @@ class BikerServiceImpl (bikerService: BikerService,
 
   override def createBiker() = ServiceCall { req =>
     val bikerId = UUID.randomUUID()
-    refFor(bikerId).ask(CreateBiker(BikerState(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email,req.active))).map { _ =>
+    refFor(bikerId).ask(CreateBiker(BikerState(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email,req.active.get))).map { _ =>
       api.BikerID(bikerId)
     }
   }
 
   override def changeBikerName(bikerId: UUID) = ServiceCall { req =>
-    refFor(bikerId).ask(ChangeBikerName(BikerState(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email,req.active))).map { _ =>
+    refFor(bikerId).ask(ChangeBikerName(BikerChange(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email))).map { _ =>
       api.BikerID(bikerId)
     }
   }
 
   override def changeBikerAvatar64(bikerId: UUID) = ServiceCall { req =>
-    refFor(bikerId).ask(ChangeBikerAvatarB64(BikerState(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email,req.active))).map { _ =>
+    refFor(bikerId).ask(ChangeBikerAvatarB64(BikerChange(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email))).map { _ =>
       api.BikerID(bikerId)
     }
   }
 
   override def changeBikerBloodType(bikerId: UUID) = ServiceCall { req =>
-    refFor(bikerId).ask(ChangeBikerBloodType(BikerState(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email,req.active))).map { _ =>
+    refFor(bikerId).ask(ChangeBikerBloodType(BikerChange(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email))).map { _ =>
       api.BikerID(bikerId)
     }
   }
 
   override def changeBikerMobile(bikerId: UUID) = ServiceCall { req =>
-    refFor(bikerId).ask(ChangeBikerEmail(BikerState(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email,req.active))).map { _ =>
+    refFor(bikerId).ask(ChangeBikerEmail(BikerChange(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email))).map { _ =>
       api.BikerID(bikerId)
     }
   }
 
   override def changeBikerEmail(bikerId: UUID) = ServiceCall { req =>
-    refFor(bikerId).ask(ChangeBikerEmail(BikerState(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email,req.active))).map { _ =>
+    refFor(bikerId).ask(ChangeBikerEmail(BikerChange(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email))).map { _ =>
       api.BikerID(bikerId)
     }
   }
@@ -94,7 +94,7 @@ class BikerServiceImpl (bikerService: BikerService,
   override def getBiker(bikerId: UUID) = ServiceCall { _ =>
     refFor(bikerId).ask(GetBiker).map {
       case Some(biker) =>
-        api.Biker(api.BikerID(bikerId),api.BikerFields(biker.name,biker.avatarb64,biker.bloodType,biker.mobile,biker.email,biker.active))
+        api.Biker(api.BikerID(bikerId),api.BikerFields(biker.name,biker.avatarb64,biker.bloodType,biker.mobile,biker.email,Some(biker.active)))
       case None =>
         throw NotFound(s"Biker with id $bikerId")
     }
@@ -108,7 +108,7 @@ class BikerServiceImpl (bikerService: BikerService,
     println(s"getBikers(${pageNo.getOrElse(0)}, ${pageSize.getOrElse(DefaultPageSize)})   ##############")
     //val offset = pageNo * pageSize
     //.drop(offset)
-    session.select("SELECT name,avatarb64,bloodType,mobile,email,active FROM bikers LIMIT ?",Integer.valueOf(pageSize.getOrElse(DefaultPageSize))).map { row =>
+    session.select("SELECT id,name,avatarb64,bloodType,mobile,email,active FROM bikers LIMIT ?",Integer.valueOf(pageSize.getOrElse(DefaultPageSize))).map { row =>
       api.Biker(
         api.BikerID(row.getUUID("id")),
         api.BikerFields(
@@ -117,25 +117,7 @@ class BikerServiceImpl (bikerService: BikerService,
           Some(row.getString("bloodtype")),
           Some(row.getString("mobile")),
           Some(row.getString("email")),
-          row.getBool("active")
-        )
-      )
-    }.runFold(Seq.empty[api.Biker])((acc, e) => acc :+ e)
-  }
-
-  //TODO maps the Option fields
-  //TODO cut in pages and jump to the right one
-  override def searchBikers = ServiceCall[api.BikerQueryFields, Seq[api.Biker]] { req =>
-    session.select("SELECT name,avatarb64,bloodType,mobile,email,active FROM bikers").map { row =>
-      api.Biker(
-        api.BikerID(row.getUUID("id")),
-        api.BikerFields(
-          row.getString("name"),
-          Some(row.getString("avatarb64")),
-          Some(row.getString("bloodtype")),
-          Some(row.getString("mobile")),
-          Some(row.getString("email")),
-          row.getBool("active")
+          Some(row.getBool("active"))
         )
       )
     }.runFold(Seq.empty[api.Biker])((acc, e) => acc :+ e)

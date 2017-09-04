@@ -19,7 +19,7 @@ class BikerEntity extends PersistentEntity {
           ctx.invalidCommand(s"Biker with id $biker.id already exists")
       }.onCommand[ChangeBikerName, Done] {
         case (ChangeBikerName(biker), ctx, state) =>
-          ctx.thenPersist(BikerNameChanged(BikerState(state.get.id,biker.name,state.get.avatarb64,state.get.bloodType,state.get.mobile,state.get.email,state.get.active)))( _ => ctx.reply(Done))
+          ctx.thenPersist(BikerNameChanged(BikerState(state.get.id,biker.name.get,state.get.avatarb64,state.get.bloodType,state.get.mobile,state.get.email,state.get.active)))( _ => ctx.reply(Done))
       }.onCommand[ChangeBikerAvatarB64, Done] {
         case (ChangeBikerAvatarB64(biker), ctx, state) =>
           ctx.thenPersist(BikerAvatarB64Changed(BikerState(state.get.id,state.get.name,biker.avatarb64,state.get.bloodType,state.get.mobile,state.get.email,state.get.active)))( _ => ctx.reply(Done))
