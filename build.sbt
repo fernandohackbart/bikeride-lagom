@@ -29,4 +29,50 @@ lazy val `biker-lagom-impl` = (project in file("biker-lagom-impl"))
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`biker-lagom-api`)
 
+lazy val `track-lagom-api` = (project in file("track-lagom-api"))
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslApi
+    )
+  )
+
+lazy val `track-lagom-impl` = (project in file("track-lagom-impl"))
+  .enablePlugins(LagomScala)
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslPersistenceCassandra,
+      lagomScaladslKafkaBroker,
+      lagomScaladslTestKit,
+      macwire,
+      scalaTest
+    )
+  )
+  .settings(lagomForkedTestSettings: _*)
+  .dependsOn(`track-lagom-api`)
+  .dependsOn(`biker-lagom-api`)
+
+lazy val `ride-lagom-api` = (project in file("ride-lagom-api"))
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslApi
+    )
+  )
+
+lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
+  .enablePlugins(LagomScala)
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslPersistenceCassandra,
+      lagomScaladslKafkaBroker,
+      lagomScaladslTestKit,
+      macwire,
+      scalaTest
+    )
+  )
+  .settings(lagomForkedTestSettings: _*)
+  .dependsOn(`ride-lagom-api`)
+  .dependsOn(`track-lagom-api`)
+  .dependsOn(`biker-lagom-api`)
+
+
 lagomCassandraCleanOnStart in ThisBuild := true
