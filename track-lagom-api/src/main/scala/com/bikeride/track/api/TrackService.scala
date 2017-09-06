@@ -8,6 +8,7 @@ import play.api.libs.json.{Format, Json}
 import scala.collection.Seq
 
 trait TrackService  extends Service {
+
   def createTrack: ServiceCall[TrackFields, TrackID]
   def changeTrackName(id: UUID): ServiceCall[TrackFields, TrackID]
   def changeBikerMaintainer(id: UUID): ServiceCall[TrackFields, TrackID]
