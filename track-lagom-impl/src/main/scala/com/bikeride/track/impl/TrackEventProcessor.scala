@@ -1,4 +1,4 @@
-package cmo.bikeride.track.impl
+package com.bikeride.track.impl
 
 class TrackEventProcessor {
 

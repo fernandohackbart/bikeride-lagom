@@ -1,4 +1,4 @@
-package cmo.bikeride.track.impl
+package com.bikeride.track.impl
 
 import com.bikeride.track.api.TrackService
 import com.lightbend.lagom.scaladsl.api.ServiceLocator

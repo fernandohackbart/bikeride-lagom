@@ -1,4 +1,4 @@
-package cmo.bikeride.track.impl
+package com.bikeride.track.impl
 
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
