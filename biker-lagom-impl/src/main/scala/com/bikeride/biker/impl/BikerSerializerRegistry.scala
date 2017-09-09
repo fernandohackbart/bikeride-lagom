@@ -11,6 +11,7 @@ object BikerSerializerRegistry extends JsonSerializerRegistry {
     JsonSerializer[BikerBloodTypeChanged],
     JsonSerializer[BikerMobileChanged],
     JsonSerializer[BikerEmailChanged],
+    JsonSerializer[BikerActivated],
     JsonSerializer[BikerDeactivated],
     JsonSerializer[CreateBiker],
     JsonSerializer[ChangeBikerName],

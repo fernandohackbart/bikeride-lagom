@@ -1,20 +1,15 @@
 package com.bikeride.biker.impl
 
 import java.util.UUID
-
-import akka.{Done, NotUsed}
+import akka.NotUsed
 import akka.stream.Materializer
-import akka.stream.scaladsl.{Flow, Source}
 import com.bikeride.biker.api
 import com.bikeride.biker.api.BikerService
-import com.lightbend.lagom.scaladsl.api.broker.Topic
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.transport.NotFound
-import com.lightbend.lagom.scaladsl.broker.TopicProducer
-import com.lightbend.lagom.scaladsl.persistence.{EventStreamElement, PersistentEntityRegistry, ReadSide}
+import com.lightbend.lagom.scaladsl.persistence.{PersistentEntityRegistry, ReadSide}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
-import scala.collection.immutable
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class BikerServiceImpl (bikerService: BikerService,
                         persistentEntityRegistry: PersistentEntityRegistry,
@@ -26,7 +21,7 @@ class BikerServiceImpl (bikerService: BikerService,
 
   override def createBiker() = ServiceCall { req =>
     val bikerId = UUID.randomUUID()
-    refFor(bikerId).ask(CreateBiker(BikerState(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email,req.active.get))).map { _ =>
+    refFor(bikerId).ask(CreateBiker(BikerState(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email,req.active))).map { _ =>
       api.BikerID(bikerId)
     }
   }
@@ -94,7 +89,7 @@ class BikerServiceImpl (bikerService: BikerService,
   override def getBiker(bikerId: UUID) = ServiceCall { _ =>
     refFor(bikerId).ask(GetBiker).map {
       case Some(biker) =>
-        api.Biker(api.BikerID(bikerId),api.BikerFields(biker.name,biker.avatarb64,biker.bloodType,biker.mobile,biker.email,Some(biker.active)))
+        api.Biker(api.BikerID(bikerId),api.BikerFields(biker.name,biker.avatarb64,biker.bloodType,biker.mobile,biker.email,biker.active))
       case None =>
         throw NotFound(s"Biker with id $bikerId")
     }
@@ -117,7 +112,7 @@ class BikerServiceImpl (bikerService: BikerService,
           Some(row.getString("bloodtype")),
           Some(row.getString("mobile")),
           Some(row.getString("email")),
-          Some(row.getBool("active"))
+          row.getBool("active")
         )
       )
     }.runFold(Seq.empty[api.Biker])((acc, e) => acc :+ e)
