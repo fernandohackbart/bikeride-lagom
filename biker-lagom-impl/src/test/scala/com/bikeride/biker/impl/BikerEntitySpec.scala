@@ -1,15 +1,24 @@
 package com.bikeride.biker.impl
 
 import java.util.UUID
+
+import akka.Done
 import akka.actor.ActorSystem
 import akka.testkit.TestKit
-import com.lightbend.lagom.scaladsl.testkit.PersistentEntityTestDriver
+import com.lightbend.lagom.scaladsl.testkit.{PersistentEntityTestDriver, ServiceTest}
 import com.lightbend.lagom.scaladsl.playjson.JsonSerializerRegistry
+import com.lightbend.lagom.scaladsl.server.LocalServiceLocator
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpec}
 
 class BikerEntitySpec extends WordSpec with Matchers with BeforeAndAfterAll {
-  private val system = ActorSystem("BikerEntitySpecSystem",
-    JsonSerializerRegistry.actorSystemSetupFor(BikerSerializerRegistry))
+
+  lazy val server = ServiceTest.startServer(
+    ServiceTest.defaultSetup.withCassandra(true)
+  ) { ctx =>
+    new BikerApplication(ctx) with LocalServiceLocator
+  }
+
+  private val system = ActorSystem("BikerEntitySpecSystem",JsonSerializerRegistry.actorSystemSetupFor(BikerSerializerRegistry))
 
   override protected def afterAll(): Unit = {
     TestKit.shutdownActorSystem(system)
@@ -23,17 +32,18 @@ class BikerEntitySpec extends WordSpec with Matchers with BeforeAndAfterAll {
 
   "biker entity" should {
     val bikerId = UUID.randomUUID()
+    val biker = BikerState(bikerId,"Some biker name",Some("AvatarB64"),Some("Some blood type"),Some("Some mobile"),Some("Some email"),true)
     "create a biker " in withTestDriver { driver =>
-      val outcome = driver.run(CreateBiker(bikerId,"Some biker name","A+"))
-      outcome.replies should contain only bikerId
+      val outcome = driver.run(CreateBiker(biker))
+      outcome.replies should contain only Done
     }
-    "update a biker " in withTestDriver { driver =>
-      val outcome = driver.run(UpdateBiker(bikerId,"Some biker name updated","A+"))
-      outcome.replies should contain only bikerId
+    "update a biker name " in withTestDriver { driver =>
+      val outcome = driver.run(ChangeBikerName(BikerChange(bikerId,Some("Some biker name updated"),None,None,None,None)))
+      outcome.replies should contain only Done
     }
     "get a test" in withTestDriver { driver =>
       val outcome = driver.run(GetBiker)
-      outcome.replies should contain only BikerState(bikerId,"Some biker name updated","A+")
+      outcome.replies should contain only biker
     }
     /*
         "allow updating the greeting message" in withTestDriver { driver =>
