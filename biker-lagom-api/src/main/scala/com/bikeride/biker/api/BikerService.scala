@@ -52,7 +52,7 @@ case class BikerFields(name: String,
                        bloodType: Option[String] = None,
                        mobile: Option[String] = None,
                        email: Option[String] = None,
-                       active: Option[Boolean] = Some(true))
+                       active: Boolean = true)
 object  BikerFields {
   implicit val format: Format[BikerFields] = Json.format
 }
