@@ -7,37 +7,42 @@ import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
 import play.api.libs.json.{Format, Json}
 import scala.collection.Seq
 
+
 trait TrackService  extends Service {
 
   def createTrack: ServiceCall[TrackFields, TrackID]
   def changeTrackName(id: UUID): ServiceCall[TrackFields, TrackID]
-  def changeBikerMaintainer(id: UUID): ServiceCall[TrackFields, TrackID]
+  def changeTrackMaintainer(id: UUID): ServiceCall[TrackFields, TrackID]
   def activateTrack(id: UUID): ServiceCall[NotUsed, TrackID]
   def deactivateTrack(id: UUID): ServiceCall[NotUsed, TrackID]
   def getTrackIsActive(id: UUID): ServiceCall[NotUsed, TrackIsActive]
+  def addTrackWayPoint(id: UUID): ServiceCall[TrackWaypoint, TrackID]
+  //def addTrackWayPoints(id: UUID): ServiceCall[Seq[TrackWaypoint], TrackID]
   def deleteTrackWayPoint(id: UUID,waypointid: UUID): ServiceCall[NotUsed, TrackID]
   def defineTrackInitialWayPoint(id: UUID,waypointid: UUID): ServiceCall[NotUsed, TrackID]
   def getTrackWayPoints(id: UUID): ServiceCall[NotUsed, Seq[TrackWaypoint]]
-  def getTrackLenght(id: UUID): ServiceCall[NotUsed, Integer]
+  //def getTrackLenght(id: UUID): ServiceCall[NotUsed, Integer]
   def getTrack(id: UUID): ServiceCall[NotUsed, Track]
-  def getTracks(pageNo: Option[Int], pageSize: Option[Int]): ServiceCall[NotUsed,Seq[Track]]
+  //def getTracks(pageNo: Option[Int], pageSize: Option[Int]): ServiceCall[NotUsed,Seq[Track]]
 
   override final def descriptor = {
     import Service._
-    named("biker")
+    named("track")
       .withCalls(
-        restCall(Method.POST,"/api/biker", createTrack),
-        restCall(Method.PUT,"/api/biker/:id/name", changeTrackName _),
-        restCall(Method.PUT,"/api/biker/:id/maintainer", changeBikerMaintainer _),
-        restCall(Method.POST,"/api/biker/:id/activate", activateTrack _),
-        restCall(Method.POST,"/api/biker/:id/deactivate", deactivateTrack _),
+        restCall(Method.POST,"/api/track", createTrack),
+        restCall(Method.PUT,"/api/track/:id/name", changeTrackName _),
+        restCall(Method.PUT,"/api/track/:id/maintainer", changeTrackMaintainer _),
+        restCall(Method.POST,"/api/track/:id/activate", activateTrack _),
+        restCall(Method.POST,"/api/track/:id/deactivate", deactivateTrack _),
+        restCall(Method.POST,"/api/track/:id/waypoint", addTrackWayPoint _),
+        //restCall(Method.POST,"/api/track/:id/waypoints", addTrackWayPoints _),
         restCall(Method.DELETE,"/api/track/:id/waypoint/:waypointid", deleteTrackWayPoint _),
         restCall(Method.POST,"/api/track/:id/waypoint/:waypointid/initial", defineTrackInitialWayPoint _),
         restCall(Method.GET,"/api/track/:id/waypoints", getTrackWayPoints _),
-        restCall(Method.GET,"/api/track/:id/lenght", getTrackLenght _),
-        restCall(Method.GET,"/api/biker/:id/isactive", getTrackIsActive _),
-        restCall(Method.GET,"/api/biker/:id", getTrack _),
-        restCall(Method.GET,"/api/bikers?pageNo&pageSize", getTracks _)
+        //restCall(Method.GET,"/api/track/:id/lenght", getTrackLenght _),
+        restCall(Method.GET,"/api/track/:id/isactive", getTrackIsActive _),
+        restCall(Method.GET,"/api/track/:id", getTrack _),
+        //restCall(Method.GET,"/api/track?pageNo&pageSize", getTracks _)
       ).withAutoAcl(true)
   }
 }
@@ -48,14 +53,14 @@ object  TrackID {
 }
 
 case class TrackFields(name: String,
-                       maintainer: Option[String] = None,
-                       active: Option[Boolean] = Some(true))
+                       maintainer: UUID,
+                       active: Boolean = true)
 object  TrackFields {
   implicit val format: Format[TrackFields] = Json.format
 }
 
 case class TrackChangeFields(name: Option[String] = None,
-                             maintainer: Option[String] = None
+                             maintainer: Option[UUID] = None)
 object  TrackChangeFields {
   implicit val format: Format[TrackChangeFields] = Json.format
 }
@@ -70,7 +75,7 @@ object  TrackIsActive {
   implicit val format: Format[TrackIsActive] = Json.format
 }
 
-case class Track(bikerID: TrackID, bikerFields: TrackFields, waypoints: Seq[TrackWaypoint])
+case class Track(trackID: TrackID, trackFields: TrackFields, trackWaypoints: Seq[TrackWaypoint])
 object  Track {
   implicit val format: Format[Track] = Json.format
 }
