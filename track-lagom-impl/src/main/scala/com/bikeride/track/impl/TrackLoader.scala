@@ -32,9 +32,8 @@ abstract class TrackApplication(context: LagomApplicationContext)
   override lazy val lagomServer = serverFor[TrackService](wire[TrackServiceImpl])
   override lazy val jsonSerializerRegistry = TrackSerializerRegistry
 
-  lazy val trackrService = serviceClient.implement[TrackService]
+  lazy val trackService = serviceClient.implement[TrackService]
 
   persistentEntityRegistry.register(wire[TrackEntity])
-  readSide.register(wire[TrackEventProcessor])
-
+  //readSide.register(wire[TrackEventProcessor])
 }
