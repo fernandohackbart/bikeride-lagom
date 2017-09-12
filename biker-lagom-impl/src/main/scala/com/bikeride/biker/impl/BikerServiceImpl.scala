@@ -7,11 +7,11 @@ import akka.stream.Materializer
 import com.bikeride.biker.api
 import com.bikeride.biker.api.BikerService
 import com.lightbend.lagom.scaladsl.api.ServiceCall
-import com.lightbend.lagom.scaladsl.api.transport.{BadRequest, NotFound}
+import com.lightbend.lagom.scaladsl.api.transport.{BadRequest, NotFound, TransportErrorCode, TransportException}
 import com.lightbend.lagom.scaladsl.persistence.{PersistentEntityRegistry, ReadSide}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class BikerServiceImpl (bikerService: BikerService,
                         persistentEntityRegistry: PersistentEntityRegistry,
@@ -38,7 +38,7 @@ class BikerServiceImpl (bikerService: BikerService,
   }
 
   override def changeBikerAvatarB64(bikerId: UUID) = ServiceCall { req =>
-    if (req.avatarb64.isEmpty) throw BadRequest("Biker avatarB64 cannot be empty!")
+    if (req.avatarb64.isEmpty)throw BadRequest("Biker avatarB64 cannot be empty!")
     else{
       refFor(bikerId).ask(ChangeBikerAvatarB64(BikerChange(bikerId,req.name,req.avatarb64,req.bloodType,req.mobile,req.email))).map { _ =>
         api.BikerID(bikerId)
