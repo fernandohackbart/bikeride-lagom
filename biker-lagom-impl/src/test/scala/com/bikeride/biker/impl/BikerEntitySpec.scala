@@ -45,6 +45,7 @@ class BikerEntitySpec extends WordSpec with Matchers with BeforeAndAfterAll {
       val outcome = driver.run(GetBiker)
       outcome.replies should contain only biker
     }
+
     /*
         "allow updating the greeting message" in withTestDriver { driver =>
           val outcome1 = driver.run(UseGreetingMessage("Hi"))
