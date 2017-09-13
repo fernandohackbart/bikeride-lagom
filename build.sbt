@@ -6,7 +6,7 @@ val macwire = "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % Test
 
 lazy val `bikeride-lagom` = (project in file("."))
-  .aggregate(`biker-lagom-api`, `biker-lagom-impl`)
+  .aggregate(`biker-lagom-api`, `biker-lagom-impl`,`track-lagom-api`,`track-lagom-impl`)
 
 lazy val `biker-lagom-api` = (project in file("biker-lagom-api"))
   .settings(
@@ -50,7 +50,7 @@ lazy val `track-lagom-impl` = (project in file("track-lagom-impl"))
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`track-lagom-api`)
   .dependsOn(`biker-lagom-api`)
-
+/*
 lazy val `ride-lagom-api` = (project in file("ride-lagom-api"))
   .settings(
     libraryDependencies ++= Seq(
@@ -73,6 +73,6 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
   .dependsOn(`ride-lagom-api`)
   .dependsOn(`track-lagom-api`)
   .dependsOn(`biker-lagom-api`)
-
+*/
 
 lagomCassandraCleanOnStart in ThisBuild := true

@@ -41,7 +41,7 @@ trait TrackService  extends Service {
         restCall(Method.GET,"/api/track/:id/waypoints", getTrackWayPoints _),
         //restCall(Method.GET,"/api/track/:id/lenght", getTrackLenght _),
         restCall(Method.GET,"/api/track/:id/isactive", getTrackIsActive _),
-        restCall(Method.GET,"/api/track/:id", getTrack _),
+        restCall(Method.GET,"/api/track/:id", getTrack _)//,
         //restCall(Method.GET,"/api/track?pageNo&pageSize", getTracks _)
       ).withAutoAcl(true)
   }

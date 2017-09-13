@@ -11,7 +11,7 @@ trait BikerService extends Service {
 
   def createBiker: ServiceCall[BikerFields, BikerID]
   def changeBikerName(id: UUID): ServiceCall[BikerChangeFields, BikerID]
-  def changeBikerAvatar64(id: UUID): ServiceCall[BikerChangeFields, BikerID]
+  def changeBikerAvatarB64(id: UUID): ServiceCall[BikerChangeFields, BikerID]
   def changeBikerBloodType(id: UUID): ServiceCall[BikerChangeFields, BikerID]
   def changeBikerMobile(id: UUID): ServiceCall[BikerChangeFields, BikerID]
   def changeBikerEmail(id: UUID): ServiceCall[BikerChangeFields, BikerID]
@@ -28,7 +28,7 @@ trait BikerService extends Service {
       .withCalls(
         restCall(Method.POST,"/api/biker", createBiker),
         restCall(Method.PUT,"/api/biker/:id/name", changeBikerName _),
-        restCall(Method.PUT,"/api/biker/:id/avatar64", changeBikerAvatar64 _),
+        restCall(Method.PUT,"/api/biker/:id/avatar64", changeBikerAvatarB64 _),
         restCall(Method.PUT,"/api/biker/:id/bloodtype", changeBikerBloodType _),
         restCall(Method.PUT,"/api/biker/:id/mobile", changeBikerMobile _),
         restCall(Method.PUT,"/api/biker/:id/email", changeBikerEmail _),

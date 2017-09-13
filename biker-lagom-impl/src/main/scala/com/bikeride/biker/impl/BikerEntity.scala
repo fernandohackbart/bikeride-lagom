@@ -35,7 +35,7 @@ class BikerEntity extends PersistentEntity {
         ctx.thenPersist(BikerMobileChanged(BikerState(state.get.id, state.get.name, state.get.avatarb64, state.get.bloodType, biker.mobile, state.get.email, state.get.active)))(_ => ctx.reply(Done))
     }.onCommand[ChangeBikerEmail, Done] {
       case (ChangeBikerEmail(biker), ctx, state) =>
-        ctx.thenPersist(BikerEmailChanged(BikerState(state.get.id, state.get.name, state.get.avatarb64, state.get.bloodType, biker.mobile, state.get.email, state.get.active)))(_ => ctx.reply(Done))
+        ctx.thenPersist(BikerEmailChanged(BikerState(state.get.id, state.get.name, state.get.avatarb64, state.get.bloodType, state.get.mobile, biker.email, state.get.active)))(_ => ctx.reply(Done))
     }.onCommand[ActivateBiker, Done] {
       case (ActivateBiker(biker), ctx, state) =>
         ctx.thenPersist(BikerActivated(BikerState(state.get.id, state.get.name, state.get.avatarb64, state.get.bloodType, state.get.mobile, state.get.email, true)))(_ => ctx.reply(Done))
