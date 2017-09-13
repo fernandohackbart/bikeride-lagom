@@ -36,16 +36,17 @@ class TrackEntity extends PersistentEntity {
         ctx.thenPersist(TrackDeactivated(TrackState(state.get.id, state.get.name, state.get.maintainer, state.get.waypoints, false)))(_ => ctx.reply(Done))
     }.onCommand[AddTrackWayPoint, Done] {
       case (AddTrackWayPoint(trackID,waypoint), ctx, state) =>
-        val waypoints = state.get.waypoints.get :+ waypoint
-        ctx.thenPersist(TrackDeactivated(TrackState(state.get.id, state.get.name, state.get.maintainer, Some(waypoints), state.get.active)))(_ => ctx.reply(Done))
+        val waypoints = state.get.waypoints :+ waypoint
+        ctx.thenPersist(TrackWayPointAdded(TrackState(state.get.id, state.get.name, state.get.maintainer, waypoints, state.get.active)))(_ => ctx.reply(Done))
     }.onCommand[RemoveTrackWayPoint, Done] {
       case (RemoveTrackWayPoint(trackID,waypointID), ctx, state) =>
-        val waypoints = state.get.waypoints.get.filterNot(waypoint => (waypoint.id==waypointID))
-        ctx.thenPersist(TrackDeactivated(TrackState(state.get.id, state.get.name, state.get.maintainer, state.get.waypoints, state.get.active)))(_ => ctx.reply(Done))
+        val waypoints = state.get.waypoints.filterNot(waypoint => (waypoint.id==waypointID))
+        println(s"waypoints=${waypoints} #############################")
+        ctx.thenPersist(TrackWayPointRemoved(TrackState(state.get.id, state.get.name, state.get.maintainer, state.get.waypoints, state.get.active)))(_ => ctx.reply(Done))
     }.onCommand[MarkWayPointInitial, Done] {
       case (MarkWayPointInitial(trackID,waypointID), ctx, state) =>
 
-        val ways = state.get.waypoints.get
+        val ways = state.get.waypoints
         //TODO check if .last is the best option while getting the only element of a sequence
         val initialWay = ways.filter(waypoint => (waypoint.id==waypointID)).last
         def rotateSequenceLeft[A](seq: Seq[A], i: Int): Seq[A] = {
@@ -56,8 +57,7 @@ class TrackEntity extends PersistentEntity {
           }
         }
         val rotatedWays = rotateSequenceLeft(ways, ways.indexOf(initialWay))
-
-        ctx.thenPersist(TrackDeactivated(TrackState(state.get.id, state.get.name, state.get.maintainer, Some(rotatedWays), state.get.active)))(_ => ctx.reply(Done))
+        ctx.thenPersist(TrackInitialWayPointMarked(TrackState(state.get.id, state.get.name, state.get.maintainer, rotatedWays, state.get.active)))(_ => ctx.reply(Done))
     }.onEvent {
       case (TrackNameChanged(track), state) =>
         Some(track)
