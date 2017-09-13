@@ -11,12 +11,12 @@ import scala.collection.Seq
 trait TrackService  extends Service {
 
   def createTrack: ServiceCall[TrackFields, TrackID]
-  def changeTrackName(id: UUID): ServiceCall[TrackFields, TrackID]
-  def changeTrackMaintainer(id: UUID): ServiceCall[TrackFields, TrackID]
+  def changeTrackName(id: UUID): ServiceCall[TrackChangeFields, TrackID]
+  def changeTrackMaintainer(id: UUID): ServiceCall[TrackChangeFields, TrackID]
   def activateTrack(id: UUID): ServiceCall[NotUsed, TrackID]
   def deactivateTrack(id: UUID): ServiceCall[NotUsed, TrackID]
   def getTrackIsActive(id: UUID): ServiceCall[NotUsed, TrackIsActive]
-  def addTrackWayPoint(id: UUID): ServiceCall[TrackWaypoint, TrackID]
+  def addTrackWayPoint(id: UUID): ServiceCall[TrackWaypointFields, TrackWaypointID]
   //def addTrackWayPoints(id: UUID): ServiceCall[Seq[TrackWaypoint], TrackID]
   def deleteTrackWayPoint(id: UUID,waypointid: UUID): ServiceCall[NotUsed, TrackID]
   def defineTrackInitialWayPoint(id: UUID,waypointid: UUID): ServiceCall[NotUsed, TrackID]
@@ -65,7 +65,17 @@ object  TrackChangeFields {
   implicit val format: Format[TrackChangeFields] = Json.format
 }
 
-case class TrackWaypoint(id: UUID, name: String, coordinates: String)
+case class TrackWaypointFields(name: String, coordinates: String)
+object  TrackWaypointFields {
+  implicit val format: Format[TrackWaypointFields] = Json.format
+}
+
+case class TrackWaypointID(trackid: UUID, trackwaypointid: UUID)
+object  TrackWaypointID {
+  implicit val format: Format[TrackWaypointID] = Json.format
+}
+
+case class TrackWaypoint(trackwaypointid: TrackWaypointID, trackWaypointFields: TrackWaypointFields)
 object  TrackWaypoint {
   implicit val format: Format[TrackWaypoint] = Json.format
 }

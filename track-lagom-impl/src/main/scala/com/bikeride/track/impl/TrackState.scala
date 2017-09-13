@@ -6,7 +6,7 @@ import play.api.libs.json._
 case class TrackState (id: UUID,
                        name: String,
                        maintainer: UUID,
-                       waypoints: Option[Seq[TrackWaypoint]] = None,
+                       waypoints: Seq[TrackWaypoint],
                        active: Boolean)
 object TrackState {
   implicit val format: Format[TrackState] = Json.format

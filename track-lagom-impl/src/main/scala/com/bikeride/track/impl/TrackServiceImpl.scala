@@ -1,13 +1,15 @@
 package com.bikeride.track.impl
 
 import java.util.UUID
+
 import akka.stream.Materializer
 import com.bikeride.track.api
 import com.bikeride.track.api.TrackService
 import com.lightbend.lagom.scaladsl.api.ServiceCall
-import com.lightbend.lagom.scaladsl.api.transport.NotFound
+import com.lightbend.lagom.scaladsl.api.transport.{BadRequest, NotFound}
 import com.lightbend.lagom.scaladsl.persistence.{PersistentEntityRegistry, ReadSide}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
+
 import scala.concurrent.ExecutionContext
 
 class TrackServiceImpl (trackService: TrackService,
@@ -20,20 +22,26 @@ class TrackServiceImpl (trackService: TrackService,
 
   override def createTrack() = ServiceCall { req =>
     val trackId = UUID.randomUUID()
-    refFor(trackId).ask(CreateTrack(TrackState(trackId,req.name,req.maintainer,None,req.active))).map { _ =>
+    refFor(trackId).ask(CreateTrack(TrackState(trackId,req.name,req.maintainer,Seq.empty[TrackWaypoint],req.active))).map { _ =>
       api.TrackID(trackId)
     }
   }
 
   override def changeTrackName(trackId: UUID) = ServiceCall { req =>
-    refFor(trackId).ask(ChangeTrackName(TrackChange(trackId,Some(req.name),Some(req.maintainer)))).map { _ =>
-      api.TrackID(trackId)
+    if (req.name.isEmpty) throw BadRequest("Track name cannot be empty!")
+    else{
+      refFor(trackId).ask(ChangeTrackName(TrackChange(trackId,req.name,req.maintainer))).map { _ =>
+        api.TrackID(trackId)
+      }
     }
   }
 
   override def changeTrackMaintainer(trackId: UUID) = ServiceCall { req =>
-    refFor(trackId).ask(ChangeTrackMaintainer(TrackChange(trackId,Some(req.name),Some(req.maintainer)))).map { _ =>
-      api.TrackID(trackId)
+    if (req.maintainer.isEmpty) throw BadRequest("Track maintainer cannot be empty!")
+    else{
+      refFor(trackId).ask(ChangeTrackMaintainer(TrackChange(trackId,req.name,req.maintainer))).map { _ =>
+        api.TrackID(trackId)
+      }
     }
   }
 
@@ -59,8 +67,9 @@ class TrackServiceImpl (trackService: TrackService,
   }
 
   override def addTrackWayPoint(trackId: UUID) = ServiceCall { req =>
-    refFor(trackId).ask(AddTrackWayPoint(trackId,TrackWaypoint(req.id,req.name,req.coordinates))).map { _ =>
-      api.TrackID(trackId)
+    val trackwaypointid = UUID.randomUUID()
+    refFor(trackId).ask(AddTrackWayPoint(trackId,TrackWaypoint(trackwaypointid,req.name,req.coordinates))).map { _ =>
+      api.TrackWaypointID(trackId,trackwaypointid)
     }
   }
 
@@ -81,7 +90,7 @@ class TrackServiceImpl (trackService: TrackService,
   override def getTrackWayPoints(trackId: UUID) = ServiceCall { _ =>
     refFor(trackId).ask(GetTrack).map {
       case Some(track) =>
-        track.waypoints.get.map(way => api.TrackWaypoint(way.id,way.name,way.coordinates))
+        track.waypoints.map(way => api.TrackWaypoint(api.TrackWaypointID(trackId,way.id),api.TrackWaypointFields(way.name,way.coordinates)))
       case None =>
         throw NotFound(s"Track with id $trackId")
     }
@@ -89,16 +98,22 @@ class TrackServiceImpl (trackService: TrackService,
 
   //override def getTrackLenght(id: UUID): ServiceCall[NotUsed, Integer]
 
-  override def getTrack(trackId: UUID) = ServiceCall { _ =>
-    refFor(trackId).ask(GetTrack).map {
+  override def getTrack(trackID: UUID) = ServiceCall { _ =>
+    refFor(trackID).ask(GetTrack).map {
       case Some(track) =>
+
+        var waypoints = Seq.empty[api.TrackWaypoint]
+        if (!track.waypoints.isEmpty){
+          waypoints = track.waypoints.map(way => api.TrackWaypoint(api.TrackWaypointID(trackID,way.id),api.TrackWaypointFields(way.name,way.coordinates)))
+        }
+
         api.Track(
-          api.TrackID(trackId),
+          api.TrackID(trackID),
           api.TrackFields(track.name,track.maintainer,track.active),
-          track.waypoints.get.map(way => api.TrackWaypoint(way.id,way.name,way.coordinates))
+          waypoints
         )
       case None =>
-        throw NotFound(s"Track with id $trackId")
+        throw NotFound(s"Track with id $trackID")
     }
   }
 
