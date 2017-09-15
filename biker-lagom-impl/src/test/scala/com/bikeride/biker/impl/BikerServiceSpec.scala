@@ -130,10 +130,10 @@ class BikerServiceSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAl
       }
     }
 
-    //TODO properly assert the biker read side response (even when empty)
+    //TODO test the biker read side response (even when empty) (the read side is updated by the test execution?)
     //"find biker in bikers sequence from the read side" in {
     //  client.getBikers(Some(1),Some(10)).invoke.map { answer =>
-    //    answer.seq.filter(biker => (biker.bikerID.id==bikerID.id)).last.bikerID.id should === (bikerID.id)
+    //    answer.seq.filter(biker => (biker.bikerID.id==bikerID.id)).last.bikerID.id should be (bikerID.id)
     //  }
     //}
   }

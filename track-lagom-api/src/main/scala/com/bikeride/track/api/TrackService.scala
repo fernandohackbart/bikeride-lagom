@@ -23,7 +23,8 @@ trait TrackService  extends Service {
   def getTrackWayPoints(id: UUID): ServiceCall[NotUsed, Seq[TrackWaypoint]]
   //def getTrackLenght(id: UUID): ServiceCall[NotUsed, Integer]
   def getTrack(id: UUID): ServiceCall[NotUsed, Track]
-  //def getTracks(pageNo: Option[Int], pageSize: Option[Int]): ServiceCall[NotUsed,Seq[Track]]
+  def getTracks(pageNo: Option[Int], pageSize: Option[Int]): ServiceCall[NotUsed,Seq[Track]]
+  //def getTrackWayPoints(pageNo: Option[Int], pageSize: Option[Int]): ServiceCall[NotUsed,Seq[TrackWaypoint]]
 
   override final def descriptor = {
     import Service._
@@ -36,13 +37,14 @@ trait TrackService  extends Service {
         restCall(Method.POST,"/api/track/:id/deactivate", deactivateTrack _),
         restCall(Method.POST,"/api/track/:id/waypoint", addTrackWayPoint _),
         //restCall(Method.POST,"/api/track/:id/waypoints", addTrackWayPoints _),
+        //restCall(Method.GET,"/api/track/:id/waypoints", getTrackWayPoints _),
         restCall(Method.DELETE,"/api/track/:id/waypoint/:waypointid", deleteTrackWayPoint _),
         restCall(Method.POST,"/api/track/:id/waypoint/:waypointid/initial", defineTrackInitialWayPoint _),
         restCall(Method.GET,"/api/track/:id/waypoints", getTrackWayPoints _),
         //restCall(Method.GET,"/api/track/:id/lenght", getTrackLenght _),
         restCall(Method.GET,"/api/track/:id/isactive", getTrackIsActive _),
-        restCall(Method.GET,"/api/track/:id", getTrack _)//,
-        //restCall(Method.GET,"/api/track?pageNo&pageSize", getTracks _)
+        restCall(Method.GET,"/api/track/:id", getTrack _),
+        restCall(Method.GET,"/api/tracks?pageNo&pageSize", getTracks _)
       ).withAutoAcl(true)
   }
 }

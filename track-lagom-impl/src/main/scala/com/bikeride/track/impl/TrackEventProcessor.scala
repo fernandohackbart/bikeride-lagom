@@ -30,8 +30,8 @@ class TrackEventProcessor(session: CassandraSession, readSide: CassandraReadSide
       "trackid UUID, " +
       "position INT," +
       "name TEXT, " +
-      "coordinates TEXT" +
-      "PRIMARY KEY (id))")
+      "coordinates TEXT, " +
+      "PRIMARY KEY (id,position)) WITH CLUSTERING ORDER BY (position ASC)")
   }
 
   private val insertTrackPromise = Promise[PreparedStatement]
@@ -110,9 +110,10 @@ class TrackEventProcessor(session: CassandraSession, readSide: CassandraReadSide
 
   private def processTrackActivated(eventElement: EventStreamElement[TrackActivated]): Future[List[BoundStatement]] = {
     updateTrackActive.map { ps =>
-      val bindUpdateTrackActive = ps.bind()
-      bindUpdateTrackActive.setUUID("id", eventElement.event.track.id)
-      List(bindUpdateTrackActive)
+      val bindUpdateTrackActived = ps.bind()
+      bindUpdateTrackActived.setUUID("id", eventElement.event.track.id)
+      bindUpdateTrackActived.setBool("active", eventElement.event.track.active)
+      List(bindUpdateTrackActived)
     }
   }
 
@@ -125,42 +126,74 @@ class TrackEventProcessor(session: CassandraSession, readSide: CassandraReadSide
     }
   }
 
-/*
   private def processWaypointAdded(eventElement: EventStreamElement[TrackWayPointAdded]): Future[List[BoundStatement]] = {
-
-    //TODO execute many statements in one processor
-    Future.successful(
-      List(
-        deleteTrackWaypoints.map { ps =>
-          val bindDeleteTrackWaypoints = ps.bind()
-          bindDeleteTrackWaypoints.setUUID("id", eventElement.event.track.id)
-          bindDeleteTrackWaypoints.setBool("active", eventElement.event.track.active)
-        }
-      )
-    )
-
-
+    var stmts: List[BoundStatement] = List.empty
     deleteTrackWaypoints.map { ps =>
       val bindDeleteTrackWaypoints = ps.bind()
       bindDeleteTrackWaypoints.setUUID("id", eventElement.event.track.id)
-      bindDeleteTrackWaypoints.setBool("active", eventElement.event.track.active)
-      List(bindDeleteTrackWaypoints)
+      stmts :+ bindDeleteTrackWaypoints
     }
-    //TODO loop over the waypoints and insert with right position
-    eventElement.event.track.waypoints.get.foreach { waypoint =>
+    var position: Int = 0
+    eventElement.event.track.waypoints.map{way =>
       insertTrackWaypoint.map { ps =>
         val bindInsertTrackWaypoint = ps.bind()
-        bindInsertTrackWaypoint.setUUID("id", waypoint.id)
+        bindInsertTrackWaypoint.setUUID("id", way.id)
         bindInsertTrackWaypoint.setUUID("trackid", eventElement.event.track.id)
-        bindInsertTrackWaypoint.setInt("position",0)
-        bindInsertTrackWaypoint.setString("name", waypoint.name)
-        bindInsertTrackWaypoint.setString("coordinates", waypoint.coordinates)
-        List(bindInsertTrackWaypoint)
+        position += 1
+        bindInsertTrackWaypoint.setInt("position", position)
+        bindInsertTrackWaypoint.setString("name", way.name)
+        bindInsertTrackWaypoint.setString("coordinates", way.coordinates)
+        stmts :+ bindInsertTrackWaypoint
       }
     }
-
+    Future.successful(stmts)
   }
-*/
+
+  private def processWaypointRemoved(eventElement: EventStreamElement[TrackWayPointRemoved]): Future[List[BoundStatement]] = {
+    var stmts: List[BoundStatement] = List.empty
+    deleteTrackWaypoints.map { ps =>
+      val bindDeleteTrackWaypoints = ps.bind()
+      bindDeleteTrackWaypoints.setUUID("id", eventElement.event.track.id)
+      stmts :+ bindDeleteTrackWaypoints
+    }
+    var position: Int = 0
+    eventElement.event.track.waypoints.map{way =>
+      insertTrackWaypoint.map { ps =>
+        val bindInsertTrackWaypoint = ps.bind()
+        bindInsertTrackWaypoint.setUUID("id", way.id)
+        bindInsertTrackWaypoint.setUUID("trackid", eventElement.event.track.id)
+        position += 1
+        bindInsertTrackWaypoint.setInt("position", position)
+        bindInsertTrackWaypoint.setString("name", way.name)
+        bindInsertTrackWaypoint.setString("coordinates", way.coordinates)
+        stmts :+ bindInsertTrackWaypoint
+      }
+    }
+    Future.successful(stmts)
+  }
+
+  private def processWaypointMarked(eventElement: EventStreamElement[TrackInitialWayPointMarked]): Future[List[BoundStatement]] = {
+    var stmts: List[BoundStatement] = List.empty
+    deleteTrackWaypoints.map { ps =>
+      val bindDeleteTrackWaypoints = ps.bind()
+      bindDeleteTrackWaypoints.setUUID("id", eventElement.event.track.id)
+      stmts :+ bindDeleteTrackWaypoints
+    }
+    var position: Int = 0
+    eventElement.event.track.waypoints.map{way =>
+      insertTrackWaypoint.map { ps =>
+        val bindInsertTrackWaypoint = ps.bind()
+        bindInsertTrackWaypoint.setUUID("id", way.id)
+        bindInsertTrackWaypoint.setUUID("trackid", eventElement.event.track.id)
+        position += 1
+        bindInsertTrackWaypoint.setInt("position", position)
+        bindInsertTrackWaypoint.setString("name", way.name)
+        bindInsertTrackWaypoint.setString("coordinates", way.coordinates)
+        stmts :+ bindInsertTrackWaypoint
+      }
+    }
+    Future.successful(stmts)
+  }
 
   override def buildHandler(): ReadSideProcessor.ReadSideHandler[TrackEvent] = {
     val builder = readSide.builder[TrackEvent]("tracksoffset")
@@ -171,9 +204,9 @@ class TrackEventProcessor(session: CassandraSession, readSide: CassandraReadSide
     builder.setEventHandler[TrackMaintainerChanged](processTrackMaintainerChanged)
     builder.setEventHandler[TrackActivated](processTrackActivated)
     builder.setEventHandler[TrackDeactivated](processTrackDeactivated)
-    //builder.setEventHandler[TrackWayPointAdded](processWaypointAdded)
-    //builder.setEventHandler[TrackWayPointRemoved](processWaypoinstChanged)
-    //builder.setEventHandler[TrackInitialWayPointMarked](processWaypoinstChanged)
+    builder.setEventHandler[TrackWayPointAdded](processWaypointAdded)
+    builder.setEventHandler[TrackWayPointRemoved](processWaypointRemoved)
+    builder.setEventHandler[TrackInitialWayPointMarked](processWaypointMarked)
     builder.build()
   }
 }

@@ -13,21 +13,21 @@
     </appender>
 
     <!-- Set logging for all Play library classes to INFO -->
-    <logger name="play" level="WARN" />
+    <logger name="play" level="ERROR" />
     <!-- Set logging for all Akka library classes to INFO -->
-    <logger name="akka" level="WARN" />
+    <logger name="akka" level="ERROR" />
     <!-- Set logging for all Lagom library classes to INFO -->
-    <logger name="com.lightbend.lagom" level="TRACE" />
+    <logger name="com.lightbend.lagom" level="ERROR" />
 
     <!-- Cassandra and the datasta driver are used by the Lagom event sourcing modules -->
-    <logger name="org.apache.cassandra" level="WARN" />
-    <logger name="com.datastax.driver" level="WARN" />
+    <logger name="org.apache.cassandra" level="ERROR" />
+    <logger name="com.datastax.driver" level="ERROR" />
     <!-- Turning off connection error logging to avoid noise when services are forcibly stopped -->
-    <logger name="com.datastax.driver.core.ControlConnection" level="WARN" />
+    <logger name="com.datastax.driver.core.ControlConnection" level="ERROR" />
     <!-- Turn down Kafka noise -->
-    <logger name="org.apache.kafka" level="WARN" />
+    <logger name="org.apache.kafka" level="ERROR" />
 
-    <root level="INFO">
+    <root level="ERROR">
         <appender-ref ref="STDOUT" />
     </root>
 
