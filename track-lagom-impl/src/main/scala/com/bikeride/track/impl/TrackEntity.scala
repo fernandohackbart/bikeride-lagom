@@ -2,6 +2,7 @@ package com.bikeride.track.impl
 
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity
+import org.slf4j.Logger
 
 class TrackEntity extends PersistentEntity {
   override type Command = TrackCommand
@@ -9,6 +10,8 @@ class TrackEntity extends PersistentEntity {
   override type State = Option[TrackState]
 
   override def initialState: Option[TrackState] = None
+
+  //val log: Logger = Logger[TrackApplication]
 
   override def behavior: Behavior = {
     case Some(track)  => postAdded
@@ -41,8 +44,8 @@ class TrackEntity extends PersistentEntity {
     }.onCommand[RemoveTrackWayPoint, Done] {
       case (RemoveTrackWayPoint(trackID,waypointID), ctx, state) =>
         val waypoints = state.get.waypoints.filterNot(waypoint => (waypoint.id==waypointID))
-        println(s"waypoints=${waypoints} #############################")
-        ctx.thenPersist(TrackWayPointRemoved(TrackState(state.get.id, state.get.name, state.get.maintainer, state.get.waypoints, state.get.active)))(_ => ctx.reply(Done))
+        //println(s"waypoints after remove are ${waypoints}")
+        ctx.thenPersist(TrackWayPointRemoved(TrackState(state.get.id, state.get.name, state.get.maintainer, waypoints, state.get.active)))(_ => ctx.reply(Done))
     }.onCommand[MarkWayPointInitial, Done] {
       case (MarkWayPointInitial(trackID,waypointID), ctx, state) =>
 

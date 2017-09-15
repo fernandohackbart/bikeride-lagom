@@ -1,7 +1,7 @@
 package com.bikeride.track.impl
 
 import java.util.UUID
-
+import akka.NotUsed
 import akka.stream.Materializer
 import com.bikeride.track.api
 import com.bikeride.track.api.TrackService
@@ -9,8 +9,8 @@ import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.transport.{BadRequest, NotFound}
 import com.lightbend.lagom.scaladsl.persistence.{PersistentEntityRegistry, ReadSide}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
-
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.duration._
 
 class TrackServiceImpl (trackService: TrackService,
                         persistentEntityRegistry: PersistentEntityRegistry,
@@ -73,6 +73,7 @@ class TrackServiceImpl (trackService: TrackService,
     }
   }
 
+  //TODO implement addTrackWayPoints
   //override def addTrackWayPoints(id: UUID): ServiceCall[Seq[TrackWaypoint], TrackID]
 
   override def deleteTrackWayPoint(trackId: UUID,waypointID: UUID) = ServiceCall { req =>
@@ -96,6 +97,7 @@ class TrackServiceImpl (trackService: TrackService,
     }
   }
 
+  //TODO implement the getTrackLenght
   //override def getTrackLenght(id: UUID): ServiceCall[NotUsed, Integer]
 
   override def getTrack(trackID: UUID) = ServiceCall { _ =>
@@ -106,7 +108,6 @@ class TrackServiceImpl (trackService: TrackService,
         if (!track.waypoints.isEmpty){
           waypoints = track.waypoints.map(way => api.TrackWaypoint(api.TrackWaypointID(trackID,way.id),api.TrackWaypointFields(way.name,way.coordinates)))
         }
-
         api.Track(
           api.TrackID(trackID),
           api.TrackFields(track.name,track.maintainer,track.active),
@@ -117,6 +118,37 @@ class TrackServiceImpl (trackService: TrackService,
     }
   }
 
-  //override def getTracks(pageNo: Option[Int], pageSize: Option[Int]): ServiceCall[NotUsed,Seq[Track]]
+  //TODO implement the getTracks
+  private val DefaultPageSize = 10
+  override def getTracks( pageNo: Option[Int], pageSize: Option[Int]) = ServiceCall[NotUsed, Seq[api.Track]] { req =>
+
+    //TODO implement the pages in the query
+    println(s"getTracks(${pageNo.getOrElse(0)}, ${pageSize.getOrElse(DefaultPageSize)})   ##############")
+    //val offset = pageNo * pageSize
+    //.drop(offset)
+
+    //val timeout: Duration = Duration.
+
+    session.select("SELECT id, name, maintainer, active FROM tracks LIMIT ?",Integer.valueOf(pageSize.getOrElse(DefaultPageSize))).map { row =>
+      api.Track(
+        api.TrackID(row.getUUID("id")),
+        api.TrackFields(
+          row.getString("name"),
+          row.getUUID("maintainer"),
+          row.getBool("active")
+        ),
+        Await.result(session.select("SELECT id, name, coordinates FROM trackwaypoints WHERE trackid = ? ALLOW FILTERING ",row.getUUID("id")).map { waypointrow =>
+          api.TrackWaypoint(
+            api.TrackWaypointID(UUID.randomUUID(),waypointrow.getUUID("id")),
+            api.TrackWaypointFields(waypointrow.getString("name"),waypointrow.getString("coordinates"))
+          )
+        }.runFold(Seq.empty[api.TrackWaypoint])((acc, e) => acc :+ e),30 seconds)
+      )
+    }.runFold(Seq.empty[api.Track])((acc, e) => acc :+ e)
+  }
+
+  //TODO implement the getTrackWaypoints
+  //override def getTrackWaypoints(pageNo: Option[Int], pageSize: Option[Int]): ServiceCall[NotUsed,Seq[TrackWaypoint]]
 
 }
+

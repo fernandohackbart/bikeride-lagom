@@ -212,13 +212,14 @@ class TrackServiceSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAl
       }
     }
 
+    //TODO check why the remove of one item makes the rest of items to keep their original indexOf
     "waypoint (waypoint1,waypoint1) should be third after remove waypoint3" in {
       client.getTrackWayPoints(trackID.id).invoke.map { answer =>
         answer.seq.indexOf(waypoint1) should be (2)
       }
     }
 
-    //TODO properly assert the read side response (even when empty)
+    //TODO test the read side response (even when empty)
 
     //"find track in tracks sequence from the read side" in {
     //  client.getTracks(Some(1),Some(10)).invoke.map { answer =>

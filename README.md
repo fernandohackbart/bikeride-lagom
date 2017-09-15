@@ -1,4 +1,4 @@
-# biketrip-lagom
+# bikeride-lagom
 
 This project is a learning project to understand Lagom framework
 

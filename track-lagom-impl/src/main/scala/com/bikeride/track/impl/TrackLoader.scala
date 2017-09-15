@@ -9,6 +9,7 @@ import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.lightbend.lagom.scaladsl.broker.kafka.LagomKafkaComponents
 import com.softwaremill.macwire._
+import org.slf4j.{Logger, LoggerFactory}
 
 class TrackLoader extends LagomApplicationLoader{
 
@@ -29,11 +30,14 @@ abstract class TrackApplication(context: LagomApplicationContext)
     with LagomKafkaComponents
     with AhcWSComponents {
 
+  val log: Logger = LoggerFactory.getLogger(getClass)
+  log.debug("Loading...")
+
   override lazy val lagomServer = serverFor[TrackService](wire[TrackServiceImpl])
   override lazy val jsonSerializerRegistry = TrackSerializerRegistry
 
   lazy val trackService = serviceClient.implement[TrackService]
 
   persistentEntityRegistry.register(wire[TrackEntity])
-  //readSide.register(wire[TrackEventProcessor])
+  readSide.register(wire[TrackEventProcessor])
 }
