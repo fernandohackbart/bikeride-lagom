@@ -118,10 +118,8 @@ class TrackServiceImpl (trackService: TrackService,
     }
   }
 
-  //TODO implement the getTracks
   private val DefaultPageSize = 10
   override def getTracks( pageNo: Option[Int], pageSize: Option[Int]) = ServiceCall[NotUsed, Seq[api.Track]] { req =>
-    //TODO implement the pages in the query
     println(s"getTracks(${pageNo.getOrElse(0)}, ${pageSize.getOrElse(DefaultPageSize)})   ##############")
     session.select("SELECT id, name, maintainer, active FROM tracks LIMIT ?",Integer.valueOf(pageSize.getOrElse(DefaultPageSize))).map { row =>
       api.Track(
@@ -141,8 +139,14 @@ class TrackServiceImpl (trackService: TrackService,
     }.runFold(Seq.empty[api.Track])((acc, e) => acc :+ e)
   }
 
-  //TODO implement the getTrackWaypoints
-  //override def getTrackWaypoints(pageNo: Option[Int], pageSize: Option[Int]): ServiceCall[NotUsed,Seq[TrackWaypoint]]
-
+  //TODO implement the readTrackWayPoints
+  override def readTrackWayPoints(trackID: UUID) = ServiceCall[NotUsed, Seq[api.TrackWaypoint]] { req =>
+    session.select("SELECT id, name, coordinates FROM trackwaypoints WHERE trackid = ? ALLOW FILTERING ",trackID).map { waypointrow =>
+      api.TrackWaypoint(
+      api.TrackWaypointID(UUID.randomUUID(),waypointrow.getUUID("id")),
+      api.TrackWaypointFields(waypointrow.getString("name"),waypointrow.getString("coordinates"))
+      )
+    }.runFold(Seq.empty[api.TrackWaypoint])((acc, e) => acc :+ e)
+  }
 }
 
