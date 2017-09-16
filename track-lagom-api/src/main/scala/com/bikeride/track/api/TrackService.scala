@@ -11,40 +11,40 @@ import scala.collection.Seq
 trait TrackService  extends Service {
 
   def createTrack: ServiceCall[TrackFields, TrackID]
-  def changeTrackName(id: UUID): ServiceCall[TrackChangeFields, TrackID]
-  def changeTrackMaintainer(id: UUID): ServiceCall[TrackChangeFields, TrackID]
-  def activateTrack(id: UUID): ServiceCall[NotUsed, TrackID]
-  def deactivateTrack(id: UUID): ServiceCall[NotUsed, TrackID]
-  def getTrackIsActive(id: UUID): ServiceCall[NotUsed, TrackIsActive]
-  def addTrackWayPoint(id: UUID): ServiceCall[TrackWaypointFields, TrackWaypointID]
-  //def addTrackWayPoints(id: UUID): ServiceCall[Seq[TrackWaypoint], TrackID]
-  def deleteTrackWayPoint(id: UUID,waypointid: UUID): ServiceCall[NotUsed, TrackID]
-  def defineTrackInitialWayPoint(id: UUID,waypointid: UUID): ServiceCall[NotUsed, TrackID]
-  def getTrackWayPoints(id: UUID): ServiceCall[NotUsed, Seq[TrackWaypoint]]
-  //def getTrackLenght(id: UUID): ServiceCall[NotUsed, Integer]
-  def getTrack(id: UUID): ServiceCall[NotUsed, Track]
+  def changeTrackName(trackID: UUID): ServiceCall[TrackChangeFields, TrackID]
+  def changeTrackMaintainer(trackID: UUID): ServiceCall[TrackChangeFields, TrackID]
+  def activateTrack(trackID: UUID): ServiceCall[NotUsed, TrackID]
+  def deactivateTrack(trackID: UUID): ServiceCall[NotUsed, TrackID]
+  def getTrackIsActive(trackID: UUID): ServiceCall[NotUsed, TrackIsActive]
+  def addTrackWayPoint(trackID: UUID): ServiceCall[TrackWaypointFields, TrackWaypointID]
+  //def addTrackWayPoints(trackID: UUID): ServiceCall[Seq[TrackWaypoint], TrackID]
+  def deleteTrackWayPoint(trackID: UUID,waypointid: UUID): ServiceCall[NotUsed, TrackID]
+  def defineTrackInitialWayPoint(trackID: UUID,waypointid: UUID): ServiceCall[NotUsed, TrackID]
+  def getTrackWayPoints(trackID: UUID): ServiceCall[NotUsed, Seq[TrackWaypoint]]
+  //def getTrackLenght(trackID: UUID): ServiceCall[NotUsed, Integer]
+  def getTrack(trackID: UUID): ServiceCall[NotUsed, Track]
   def getTracks(pageNo: Option[Int], pageSize: Option[Int]): ServiceCall[NotUsed,Seq[Track]]
-  //def getTrackWayPoints(pageNo: Option[Int], pageSize: Option[Int]): ServiceCall[NotUsed,Seq[TrackWaypoint]]
+  def readTrackWayPoints(trackID: UUID): ServiceCall[NotUsed,Seq[TrackWaypoint]]
 
   override final def descriptor = {
     import Service._
     named("track")
       .withCalls(
         restCall(Method.POST,"/api/track", createTrack),
-        restCall(Method.PUT,"/api/track/:id/name", changeTrackName _),
-        restCall(Method.PUT,"/api/track/:id/maintainer", changeTrackMaintainer _),
-        restCall(Method.POST,"/api/track/:id/activate", activateTrack _),
-        restCall(Method.POST,"/api/track/:id/deactivate", deactivateTrack _),
-        restCall(Method.POST,"/api/track/:id/waypoint", addTrackWayPoint _),
-        //restCall(Method.POST,"/api/track/:id/waypoints", addTrackWayPoints _),
-        //restCall(Method.GET,"/api/track/:id/waypoints", getTrackWayPoints _),
-        restCall(Method.DELETE,"/api/track/:id/waypoint/:waypointid", deleteTrackWayPoint _),
-        restCall(Method.POST,"/api/track/:id/waypoint/:waypointid/initial", defineTrackInitialWayPoint _),
-        restCall(Method.GET,"/api/track/:id/waypoints", getTrackWayPoints _),
-        //restCall(Method.GET,"/api/track/:id/lenght", getTrackLenght _),
-        restCall(Method.GET,"/api/track/:id/isactive", getTrackIsActive _),
-        restCall(Method.GET,"/api/track/:id", getTrack _),
-        restCall(Method.GET,"/api/tracks?pageNo&pageSize", getTracks _)
+        restCall(Method.PUT,"/api/track/:trackID/name", changeTrackName _),
+        restCall(Method.PUT,"/api/track/:trackID/maintainer", changeTrackMaintainer _),
+        restCall(Method.POST,"/api/track/:trackID/activate", activateTrack _),
+        restCall(Method.POST,"/api/track/:trackID/deactivate", deactivateTrack _),
+        restCall(Method.GET,"/api/track/:trackID/isactive", getTrackIsActive _),
+        restCall(Method.POST,"/api/track/:trackID/waypoint", addTrackWayPoint _),
+        //restCall(Method.POST,"/api/track/:trackID/waypoints", addTrackWayPoints _),
+        restCall(Method.DELETE,"/api/track/:trackID/waypoint/:waypointid", deleteTrackWayPoint _),
+        restCall(Method.POST,"/api/track/:trackID/waypoint/:waypointid/initial", defineTrackInitialWayPoint _),
+        restCall(Method.GET,"/api/track/:trackID/waypoints", getTrackWayPoints _),
+        //restCall(Method.GET,"/api/track/:trackID/lenght", getTrackLenght _),
+        restCall(Method.GET,"/api/track/:trackID", getTrack _),
+        restCall(Method.GET,"/api/tracks?pageNo&pageSize", getTracks _),
+        restCall(Method.GET,"/api/track/:trackID/readwaypoints", readTrackWayPoints _)
       ).withAutoAcl(true)
   }
 }
