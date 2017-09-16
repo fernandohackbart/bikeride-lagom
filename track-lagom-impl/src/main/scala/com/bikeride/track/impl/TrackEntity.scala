@@ -44,7 +44,6 @@ class TrackEntity extends PersistentEntity {
     }.onCommand[RemoveTrackWayPoint, Done] {
       case (RemoveTrackWayPoint(trackID,waypointID), ctx, state) =>
         val waypoints = state.get.waypoints.filterNot(waypoint => (waypoint.id==waypointID))
-        //println(s"waypoints after remove are ${waypoints}")
         ctx.thenPersist(TrackWayPointRemoved(TrackState(state.get.id, state.get.name, state.get.maintainer, waypoints, state.get.active)))(_ => ctx.reply(Done))
     }.onCommand[MarkWayPointInitial, Done] {
       case (MarkWayPointInitial(trackID,waypointID), ctx, state) =>

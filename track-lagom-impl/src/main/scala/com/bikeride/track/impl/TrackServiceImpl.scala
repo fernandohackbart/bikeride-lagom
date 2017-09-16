@@ -121,14 +121,8 @@ class TrackServiceImpl (trackService: TrackService,
   //TODO implement the getTracks
   private val DefaultPageSize = 10
   override def getTracks( pageNo: Option[Int], pageSize: Option[Int]) = ServiceCall[NotUsed, Seq[api.Track]] { req =>
-
     //TODO implement the pages in the query
     println(s"getTracks(${pageNo.getOrElse(0)}, ${pageSize.getOrElse(DefaultPageSize)})   ##############")
-    //val offset = pageNo * pageSize
-    //.drop(offset)
-
-    //val timeout: Duration = Duration.
-
     session.select("SELECT id, name, maintainer, active FROM tracks LIMIT ?",Integer.valueOf(pageSize.getOrElse(DefaultPageSize))).map { row =>
       api.Track(
         api.TrackID(row.getUUID("id")),
