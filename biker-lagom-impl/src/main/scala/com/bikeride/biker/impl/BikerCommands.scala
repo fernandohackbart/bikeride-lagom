@@ -4,6 +4,7 @@ import java.util.UUID
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import play.api.libs.json.{Format, Json}
+import com.bikeride.utils.json._
 
 sealed trait BikerCommand
 
@@ -48,5 +49,5 @@ object DeactivateBiker {
 }
 
 case object GetBiker extends BikerCommand with ReplyType[Option[BikerState]] {
-  implicit val format: Format[GetBiker.type] = JsonFormats.singletonFormat(GetBiker)
+  implicit val format: Format[GetBiker.type] = JSONFormats.singletonFormat(GetBiker)
 }

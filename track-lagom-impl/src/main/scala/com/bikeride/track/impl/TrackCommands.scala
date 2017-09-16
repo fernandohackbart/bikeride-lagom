@@ -4,6 +4,7 @@ import java.util.UUID
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import play.api.libs.json.{Format, Json}
+import com.bikeride.utils.json._
 
 sealed trait TrackCommand
 
@@ -48,5 +49,5 @@ object MarkWayPointInitial {
 }
 
 case object GetTrack extends TrackCommand with ReplyType[Option[TrackState]] {
-  implicit val format: Format[GetTrack.type] = JsonFormats.singletonFormat(GetTrack)
+  implicit val format: Format[GetTrack.type] = JSONFormats.singletonFormat(GetTrack)
 }
