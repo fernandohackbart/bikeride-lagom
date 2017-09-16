@@ -9,7 +9,7 @@ import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.transport.{BadRequest, NotFound}
 import com.lightbend.lagom.scaladsl.persistence.{PersistentEntityRegistry, ReadSide}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{Await, ExecutionContext}
 import scala.concurrent.duration._
 
 class TrackServiceImpl (trackService: TrackService,
@@ -139,7 +139,6 @@ class TrackServiceImpl (trackService: TrackService,
     }.runFold(Seq.empty[api.Track])((acc, e) => acc :+ e)
   }
 
-  //TODO implement the readTrackWayPoints
   override def readTrackWayPoints(trackID: UUID) = ServiceCall[NotUsed, Seq[api.TrackWaypoint]] { req =>
     session.select("SELECT id, name, coordinates FROM trackwaypoints WHERE trackid = ? ALLOW FILTERING ",trackID).map { waypointrow =>
       api.TrackWaypoint(
