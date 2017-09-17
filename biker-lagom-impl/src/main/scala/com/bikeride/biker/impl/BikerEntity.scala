@@ -92,5 +92,4 @@ class BikerEntity extends PersistentEntity {
         Some(BikerState(biker.id,biker.name,biker.avatarb64,biker.bloodType,biker.mobile,biker.email,biker.active))
     }
   }
-
 }

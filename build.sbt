@@ -3,6 +3,7 @@ version in ThisBuild := "1.0-SNAPSHOT"
 scalaVersion in ThisBuild := "2.11.8"
 
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided"
+val jwt = "com.pauldijou" %% "jwt-play-json" % "0.14.0"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % Test
 
 lazy val `bikeride-lagom` = (project in file("."))
@@ -13,7 +14,8 @@ lazy val utils = (project in file("utils"))
     libraryDependencies ++= Seq(
       lagomScaladslApi,
       lagomScaladslServer % Optional,
-      scalaTest
+      scalaTest,
+      jwt
     )
   )
 
@@ -23,6 +25,7 @@ lazy val `biker-lagom-api` = (project in file("biker-lagom-api"))
       lagomScaladslApi
     )
   )
+  .dependsOn(`utils`)
 
 lazy val `biker-lagom-impl` = (project in file("biker-lagom-impl"))
   .enablePlugins(LagomScala)
@@ -36,8 +39,7 @@ lazy val `biker-lagom-impl` = (project in file("biker-lagom-impl"))
     )
   )
   .settings(lagomForkedTestSettings: _*)
-  .dependsOn(`biker-lagom-api`)
-  .dependsOn(`utils`)
+  .dependsOn(`biker-lagom-api`,`utils`)
 
 lazy val `track-lagom-api` = (project in file("track-lagom-api"))
   .settings(
@@ -45,6 +47,7 @@ lazy val `track-lagom-api` = (project in file("track-lagom-api"))
       lagomScaladslApi
     )
   )
+  .dependsOn(`utils`)
 
 lazy val `track-lagom-impl` = (project in file("track-lagom-impl"))
   .enablePlugins(LagomScala)
@@ -58,9 +61,7 @@ lazy val `track-lagom-impl` = (project in file("track-lagom-impl"))
     )
   )
   .settings(lagomForkedTestSettings: _*)
-  .dependsOn(`track-lagom-api`)
-  .dependsOn(`biker-lagom-api`)
-  .dependsOn(`utils`)
+  .dependsOn(`track-lagom-api`,`biker-lagom-api`,`utils`)
 
 /*
 lazy val `ride-lagom-api` = (project in file("ride-lagom-api"))
@@ -82,9 +83,7 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
     )
   )
   .settings(lagomForkedTestSettings: _*)
-  .dependsOn(`ride-lagom-api`)
-  .dependsOn(`track-lagom-api`)
-  .dependsOn(`biker-lagom-api`)
+  .dependsOn(`ride-lagom-api`,`track-lagom-api`,`biker-lagom-api`)
 */
 
 lagomCassandraCleanOnStart in ThisBuild := true

@@ -5,10 +5,12 @@ import akka.NotUsed
 import akka.stream.Materializer
 import com.bikeride.track.api
 import com.bikeride.track.api.TrackService
+import com.bikeride.utils.security.ServerSecurity._
 import com.lightbend.lagom.scaladsl.api.ServiceCall
-import com.lightbend.lagom.scaladsl.api.transport.{BadRequest, NotFound}
+import com.lightbend.lagom.scaladsl.api.transport.{BadRequest, NotFound, Forbidden}
 import com.lightbend.lagom.scaladsl.persistence.{PersistentEntityRegistry, ReadSide}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
+import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 import scala.concurrent.{Await, ExecutionContext}
 import scala.concurrent.duration._
 
@@ -20,73 +22,82 @@ class TrackServiceImpl (trackService: TrackService,
 
   private def refFor(id: UUID) = persistentEntityRegistry.refFor[TrackEntity](id.toString)
 
+  override def createTrack() = authenticated( userId => ServerServiceCall { req =>
+    val trackId = UUID.randomUUID()
+    refFor(trackId).ask(CreateTrack(TrackState(trackId,req.name,req.maintainer,Seq.empty[TrackWaypoint],req.active))).map { _ =>
+      api.TrackID(trackId)
+    }
+  })
+
+/*
   override def createTrack() = ServiceCall { req =>
     val trackId = UUID.randomUUID()
     refFor(trackId).ask(CreateTrack(TrackState(trackId,req.name,req.maintainer,Seq.empty[TrackWaypoint],req.active))).map { _ =>
       api.TrackID(trackId)
     }
   }
+*/
 
-  override def changeTrackName(trackId: UUID) = ServiceCall { req =>
+  override def changeTrackName(trackId: UUID) = authenticated( userId => ServerServiceCall { req =>
     if (req.name.isEmpty) throw BadRequest("Track name cannot be empty!")
     else{
       refFor(trackId).ask(ChangeTrackName(TrackChange(trackId,req.name,req.maintainer))).map { _ =>
         api.TrackID(trackId)
       }
     }
-  }
+  })
 
-  override def changeTrackMaintainer(trackId: UUID) = ServiceCall { req =>
+  override def changeTrackMaintainer(trackId: UUID) = authenticated( userId => ServerServiceCall { req =>
     if (req.maintainer.isEmpty) throw BadRequest("Track maintainer cannot be empty!")
     else{
       refFor(trackId).ask(ChangeTrackMaintainer(TrackChange(trackId,req.name,req.maintainer))).map { _ =>
         api.TrackID(trackId)
       }
     }
-  }
+  })
 
-  override def activateTrack(trackId: UUID) = ServiceCall { req =>
+  override def activateTrack(trackId: UUID) = authenticated( userId => ServerServiceCall { req =>
     refFor(trackId).ask(ActivateTrack(trackId)).map { _ =>
       api.TrackID(trackId)
     }
-  }
+  })
 
-  override def deactivateTrack(trackId: UUID) = ServiceCall { req =>
+  override def deactivateTrack(trackId: UUID) = authenticated( userId => ServerServiceCall { req =>
     refFor(trackId).ask(DeactivateTrack(trackId)).map { _ =>
       api.TrackID(trackId)
     }
-  }
+  })
 
-  override def getTrackIsActive(trackId: UUID) = ServiceCall { _ =>
+  override def getTrackIsActive(trackId: UUID) = authenticated( userId => ServerServiceCall { _ =>
     refFor(trackId).ask(GetTrack).map {
       case Some(track) =>
         api.TrackIsActive(trackId,track.active)
       case None =>
         throw NotFound(s"Track with id $trackId")
     }
-  }
+  })
 
-  override def addTrackWayPoint(trackId: UUID) = ServiceCall { req =>
+  override def addTrackWayPoint(trackId: UUID) = authenticated( userId => ServerServiceCall { req =>
     val trackwaypointid = UUID.randomUUID()
     refFor(trackId).ask(AddTrackWayPoint(trackId,TrackWaypoint(trackwaypointid,req.name,req.coordinates))).map { _ =>
       api.TrackWaypointID(trackId,trackwaypointid)
     }
-  }
+  })
 
   //TODO implement addTrackWayPoints
   //override def addTrackWayPoints(id: UUID): ServiceCall[Seq[TrackWaypoint], TrackID]
 
-  override def deleteTrackWayPoint(trackId: UUID,waypointID: UUID) = ServiceCall { req =>
+  override def deleteTrackWayPoint(trackId: UUID,waypointID: UUID) = authenticated( userId => ServerServiceCall { req =>
     refFor(trackId).ask(RemoveTrackWayPoint(trackId,waypointID)).map { _ =>
       api.TrackID(trackId)
     }
-  }
+  })
 
-  override def defineTrackInitialWayPoint(trackId: UUID,waypointID: UUID) = ServiceCall { req =>
+  override def defineTrackInitialWayPoint(trackId: UUID,waypointID: UUID) = authenticated( userId => ServerServiceCall { req =>
     refFor(trackId).ask(MarkWayPointInitial(trackId,waypointID)).map { _ =>
       api.TrackID(trackId)
     }
-  }
+  })
 
   override def getTrackWayPoints(trackId: UUID) = ServiceCall { _ =>
     refFor(trackId).ask(GetTrack).map {
@@ -100,7 +111,7 @@ class TrackServiceImpl (trackService: TrackService,
   //TODO implement the getTrackLenght
   //override def getTrackLenght(id: UUID): ServiceCall[NotUsed, Integer]
 
-  override def getTrack(trackID: UUID) = ServiceCall { _ =>
+  override def getTrack(trackID: UUID) = authenticated( userId => ServerServiceCall { _ =>
     refFor(trackID).ask(GetTrack).map {
       case Some(track) =>
 
@@ -116,10 +127,11 @@ class TrackServiceImpl (trackService: TrackService,
       case None =>
         throw NotFound(s"Track with id $trackID")
     }
-  }
+  })
 
   private val DefaultPageSize = 10
-  override def getTracks( pageNo: Option[Int], pageSize: Option[Int]) = ServiceCall[NotUsed, Seq[api.Track]] { req =>
+  //override def getTracks( pageNo: Option[Int], pageSize: Option[Int]) = authenticated( userId => ServerServiceCall[NotUsed, Seq[api.Track]] { req =>
+  override def getTracks( pageNo: Option[Int], pageSize: Option[Int]) = authenticated( userId => ServerServiceCall { _ =>
     println(s"getTracks(${pageNo.getOrElse(0)}, ${pageSize.getOrElse(DefaultPageSize)})   ##############")
     session.select("SELECT id, name, maintainer, active FROM tracks LIMIT ?",Integer.valueOf(pageSize.getOrElse(DefaultPageSize))).map { row =>
       api.Track(
@@ -137,15 +149,16 @@ class TrackServiceImpl (trackService: TrackService,
         }.runFold(Seq.empty[api.TrackWaypoint])((acc, e) => acc :+ e),30 seconds)
       )
     }.runFold(Seq.empty[api.Track])((acc, e) => acc :+ e)
-  }
+  })
 
-  override def readTrackWayPoints(trackID: UUID) = ServiceCall[NotUsed, Seq[api.TrackWaypoint]] { req =>
+  //override def readTrackWayPoints(trackID: UUID) = authenticated( userId => ServerServiceCall[NotUsed, Seq[api.TrackWaypoint]] { req =>
+  override def readTrackWayPoints(trackID: UUID) = authenticated( userId => ServerServiceCall { _ =>
     session.select("SELECT id, name, coordinates FROM trackwaypoints WHERE trackid = ? ALLOW FILTERING ",trackID).map { waypointrow =>
       api.TrackWaypoint(
       api.TrackWaypointID(trackID,waypointrow.getUUID("id")),
       api.TrackWaypointFields(waypointrow.getString("name"),waypointrow.getString("coordinates"))
       )
     }.runFold(Seq.empty[api.TrackWaypoint])((acc, e) => acc :+ e)
-  }
+  })
 }
 
