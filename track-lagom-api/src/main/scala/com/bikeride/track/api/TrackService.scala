@@ -6,7 +6,7 @@ import com.lightbend.lagom.scaladsl.api.transport.Method
 import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
 import play.api.libs.json.{Format, Json}
 import scala.collection.Seq
-
+import com.bikeride.utils.security.SecurityHeaderFilter
 
 trait TrackService  extends Service {
 
@@ -28,8 +28,7 @@ trait TrackService  extends Service {
 
   override final def descriptor = {
     import Service._
-    named("track")
-      .withCalls(
+    named("track").withCalls(
         restCall(Method.POST,"/api/track", createTrack),
         restCall(Method.PUT,"/api/track/:trackID/name", changeTrackName _),
         restCall(Method.PUT,"/api/track/:trackID/maintainer", changeTrackMaintainer _),
@@ -45,7 +44,7 @@ trait TrackService  extends Service {
         restCall(Method.GET,"/api/track/:trackID", getTrack _),
         restCall(Method.GET,"/api/tracks?pageNo&pageSize", getTracks _),
         restCall(Method.GET,"/api/track/:trackID/readwaypoints", readTrackWayPoints _)
-      ).withAutoAcl(true)
+      ).withHeaderFilter(SecurityHeaderFilter.Composed)
   }
 }
 

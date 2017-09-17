@@ -1,9 +1,9 @@
-package com.bikeride.track.impl
+package com.bikeride.utils.json
 
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
 
-object JsonFormats {
+object JSONFormats {
   def singletonReads[O](singleton: O): Reads[O] = {
     (__ \ "value").read[String].collect(
       ValidationError(s"Expected a JSON object with a single field with key 'value' and value '${singleton.getClass.getSimpleName}'")
