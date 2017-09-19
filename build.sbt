@@ -63,14 +63,18 @@ lazy val `track-lagom-impl` = (project in file("track-lagom-impl"))
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`track-lagom-api`,`biker-lagom-api`,`utils`)
 
-/*
+
 lazy val `ride-lagom-api` = (project in file("ride-lagom-api"))
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslApi
     )
   )
+  .dependsOn(`utils`)
+  .dependsOn(`biker-lagom-api`)
+  .dependsOn(`track-lagom-api`)
 
+/*
 lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
   .enablePlugins(LagomScala)
   .settings(

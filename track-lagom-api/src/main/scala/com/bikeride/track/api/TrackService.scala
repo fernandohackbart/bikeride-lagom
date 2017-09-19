@@ -48,7 +48,7 @@ trait TrackService  extends Service {
   }
 }
 
-case class TrackID(id: UUID)
+case class TrackID(trackID: UUID)
 object  TrackID {
   implicit val format: Format[TrackID] = Json.format
 }
