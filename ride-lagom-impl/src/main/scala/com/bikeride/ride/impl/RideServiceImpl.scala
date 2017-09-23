@@ -53,7 +53,7 @@ class RideServiceImpl (rideService: RideService,
   })
 
   override def changeRideOrganizer(rideID: UUID)= authenticated( userId => ServerServiceCall { req =>
-    if (req.name.isEmpty) throw BadRequest("Ride organizer cannot be empty!")
+    if (req.organizer.isEmpty) throw BadRequest("Ride organizer cannot be empty!")
     else{
       refFor(rideID).ask(ChangeRideOrganizer(RideChange(rideID,req.name,req.organizer,req.limit,req.track))).map { _ =>
         api.RideID(rideID)
@@ -62,7 +62,7 @@ class RideServiceImpl (rideService: RideService,
   })
 
   override def changeRideTrack(rideID: UUID)= authenticated( userId => ServerServiceCall { req =>
-    if (req.name.isEmpty) throw BadRequest("Ride track cannot be empty!")
+    if (req.track.isEmpty) throw BadRequest("Ride track cannot be empty!")
     else{
       refFor(rideID).ask(ChangeRideOrganizer(RideChange(rideID,req.name,req.organizer,req.limit,req.track))).map { _ =>
         api.RideID(rideID)
@@ -71,9 +71,9 @@ class RideServiceImpl (rideService: RideService,
   })
 
   override def changeRideLimit(rideID: UUID)= authenticated( userId => ServerServiceCall { req =>
-    if (req.name.isEmpty) throw BadRequest("Ride limit cannot be empty!")
+    if (req.limit.isEmpty) throw BadRequest("Ride limit cannot be empty!")
     else{
-      refFor(rideID).ask(ChangeRideOrganizer(RideChange(rideID,req.name,req.organizer,req.limit,req.track))).map { _ =>
+      refFor(rideID).ask(ChangeRideLimit(RideChange(rideID,req.name,req.organizer,req.limit,req.track))).map { _ =>
         api.RideID(rideID)
       }
     }

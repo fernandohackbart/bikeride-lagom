@@ -1,5 +1,5 @@
 organization in ThisBuild := "com.bikeride"
-version in ThisBuild := "1.0-SNAPSHOT"
+version in ThisBuild := "0.0.1-SNAPSHOT"
 scalaVersion in ThisBuild := "2.11.8"
 
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided"
