@@ -129,7 +129,7 @@ object  RideIsStarted {
   implicit val format: Format[RideIsStarted] = Json.format
 }
 
-case class RideIsSuspended(rideID: UUID, started: Boolean)
+case class RideIsSuspended(rideID: UUID, suspended: Boolean)
 object  RideIsSuspended {
   implicit val format: Format[RideIsSuspended] = Json.format
 }
