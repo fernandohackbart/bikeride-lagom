@@ -74,7 +74,7 @@ lazy val `ride-lagom-api` = (project in file("ride-lagom-api"))
   .dependsOn(`biker-lagom-api`)
   .dependsOn(`track-lagom-api`)
 
-/*
+
 lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
   .enablePlugins(LagomScala)
   .settings(
@@ -88,6 +88,5 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
   )
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`ride-lagom-api`,`track-lagom-api`,`biker-lagom-api`)
-*/
 
 lagomCassandraCleanOnStart in ThisBuild := true
