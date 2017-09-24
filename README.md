@@ -2,7 +2,7 @@
 
 This project is a learning project to understand Lagom framework
 
-The application is composed of a context of three objects:
+The application is composed of a context of three aggregates:
 
 - **Biker**: The person that participates on bike rides by subscribing to a ride.
 - **Track**: Sequence of waypoints to be followed as part of a ride
