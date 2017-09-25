@@ -36,7 +36,7 @@ abstract class RideApplication(context: LagomApplicationContext)
   override lazy val lagomServer = serverFor[RideService](wire[RideServiceImpl])
   override lazy val jsonSerializerRegistry = RideSerializerRegistry
 
-  lazy val trackService = serviceClient.implement[RideService]
+  lazy val rideService = serviceClient.implement[RideService]
 
   persistentEntityRegistry.register(wire[RideEntity])
   //readSide.register(wire[RideEventProcessor])

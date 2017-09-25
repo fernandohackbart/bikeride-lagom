@@ -930,7 +930,7 @@ if ( currentBikerID != bikerideBikerID){
             <boolProp name="resetInterpreter">false</boolProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
-            <stringProp name="script">${__setProperty(&quot;bikerideTrackID&quot;, ${trackID})};</stringProp>
+            <stringProp name="script">${__setProperty(bikeride${trackPosition}TrackID, ${trackID})};</stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
           <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="Valid ID?" enabled="true">
@@ -1964,7 +1964,7 @@ if ( currentTrackID != trackID){
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;name&quot;:&quot;Ride1&quot;,&quot;organizer&quot;:{&quot;bikerID&quot;:&quot;${__property(bikeride1BikerID)}&quot;},&quot;limit&quot;:10,&quot;track&quot;:{&quot;trackID&quot;:&quot;${__property(bikerideTrackID)}&quot;}}&#xd;
+                <stringProp name="Argument.value">{&quot;name&quot;:&quot;Ride1&quot;,&quot;organizer&quot;:{&quot;bikerID&quot;:&quot;${__property(bikeride1BikerID)}&quot;},&quot;limit&quot;:10,&quot;track&quot;:{&quot;trackID&quot;:&quot;${__property(bikeride1TrackID)}&quot;}}&#xd;
 &#xd;
 </stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
