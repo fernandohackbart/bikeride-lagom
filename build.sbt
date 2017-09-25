@@ -19,6 +19,14 @@ lazy val utils = (project in file("utils"))
     )
   )
 
+lazy val `authentication-lagom-api` = (project in file("authentication-lagom-api"))
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslApi
+    )
+  )
+  .dependsOn(`utils`,`biker-lagom-api`)
+
 lazy val `biker-lagom-api` = (project in file("biker-lagom-api"))
   .settings(
     libraryDependencies ++= Seq(
@@ -70,9 +78,7 @@ lazy val `ride-lagom-api` = (project in file("ride-lagom-api"))
       lagomScaladslApi
     )
   )
-  .dependsOn(`utils`)
-  .dependsOn(`biker-lagom-api`)
-  .dependsOn(`track-lagom-api`)
+  .dependsOn(`utils`,`biker-lagom-api`,`track-lagom-api`)
 
 
 lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
