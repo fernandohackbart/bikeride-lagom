@@ -31,7 +31,7 @@ class AuthenticationServiceImpl (bikerService: BikerService,
     //TODO: check if the email or mobile are provided
 
     //TODO: get this from the materialized view
-    session.select("SELECT id,name FROM biker_email WHERE email=?",req.email).map { row =>
+    session.select("SELECT id,name FROM biker_contacts WHERE email=? OR mobile=?",req.email,req.mobile).map { row =>
       bikerID = row.getUUID("id")
       bikerName =  row.getString("name")
     }
