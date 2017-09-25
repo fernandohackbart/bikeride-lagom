@@ -27,6 +27,20 @@ lazy val `authentication-lagom-api` = (project in file("authentication-lagom-api
   )
   .dependsOn(`utils`,`biker-lagom-api`)
 
+lazy val `authentication-lagom-impl` = (project in file("authentication-lagom-impl"))
+  .enablePlugins(LagomScala)
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslPersistenceCassandra,
+      lagomScaladslKafkaBroker,
+      lagomScaladslTestKit,
+      macwire,
+      scalaTest
+    )
+  )
+  .settings(lagomForkedTestSettings: _*)
+  .dependsOn(`authentication-lagom-api`,`biker-lagom-api`,`utils`)
+
 lazy val `biker-lagom-api` = (project in file("biker-lagom-api"))
   .settings(
     libraryDependencies ++= Seq(

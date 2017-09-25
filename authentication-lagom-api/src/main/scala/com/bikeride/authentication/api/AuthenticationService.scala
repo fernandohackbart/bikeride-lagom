@@ -5,7 +5,7 @@ import com.bikeride.biker.api.{BikerCreateRequest, BikerToken, BikerClient}
 import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
 import com.lightbend.lagom.scaladsl.api.transport.Method
 
-trait BikerService extends Service {
+trait AuthenticationService extends Service {
 
   def createBiker: ServiceCall[BikerCreateRequest, BikerToken]
   def validatePIN: ServiceCall[ValidatePINRequest, BikerToken]
@@ -15,7 +15,7 @@ trait BikerService extends Service {
     import Service._
     named("authn")
       .withCalls(
-        restCall(Method.POST,"/api/authn/biker", createBiker),
+        //restCall(Method.POST,"/api/authn/biker", createBiker),
         restCall(Method.POST,"/api/authn/validate", validatePIN _),
         restCall(Method.POST,"/api/authn/getpin", generatePIN _)
       ).withAutoAcl(true)
@@ -24,7 +24,7 @@ trait BikerService extends Service {
 }
 
 case class ValidatePINRequest(clientID: BikerClient,
-                              pin: Int)
+                              pin: String)
 object  ValidatePINRequest {
   implicit val format: Format[ValidatePINRequest] = Json.format
 }
