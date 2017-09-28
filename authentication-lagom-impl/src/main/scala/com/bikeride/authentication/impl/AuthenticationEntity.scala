@@ -16,7 +16,9 @@ class AuthenticationEntity extends PersistentEntity {
   }
 
   private val defaultAction: Actions = {
-    Actions().onCommand[GeneratePIN, Done] {
+    Actions().onReadOnlyCommand[GetPIN.type, Option[AuthenticationPINState]] {
+      case (GetPIN, ctx, state) => ctx.reply(state)
+    }.onCommand[GeneratePIN, Done] {
       case (GeneratePIN(authnPIN), ctx, state) =>
         ctx.thenPersist(AuthenticationPINGenerated(AuthenticationPINState(authnPIN.pinID,authnPIN.clientID,authnPIN.bikerID,authnPIN.bikerName,authnPIN.expiration)))(_ => ctx.reply(Done))
     }.onEvent {

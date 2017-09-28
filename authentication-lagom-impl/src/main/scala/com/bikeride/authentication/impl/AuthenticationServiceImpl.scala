@@ -6,7 +6,7 @@ import java.time.Instant
 import akka.stream.Materializer
 import com.bikeride.authentication.api
 import com.bikeride.authentication.api.AuthenticationService
-import com.bikeride.biker.api.{BikerID, BikerService, BikerToken}
+import com.bikeride.biker.api._
 import com.bikeride.utils.security._
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.transport.{BadRequest, NotFound}
@@ -28,17 +28,23 @@ class AuthenticationServiceImpl (bikerService: BikerService,
 
     var bikerID: UUID = UUID.randomUUID()
     var bikerName: String = "ERROR"
+
     //TODO: check if the email or mobile are provided
 
-    //TODO: get this from the materialized view
-    session.select("SELECT id,name FROM biker_contacts WHERE email=? OR mobile=?",req.email,req.mobile).map { row =>
-      bikerID = row.getUUID("id")
-      bikerName =  row.getString("name")
+    bikerService.getBikerByEmail.invoke(BikerByEmailRequest(req.email.get)).map {
+      case (bikerByEmailResponse) => {
+
+        //TODO: check if the Biker is empty
+        //throw NotFound(s"Biker with email  ${req.email.get}")
+
+        bikerID = bikerByEmailResponse.biker.get.bikerID.bikerID
+        bikerName = bikerByEmailResponse.biker.get.bikerFields.name
+      }
     }
 
     val pinID: String = Random.alphanumeric.take(6).mkString
     val expirationTime: Instant = Instant.now.plusSeconds(300)
-    refFor(pinID).ask(GeneratePIN(AuthenticationPINState(pinID,req.clientID.clientId,bikerID,bikerName,expirationTime))).map { _ =>
+    refFor(pinID).ask(GeneratePIN(AuthenticationPINState(pinID,req.client.clientID,bikerID,bikerName,expirationTime))).map { _ =>
       //TODO: send the PIN by email or SMS
       //api.GeneratePINResponse("PIN generated and sent!")
 

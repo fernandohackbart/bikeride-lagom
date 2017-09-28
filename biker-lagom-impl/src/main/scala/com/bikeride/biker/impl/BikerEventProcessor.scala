@@ -18,7 +18,8 @@ class BikerEventProcessor(session: CassandraSession, readSide: CassandraReadSide
   override def aggregateTags: Set[AggregateEventTag[BikerEvent]] =  BikerEvent.Tags.allTags
 
   private def createTable(): Future[Done] = {
-    session.executeCreateTable("CREATE TABLE IF NOT EXISTS bikers ( " +
+    session.executeCreateTable(
+      "CREATE TABLE IF NOT EXISTS bikers ( " +
       "id UUID, " +
       "name TEXT, " +
       "avatarb64 TEXT, " +
@@ -26,15 +27,16 @@ class BikerEventProcessor(session: CassandraSession, readSide: CassandraReadSide
       "mobile TEXT, " +
       "email TEXT, " +
       "active BOOLEAN, " +
-      "PRIMARY KEY (id))")
+      "PRIMARY KEY (id))"
+    )
 
-    session.executeCreateTable(" CREATE MATERIALIZED VIEW biker_contacts AS " +
-      "SELECT id " +
-      ", name " +
-      ", mobile " +
-      ", email " +
-      "FROM bikers " +
-      "PRIMARY KEY(id, name, mobile, email)")
+    //session.executeCreateTable(" CREATE MATERIALIZED VIEW biker_contacts AS " +
+    //  "SELECT id " +
+    //  ", name " +
+    //  ", mobile " +
+    //  ", email " +
+    //  "FROM bikers " +
+    //  "PRIMARY KEY(id, name, mobile, email)")
   }
 
   private val insertBikerPromise = Promise[PreparedStatement]

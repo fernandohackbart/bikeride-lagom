@@ -13,6 +13,8 @@ import com.bikeride.utils.security.{SecurityHeaderFilter, Token}
 trait BikerService extends Service {
 
   def createBiker: ServiceCall[BikerCreateRequest, BikerToken]
+  def getBikerByEmail: ServiceCall[BikerByEmailRequest, BikerByEmailResponse]
+  //def getBikerByMobile: ServiceCall[BikerMobile, Option[Biker]]
   //TODO create endpoint for token refresh
   //TODO create endpoint for token reset
   def changeBikerName(bikerID: UUID): ServiceCall[BikerChangeFields, BikerID]
@@ -32,6 +34,8 @@ trait BikerService extends Service {
     named("biker")
       .withCalls(
         restCall(Method.POST,"/api/biker", createBiker),
+        restCall(Method.POST,"/api/biker/byeemail", getBikerByEmail _),
+        //restCall(Method.POST,"/api/biker/bymobile", getBikerByMobile _),
         //TODO create endpoint for token refresh
         //TODO create endpoint for token reset
         restCall(Method.PUT,"/api/biker/:bikerID/name", changeBikerName _),
@@ -55,12 +59,12 @@ object  BikerToken {
   implicit val format: Format[BikerToken] = Json.format
 }
 
-case class BikerClient(clientId: UUID)
+case class BikerClient(clientID: UUID)
 object  BikerClient {
   implicit val format: Format[BikerClient] = Json.format
 }
 
-case class BikerCreateRequest(clientId: BikerClient,bikerFields: BikerFields)
+case class BikerCreateRequest(client: BikerClient,bikerFields: BikerFields)
 object  BikerCreateRequest {
   implicit val format: Format[BikerCreateRequest] = Json.format
 }
@@ -96,6 +100,7 @@ object  Biker {
   implicit val format: Format[Biker] = Json.format
 }
 
+
 case class BikerAvatarB64(bikerID: UUID, avatarb64: Option[String] = None)
 object  BikerAvatarB64 {
   implicit val format: Format[BikerAvatarB64] = Json.format
@@ -105,3 +110,18 @@ case class BikerIsActive(bikerID: UUID, active: Boolean)
 object  BikerIsActive {
   implicit val format: Format[BikerIsActive] = Json.format
 }
+
+case class BikerByEmailRequest(email: String)
+object  BikerByEmailRequest {
+  implicit val format: Format[BikerByEmailRequest] = Json.format
+}
+
+case class BikerByEmailResponse(biker: Option[Biker] = None)
+object  BikerByEmailResponse {
+  implicit val format: Format[BikerByEmailResponse] = Json.format
+}
+
+//case class BikerMobile(mobile: String)
+//object  BikerMobile {
+//  implicit val format: Format[BikerMobile] = Json.format
+//}

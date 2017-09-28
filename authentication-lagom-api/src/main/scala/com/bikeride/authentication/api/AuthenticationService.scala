@@ -23,13 +23,13 @@ trait AuthenticationService extends Service {
 
 }
 
-case class ValidatePINRequest(clientID: BikerClient,
+case class ValidatePINRequest(client: BikerClient,
                               pin: String)
 object  ValidatePINRequest {
   implicit val format: Format[ValidatePINRequest] = Json.format
 }
 
-case class GeneratePINRequest(clientID: BikerClient,
+case class GeneratePINRequest(client: BikerClient,
                               email: Option[String] = None,
                               mobile: Option[String] = None)
 object  GeneratePINRequest {

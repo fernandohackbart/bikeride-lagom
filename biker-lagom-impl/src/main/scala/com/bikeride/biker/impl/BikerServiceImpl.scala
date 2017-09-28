@@ -14,7 +14,8 @@ import com.lightbend.lagom.scaladsl.persistence.{PersistentEntityRegistry, ReadS
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 class BikerServiceImpl (bikerService: BikerService,
                         persistentEntityRegistry: PersistentEntityRegistry,
@@ -33,7 +34,7 @@ class BikerServiceImpl (bikerService: BikerService,
                                                req.bikerFields.mobile,
                                                req.bikerFields.email,
                                                req.bikerFields.active))).map { _ =>
-      val tokenContent = TokenContent(req.clientId.clientId,bikerId,req.bikerFields.name,false)
+      val tokenContent = TokenContent(req.client.clientID,bikerId,req.bikerFields.name,false)
       //TODO discover how the refresh mechanism works
       val token = JwtTokenUtil.generateAuthTokenOnly(tokenContent)
       api.BikerToken(api.BikerID(bikerId),token)
@@ -155,5 +156,39 @@ class BikerServiceImpl (bikerService: BikerService,
         )
       )
     }.runFold(Seq.empty[api.Biker])((acc, e) => acc :+ e)
+  }//)
+
+  override def getBikerByEmail = ServiceCall { req =>
+    //TODO: get this from the materialized view
+    //session.select("SELECT id,name FROM biker_contacts WHERE email=?",req.email).map {row =>
+    //  println(row.getString("id")+":"+row.getString("name"))
+    //}
+
+    //session.select("SELECT id,name,avatarb64,bloodType,mobile,email,active FROM bikers WHERE email=?",req.email).map { row =>
+    //  api.Biker(
+    //    api.BikerID(row.getUUID("id")),
+    //    api.BikerFields(
+    //      row.getString("name"),
+    //      Some(row.getString("avatarb64")),
+    //      Some(row.getString("bloodtype")),
+    //      Some(row.getString("mobile")),
+    //      Some(row.getString("email")),
+    //      row.getBool("active")
+    //    )
+    //  )
+    //}
+
+    Future(api.BikerByEmailResponse(
+      Some(api.Biker(
+        api.BikerID(UUID.randomUUID()),
+        api.BikerFields(
+          "Name",
+          Some("avatarb64"),
+          Some("bloodtype"),
+          Some("mobile"),
+          Some("email"),true
+        )
+      ))
+    ))
   }//)
 }
