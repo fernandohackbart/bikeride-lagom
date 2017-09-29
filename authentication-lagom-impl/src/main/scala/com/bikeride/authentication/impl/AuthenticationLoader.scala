@@ -3,7 +3,7 @@ package com.bikeride.authentication.impl
 
 import com.bikeride.authentication.api.AuthenticationService
 import com.bikeride.biker.api.BikerService
-import com.lightbend.lagom.scaladsl.api.ServiceLocator
+import com.lightbend.lagom.scaladsl.api.{ServiceLocator}
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server._

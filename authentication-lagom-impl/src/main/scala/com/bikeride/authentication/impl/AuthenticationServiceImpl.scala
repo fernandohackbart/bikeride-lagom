@@ -9,9 +9,11 @@ import com.bikeride.authentication.api.AuthenticationService
 import com.bikeride.biker.api._
 import com.bikeride.utils.security._
 import com.lightbend.lagom.scaladsl.api.ServiceCall
-import com.lightbend.lagom.scaladsl.api.transport.{BadRequest, NotFound}
+import com.lightbend.lagom.scaladsl.api.transport.{BadRequest, NotFound, RequestHeader}
+import com.lightbend.lagom.scaladsl.api.transport.Method
 import com.lightbend.lagom.scaladsl.persistence.{PersistentEntityRegistry, ReadSide}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
+import play.Configuration
 
 import scala.concurrent.ExecutionContext
 import scala.util.Random
@@ -26,25 +28,32 @@ class AuthenticationServiceImpl (bikerService: BikerService,
 
   override def generatePIN = ServiceCall { req =>
 
-    var bikerID: UUID = UUID.randomUUID()
-    var bikerName: String = "ERROR"
+    var signBikerID: UUID = UUID.randomUUID()
+    var signBikerName: String = "ERROR"
 
     //TODO: check if the email or mobile are provided
 
     bikerService.getBikerByEmail.invoke(BikerByEmailRequest(req.email.get)).map {
       case (bikerByEmailResponse) => {
+        signBikerID = bikerByEmailResponse.bikerID.get.bikerID
+        signBikerName = bikerByEmailResponse.bikerFields.get.name
 
         //TODO: check if the Biker is empty
-        //throw NotFound(s"Biker with email  ${req.email.get}")
-
-        bikerID = bikerByEmailResponse.biker.get.bikerID.bikerID
-        bikerName = bikerByEmailResponse.biker.get.bikerFields.name
+//        bikerByEmailResponse.bikerID.map {
+//          case Some(BikerID) => {
+//            signBikerID = bikerID.bikerID
+//            signBikerName = bikerByEmailResponse.bikerFields.get.name
+//          }
+//          case (None) => {
+//            throw NotFound(s"Biker with email  ${req.email.get}")
+//          }
+//        }
       }
     }
 
     val pinID: String = Random.alphanumeric.take(6).mkString
     val expirationTime: Instant = Instant.now.plusSeconds(300)
-    refFor(pinID).ask(GeneratePIN(AuthenticationPINState(pinID,req.client.clientID,bikerID,bikerName,expirationTime))).map { _ =>
+    refFor(pinID).ask(GeneratePIN(AuthenticationPINState(pinID,req.client.clientID,signBikerID,signBikerName,expirationTime))).map { _ =>
       //TODO: send the PIN by email or SMS
       //api.GeneratePINResponse("PIN generated and sent!")
 
@@ -68,7 +77,24 @@ class AuthenticationServiceImpl (bikerService: BikerService,
   }
 
   override def createBiker = ServiceCall { req =>
-    //TODO: check if the token is needed
+    //TODO: inject the header to the invoke()
+    //val header = RequestHeader.apply(headers = Seq[("bikerideClientID","b703af24-0a44-4006-81bf-7b07cb776103"),("bikerideClientToken",createAutoLoginToken.authToken)])
     bikerService.createBiker.invoke(req)
+  }
+
+  def createAutoLoginToken(): Token = {
+    //TODO: get the parameters from the applcation.properties
+//    println(s"${configuration.getString("authentication.bikerName")} createAutoLoginToken ##############")
+//    val tokenContent = TokenContent(
+    //      UUID.fromString(configuration.getString("authentication.clientID")),
+    //      UUID.fromString(configuration.getString("authentication.bikerID")),
+    //      configuration.getString("authentication.bikerName"),
+    //      false)
+        val tokenContent = TokenContent(
+          UUID.fromString("b703af24-0a44-4006-81bf-7b07cb776103"),
+          UUID.fromString("b703af24-0a44-4006-81bf-7b07cb776103"),
+          "AuthenticatioService",
+          false)
+    JwtTokenUtil.generateAuthTokenOnly(tokenContent)
   }
 }

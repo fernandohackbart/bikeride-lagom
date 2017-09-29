@@ -34,7 +34,7 @@ trait BikerService extends Service {
     named("biker")
       .withCalls(
         restCall(Method.POST,"/api/biker", createBiker),
-        restCall(Method.POST,"/api/biker/byeemail", getBikerByEmail _),
+        restCall(Method.GET,"/api/biker/byeemail", getBikerByEmail _),
         //restCall(Method.POST,"/api/biker/bymobile", getBikerByMobile _),
         //TODO create endpoint for token refresh
         //TODO create endpoint for token reset
@@ -49,8 +49,8 @@ trait BikerService extends Service {
         restCall(Method.GET,"/api/biker/:bikerID/avatarb64", getBikerAvatarB64 _),
         restCall(Method.GET,"/api/biker/:bikerID", getBiker _),
         restCall(Method.GET,"/api/bikers?pageNo&pageSize", getBikers _)
-      ).withAutoAcl(true)
-      //.withHeaderFilter(SecurityHeaderFilter.Composed)
+      )//.withAutoAcl(true)
+      .withHeaderFilter(SecurityHeaderFilter.Composed)
   }
 }
 
@@ -116,7 +116,7 @@ object  BikerByEmailRequest {
   implicit val format: Format[BikerByEmailRequest] = Json.format
 }
 
-case class BikerByEmailResponse(biker: Option[Biker] = None)
+case class BikerByEmailResponse(bikerID: Option[BikerID] = None,bikerFields: Option[BikerFields] = None)
 object  BikerByEmailResponse {
   implicit val format: Format[BikerByEmailResponse] = Json.format
 }
