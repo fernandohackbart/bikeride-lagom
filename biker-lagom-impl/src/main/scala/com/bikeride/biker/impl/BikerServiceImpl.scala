@@ -160,6 +160,7 @@ class BikerServiceImpl (bikerService: BikerService,
   override def getBikerByEmail = ServiceCall[api.BikerByEmailRequest, api.BikerByEmailResponse] { req =>
     session.selectOne("SELECT id,name,active FROM biker_email where email=? ",req.email).map {
       case Some(row) => {
+        println(s"getBikerByEmail: (${row.getUUID("id")},${row.getString("name")},${row.getBool("active")}) ################")
         api.BikerByEmailResponse(
           Some(api.BikerID(row.getUUID("id"))),
           Some(api.BikerFields(
@@ -168,6 +169,7 @@ class BikerServiceImpl (bikerService: BikerService,
         )
       }
       case (None) => {
+        println(s"getBikerByEmail: (None,None,None) ################")
         api.BikerByEmailResponse(None,None)
       }
     }

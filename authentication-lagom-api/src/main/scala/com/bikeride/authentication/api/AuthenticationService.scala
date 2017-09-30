@@ -17,7 +17,7 @@ trait AuthenticationService extends Service {
       .withCalls(
         restCall(Method.POST,"/api/authn/biker", createBiker),
         restCall(Method.POST,"/api/authn/validate", validatePIN _),
-        restCall(Method.POST,"/api/authn/getpin", generatePIN _)
+        restCall(Method.POST,"/api/authn/generatepin", generatePIN _)
       ).withAutoAcl(true)
   }
 

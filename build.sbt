@@ -110,3 +110,5 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
   .dependsOn(`ride-lagom-api`,`track-lagom-api`,`biker-lagom-api`)
 
 lagomCassandraCleanOnStart in ThisBuild := true
+lagomCassandraEnabled in ThisBuild := false
+lagomUnmanagedServices in ThisBuild := Map("cas_native" -> "http://172.18.0.2:9042")

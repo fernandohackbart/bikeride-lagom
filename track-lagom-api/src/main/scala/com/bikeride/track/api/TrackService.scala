@@ -44,8 +44,7 @@ trait TrackService  extends Service {
         restCall(Method.GET,"/api/track/:trackID", getTrack _),
         restCall(Method.GET,"/api/tracks?pageNo&pageSize", getTracks _),
         restCall(Method.GET,"/api/track/:trackID/readwaypoints", readTrackWayPoints _)
-      )//.withAutoAcl(true)
-      .withHeaderFilter(SecurityHeaderFilter.Composed)
+      ).withHeaderFilter(SecurityHeaderFilter.Composed)
   }
 }
 

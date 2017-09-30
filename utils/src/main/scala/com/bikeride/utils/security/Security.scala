@@ -7,11 +7,11 @@ import javax.security.auth.Subject
 import com.lightbend.lagom.scaladsl.api.security.ServicePrincipal
 import com.lightbend.lagom.scaladsl.api.transport._
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
-
+import com.typesafe.config.ConfigFactory
 import play.api.libs.json._
+import pdi.jwt.{Jwt, JwtJson}
 
-import pdi.jwt.{Jwt,JwtJson}
-
+import scala.collection.immutable
 import scala.util.{Failure, Success}
 
 sealed trait UserPrincipal extends Principal {
@@ -42,10 +42,11 @@ object SecurityHeaderFilter extends HeaderFilter {
 
   //TODO how to implement internal calls?
   override def transformClientRequest(request: RequestHeader) = {
-    request.principal match {
-      case Some(userPrincipal: UserPrincipal) => request.withHeader("User-Id", userPrincipal.userId.toString)
-      case other => request
-    }
+    //TODO check how to tell wich service is going out and use the approriate headers
+    request.withHeaders(immutable.Seq(
+      ("bikerideClientID",ConfigFactory.load().getString("authentication.clientID")),
+      ("bikerideClientToken",createAutoLoginToken.authToken))
+    )
   }
 
   override def transformServerRequest(request: RequestHeader) = {
@@ -76,8 +77,19 @@ object SecurityHeaderFilter extends HeaderFilter {
     val jsonTokenContent = JwtJson.decode(token, JWTConstants.secret, Seq(JWTConstants.algorithm))
     jsonTokenContent match {
       case Success(json) => Json.parse(json.content).as[TokenContent]
-      case Failure(_) => throw Forbidden(s"Unable to decode token")
+      case Failure(_) => {
+        throw Forbidden(s"Unable to decode token")
+      }
     }
+  }
+
+  def createAutoLoginToken(): Token = {
+    val tokenContent = TokenContent(
+      UUID.fromString(ConfigFactory.load().getString("authentication.clientID")),
+      UUID.fromString(ConfigFactory.load().getString("authentication.bikerID")),
+      ConfigFactory.load().getString("authentication.bikerName"),
+      false)
+    JwtTokenUtil.generateAuthTokenOnly(tokenContent)
   }
 }
 

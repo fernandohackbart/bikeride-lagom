@@ -60,8 +60,7 @@ trait RideService extends Service {
         restCall(Method.GET,"/api/ride/:rideID/isFinished", getRideIsFinished _),
         restCall(Method.GET,"/api/ride/:rideID", getRide _)//,
         //restCall(Method.GET,"/api/rides?pageNo&pageSize", getRides _)
-      )//.withAutoAcl(true)
-      .withHeaderFilter(SecurityHeaderFilter.Composed)
+      ).withHeaderFilter(SecurityHeaderFilter.Composed)
   }
 }
 
