@@ -1,0 +1,37 @@
+########################################################################################################################################################
+docker network ls
+docker network rm bikeride-network
+docker network create --driver bridge --subnet=172.18.0.0/16 bikeride-network
+########################################################################################################################################################
+docker pull cassandra
+docker run -d --name bikeride-cassandra --network bikeride-network --ip 172.18.0.2 -p  9042:9042 -i cassandra
+docker run -t --name bikeride-cassandra --network bikeride-network --ip 172.18.0.2 -p  9042:9042 -i cassandra
+docker start bikeride-cassandra
+docker attach bikeride-cassandra
+docker stop bikeride-cassandra
+netstat -na |findstr 9042
+########################################################################################################################################################
+docker pull spotify/kafka
+docker run -t --name bikeride-kafka --network bikeride-network --ip 172.18.0.3 -p  9094:9094 -i spotify/kafka
+docker run -d --name bikeride-kafka --network bikeride-network --ip 172.18.0.3 -p  9094:9094 -i spotify/kafka
+docker run -t --name bikeride-kafka --network bikeride-network --ip 172.18.0.3 -p 2181:2181 -p 9092:9092 --env ADVERTISED_HOST=`docker-machine ip \`docker-machine active\`` --env ADVERTISED_PORT=9092 -i spotify/kafka
+docker start bikeride-kafka
+docker attach bikeride-kafka
+docker stop bikeride-kafka
+netstat -na |findstr 9092
+netstat -na |findstr 2181
+########################################################################################################################################################
+docker build -f C:\Users\fehac2\DockerProjects\linux-shell\DockerFile.txt -t bikeride/linux-shell:1.0.0 C:\Users\fehac2\DockerProjects\linux-shell
+docker run -t  --name linux-shell --network bikeride-network --ip 172.18.0.5 -i bikeride/linux-shell:1.0.0 bash
+yum install -y nc
+nc -v 172.18.0.2 9042
+########################################################################################################################################################
+docker build -f C:\Users\fehac2\DockerProjects\development-backend\BikeRide-1.0.0.docker -t bikeride/development-backend:1.0.0 C:\Users\fehac2\DockerProjects\development-backend
+docker run -t --name development-backend --network bikeride-network --ip 172.18.0.3 -i bikeride/development-backend:1.0.0
+docker run -i bikeride/development-backend:1.0.0
+docker ps -a
+docker rm <container>
+docker images
+docker rmi bikeride/development-backend:1.0.0
+docker push bikeride/development-backend:1.0.0
+########################################################################################################################################################
