@@ -229,6 +229,12 @@ vars.put(&quot;bikerideClientToken&quot;,bikerideClientToken)
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
         </HTTPSamplerProxy>
         <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract biker ID" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">bikerideBikerID</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.bikerID.bikerID</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
           <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract token" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">bikerideClientToken</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.token.authToken</stringProp>
@@ -1460,7 +1466,7 @@ vars.put(&quot;bikerideTrackID&quot;,bikerideTrackID)</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Change track name with empty field" enabled="false">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Change track name with empty field" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
@@ -2391,7 +2397,7 @@ if ( currentTrackID != trackID){
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Ride" enabled="false">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Ride" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>

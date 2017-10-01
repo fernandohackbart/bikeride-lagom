@@ -21,17 +21,39 @@ docker stop bikeride-kafka
 netstat -na |findstr 9092
 netstat -na |findstr 2181
 ########################################################################################################################################################
-docker build -f C:\Users\fehac2\DockerProjects\linux-shell\DockerFile.txt -t bikeride/linux-shell:1.0.0 C:\Users\fehac2\DockerProjects\linux-shell
+docker build -f C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\linux-shell\DockerFile.txt -t bikeride/linux-shell:1.0.0 C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker
 docker run -t  --name linux-shell --network bikeride-network --ip 172.18.0.5 -i bikeride/linux-shell:1.0.0 bash
 yum install -y nc
 nc -v 172.18.0.2 9042
+
 ########################################################################################################################################################
-docker build -f C:\Users\fehac2\DockerProjects\development-backend\BikeRide-1.0.0.docker -t bikeride/development-backend:1.0.0 C:\Users\fehac2\DockerProjects\development-backend
-docker run -t --name development-backend --network bikeride-network --ip 172.18.0.3 -i bikeride/development-backend:1.0.0
-docker run -i bikeride/development-backend:1.0.0
+docker run -it --name bikeride-cassandra-cqlsh --link bikeride-cassandra --network bikeride-network --ip 172.18.0.4 --rm cassandra sh -c 'exec cqlsh "172.18.0.2"'
+
+select * from biker.bikers;
+select * from biker.biker_email;
+select * from track.tracks;
+select * from track.trackwaypoints;
+########################################################################################################################################################
+# Build the Docker container with bikeride-backend
+docker build -f C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\bikeride-backend\BikeRide-base.docker -t bikeride/bikeride-backend:base C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\bikeride-backend
+docker run -t --name bikeride-backend --network bikeride-network --ip 172.18.0.3 -i bikeride/bikeride-backend:base
+docker run -i bikeride/bikeride-backend:base
 docker ps -a
 docker rm <container>
 docker images
-docker rmi bikeride/development-backend:1.0.0
-docker push bikeride/development-backend:1.0.0
+docker rmi bikeride/bikeride-backend:base
+docker push bikeride/bikeride-backend:base
 ########################################################################################################################################################
+docker:stage
+docker:publishLocal
+docker:publish
+docker:clean
+########################################################################################################################################################
+
+
+docker login
+
+docker push bikeride/bikeride-backend:bas
+docker push bikeride/bikeride-backend:0.0.1
+
+

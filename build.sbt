@@ -115,3 +115,40 @@ lagomUnmanagedServices in ThisBuild := Map("cas_native" -> "http://localhost:904
 
 lagomKafkaEnabled in ThisBuild := false
 lagomKafkaAddress in ThisBuild := "localhost:9092"
+
+//#########################################################################
+// http://www.scala-sbt.org/sbt-native-packager/formats/docker.html
+enablePlugins(DockerPlugin)
+//#########################################################################
+//Informational Settings
+packageName in Docker := "bikeride-backend"
+packageSummary in Docker := "BikeRide Backend in Lagom"
+packageDescription := "BikeRide Backend in Lagom"
+version in Docker := "0.0.1"
+maintainer in Docker := "Fernando Hackbart<fhackbart@gmail.com>"
+
+//Environment Settings
+dockerBaseImage := "bikeride/bikeride-backend:base"
+daemonUser in Docker := "bikeride"
+dockerExposedPorts := Seq(9000,8000,54610,61817,54431,49454)
+//dockerExposedUdpPorts :=
+//dockerExposedVolumes :=
+//dockerLabels :=
+//dockerEntrypoint :=
+defaultLinuxInstallLocation in Docker := "/u01/bikeride-lagom"
+
+//Publishing Settings
+dockerRepository := Some("bikeride")
+//dockerUsername :=
+//dockerUpdateLatest :=
+//dockerAlias :=
+//dockerBuildOptions :=
+//dockerExecCommand := Seq("sudo","/usr/bin/docker")
+//dockerBuildCommand :=
+//dockerRmiCommand :=
+
+
+
+
+
+
