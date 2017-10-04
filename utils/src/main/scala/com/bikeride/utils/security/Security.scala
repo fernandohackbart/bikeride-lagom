@@ -42,7 +42,7 @@ object SecurityHeaderFilter extends HeaderFilter {
 
   //TODO how to implement internal calls?
   override def transformClientRequest(request: RequestHeader) = {
-    //TODO check how to tell wich service is going out and use the approriate headers
+    //TODO check how to tell which service is going out and use the appropriate headers
     request.withHeaders(immutable.Seq(
       ("bikerideClientID",ConfigFactory.load().getString("authentication.clientID")),
       ("bikerideClientToken",createAutoLoginToken.authToken))

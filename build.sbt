@@ -111,10 +111,10 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
 
 lagomCassandraCleanOnStart in ThisBuild := true
 lagomCassandraEnabled in ThisBuild := false
-lagomUnmanagedServices in ThisBuild := Map("cas_native" -> "http://localhost:9042")
+lagomUnmanagedServices in ThisBuild := Map("cas_native" -> "http://192.168.1.200:9042")
 
 lagomKafkaEnabled in ThisBuild := false
-lagomKafkaAddress in ThisBuild := "localhost:9092"
+lagomKafkaAddress in ThisBuild := "192.168.1.200:9092"
 
 //#########################################################################
 // http://www.scala-sbt.org/sbt-native-packager/formats/docker.html

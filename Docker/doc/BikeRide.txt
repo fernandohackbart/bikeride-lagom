@@ -1,38 +1,72 @@
 ########################################################################################################################################################
+systemctl start docker
+systemctl enable docker
+systemctl stop docker
+systemctl restart docker
+docker:/var/lib/docker # btrfs subvolume delete btrfs/subvolumes/*
+########################################################################################################################################################
+cat > /etc/docker/daemon.json <<EOF
+{
+  "bip": "192.168.1.200/24",
+  "fixed-cidr": "172.17.0.1/16",
+  "mtu": 1500,
+  "default-gateway": "172.17.0.1",
+  "dns": ["192.168.1.1"]
+}
+EOF
+
+
+cat > /etc/docker/daemon.json <<EOF
+{
+  "bip": "172.17.0.1/16"
+}
+EOF
+
+http://jodies.de/ipcalc
+docker network inspect bridge
+docker network inspect bikeride-network
+########################################################################################################################################################
 docker network ls
 docker network rm bikeride-network
 docker network create --driver bridge --subnet=172.18.0.0/16 bikeride-network
 ########################################################################################################################################################
+
+
+
+
+########################################################################################################################################################
+# BIND on Docker
+docker pull sameersbn/bind
+docker run --name bind -d --restart=always -p 53:53/tcp -p 53:53/udp -p 10000:10000/tcp --volume /srv/docker/bind:/opt/docker/bind sameersbn/bind
+# docker run --name bind -d --network bikeride-network --ip 172.18.0.3  --restart=always -p 53:53/tcp -p 53:53/udp -p 10000:10000/tcp --volume /srv/docker/bind:/opt/docker/bind sameersbn/bind
+########################################################################################################################################################
 docker pull cassandra
-docker run -d --name bikeride-cassandra --network bikeride-network --ip 172.18.0.2 -p  9042:9042 -i cassandra
-docker run -t --name bikeride-cassandra --network bikeride-network --ip 172.18.0.2 -p  9042:9042 -i cassandra
+docker run -d --name bikeride-cassandra -p  9042:9042 -i cassandra
+# docker run -d --name bikeride-cassandra --network bikeride-network --ip 172.18.0.2 -p  9042:9042 -i cassandra
+# docker run -t --name bikeride-cassandra --network bikeride-network --ip 172.18.0.2 -p  9042:9042 -i cassandra
 docker start bikeride-cassandra
 docker attach bikeride-cassandra
 docker stop bikeride-cassandra
-netstat -na |findstr 9042
 ########################################################################################################################################################
 docker pull spotify/kafka
-docker run -t --name bikeride-kafka --network bikeride-network --ip 172.18.0.3 -p  9094:9094 -i spotify/kafka
-docker run -d --name bikeride-kafka --network bikeride-network --ip 172.18.0.3 -p  9094:9094 -i spotify/kafka
-docker run -t --name bikeride-kafka --network bikeride-network --ip 172.18.0.3 -p 2181:2181 -p 9092:9092 --env ADVERTISED_HOST=`docker-machine ip \`docker-machine active\`` --env ADVERTISED_PORT=9092 -i spotify/kafka
+docker run -d --name bikeride-kafka -p  9094:9094 -i spotify/kafka
+#docker run -d --name bikeride-kafka --network bikeride-network --ip 172.18.0.3 -p  9094:9094 -i spotify/kafka
+# docker run -t --name bikeride-kafka --network bikeride-network --ip 172.18.0.3 -p 2181:2181 -p 9092:9092 --env ADVERTISED_HOST=`docker-machine ip \`docker-machine active\`` --env ADVERTISED_PORT=9092 -i spotify/kafka
 docker start bikeride-kafka
 docker attach bikeride-kafka
 docker stop bikeride-kafka
-netstat -na |findstr 9092
-netstat -na |findstr 2181
 ########################################################################################################################################################
-docker build -f C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\linux-shell\DockerFile.txt -t bikeride/linux-shell:1.0.0 C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker
-docker run -t  --name linux-shell --network bikeride-network --ip 172.18.0.5 -i bikeride/linux-shell:1.0.0 bash
-yum install -y nc
-nc -v 172.18.0.2 9042
+# Kong container
+docker run -t --name kong --link bikeride-cassandra -e "KONG_DATABASE=cassandra" -e "KONG_CASSANDRA_CONTACT_POINTS=bikeride-cassandra" -p 8000:8000 -p 8443:8443 -p 8001:8001 -p 
+#docker run -t --name kong --network bikeride-network --ip 172.18.0.10 --link bikeride-cassandra -e "KONG_DATABASE=cassandra" -e "KONG_CASSANDRA_CONTACT_POINTS=bikeride-cassandra" -p 8000:8000 -p 8443:8443 -p 8001:8001 -p 7946:7946 -p 7946:7946/udp kong kong migrations up
+#this will update the cassandra database
+docker rm kong
+docker run -t --name kong --network bikeride-network --ip 172.18.0.10 --link bikeride-cassandra -e "KONG_DATABASE=cassandra" -e "KONG_CASSANDRA_CONTACT_POINTS=bikeride-cassandra" -p 8000:8000 -p 8443:8443 -p 8001:8001 -p 7946:7946 -p 7946:7946/udp kong
+docker start kong
+docker stop kong
 
-########################################################################################################################################################
-docker run -it --name bikeride-cassandra-cqlsh --link bikeride-cassandra --network bikeride-network --ip 172.18.0.4 --rm cassandra sh -c 'exec cqlsh "172.18.0.2"'
-
-select * from biker.bikers;
-select * from biker.biker_email;
-select * from track.tracks;
-select * from track.trackwaypoints;
+http://localhost:8001/
+curl -i -X POST --url http://localhost:8001/apis/ --data 'name=example-api' --data 'hosts=example.com' --data 'upstream_url=http://example.com'
 ########################################################################################################################################################
 # Build the Docker container with bikeride-backend
 docker build -f C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\bikeride-backend\BikeRide-base.docker -t bikeride/bikeride-backend:base C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\bikeride-backend
@@ -43,17 +77,34 @@ docker rm <container>
 docker images
 docker rmi bikeride/bikeride-backend:base
 docker push bikeride/bikeride-backend:base
+
 ########################################################################################################################################################
+docker run -it --name bikeride-cassandra-cqlsh --link bikeride-cassandra --network bikeride-network --ip 172.18.0.4 --rm cassandra sh -c 'exec cqlsh "192.168.1.200"'
+
+select * from biker.bikers;
+select * from biker.biker_email;
+select * from track.tracks;
+select * from track.trackwaypoints;
+########################################################################################################################################################
+# http://www.scala-sbt.org/sbt-native-packager/recipes/package_configuration.html
+# http://www.scala-sbt.org/sbt-native-packager/formats/docker.html
+
+show dockerCommands
+
 docker:stage
 docker:publishLocal
 docker:publish
 docker:clean
 ########################################################################################################################################################
-
-
 docker login
-
-docker push bikeride/bikeride-backend:bas
+docker push bikeride/bikeride-backend:base
 docker push bikeride/bikeride-backend:0.0.1
+########################################################################################################################################################
 
 
+########################################################################################################################################################
+docker build -f C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\linux-shell\DockerFile.txt -t bikeride/linux-shell:1.0.0 C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker
+docker run -t  --name linux-shell --network bikeride-network --ip 172.18.0.5 -i bikeride/linux-shell:1.0.0 bash
+yum install -y nc
+nc -v 172.18.0.2 9042
+########################################################################################################################################################
