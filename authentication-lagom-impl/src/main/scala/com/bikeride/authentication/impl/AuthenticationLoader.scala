@@ -11,6 +11,7 @@ import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.lightbend.lagom.scaladsl.broker.kafka.LagomKafkaComponents
 import com.softwaremill.macwire._
+//import com.lightbend.lagom.scaladsl.dns.DnsServiceLocatorComponents
 
 class AuthenticationLoader extends LagomApplicationLoader{
 
@@ -21,6 +22,10 @@ class AuthenticationLoader extends LagomApplicationLoader{
 
   override def loadDevMode(context: LagomApplicationContext): LagomApplication =
     new AuthenticationApplication(context) with LagomDevModeComponents
+
+//  override def loadDevMode(context: LagomApplicationContext): LagomApplication =
+//    new AuthenticationApplication(context) with DnsServiceLocatorComponents
+
 
   override def describeService = Some(readDescriptor[AuthenticationService])
 }

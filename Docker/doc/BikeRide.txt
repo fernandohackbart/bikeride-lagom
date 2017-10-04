@@ -1,3 +1,28 @@
+Build the application:
+########################################################################################################################################################
+# http://www.scala-sbt.org/sbt-native-packager/recipes/package_configuration.html
+# http://www.scala-sbt.org/sbt-native-packager/formats/docker.html
+
+show dockerCommands
+
+docker:stage
+docker:publishLocal
+docker:publish
+docker:clean
+
+########################################################################################################################################################
+# Build the Docker container with bikeride-backend
+docker build -f C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\bikeride-backend\BikeRide-base.docker -t bikeride/bikeride-backend:base C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\bikeride-backend
+docker run -t --name bikeride-backend --network bikeride-network --ip 172.18.0.3 -i bikeride/bikeride-backend:base
+docker run -i bikeride/bikeride-backend:base
+docker ps -a
+docker rm <container>
+docker images
+docker rmi bikeride/bikeride-backend:base
+docker push bikeride/bikeride-backend:base
+
+
+
 ########################################################################################################################################################
 systemctl start docker
 systemctl enable docker
@@ -68,15 +93,7 @@ docker stop kong
 http://localhost:8001/
 curl -i -X POST --url http://localhost:8001/apis/ --data 'name=example-api' --data 'hosts=example.com' --data 'upstream_url=http://example.com'
 ########################################################################################################################################################
-# Build the Docker container with bikeride-backend
-docker build -f C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\bikeride-backend\BikeRide-base.docker -t bikeride/bikeride-backend:base C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\bikeride-backend
-docker run -t --name bikeride-backend --network bikeride-network --ip 172.18.0.3 -i bikeride/bikeride-backend:base
-docker run -i bikeride/bikeride-backend:base
-docker ps -a
-docker rm <container>
-docker images
-docker rmi bikeride/bikeride-backend:base
-docker push bikeride/bikeride-backend:base
+
 
 ########################################################################################################################################################
 docker run -it --name bikeride-cassandra-cqlsh --link bikeride-cassandra --network bikeride-network --ip 172.18.0.4 --rm cassandra sh -c 'exec cqlsh "192.168.1.200"'
@@ -85,16 +102,6 @@ select * from biker.bikers;
 select * from biker.biker_email;
 select * from track.tracks;
 select * from track.trackwaypoints;
-########################################################################################################################################################
-# http://www.scala-sbt.org/sbt-native-packager/recipes/package_configuration.html
-# http://www.scala-sbt.org/sbt-native-packager/formats/docker.html
-
-show dockerCommands
-
-docker:stage
-docker:publishLocal
-docker:publish
-docker:clean
 ########################################################################################################################################################
 docker login
 docker push bikeride/bikeride-backend:base

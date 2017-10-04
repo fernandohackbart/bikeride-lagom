@@ -2,12 +2,60 @@ organization in ThisBuild := "com.bikeride"
 version in ThisBuild := "0.0.1-SNAPSHOT"
 scalaVersion in ThisBuild := "2.11.8"
 
+//#########################################################################
+// http://www.scala-sbt.org/sbt-native-packager/formats/docker.html
+enablePlugins(DockerPlugin)
+//enablePlugins(DockerSpotifyClientPlugin)
+
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided"
 val jwt = "com.pauldijou" %% "jwt-play-json" % "0.14.0"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % Test
+//val serviceLocatorDNS =  "com.lightbend" % "lagom13-scala-service-locator-dns_2.11" % "2.1.1"
 
 lazy val `bikeride-lagom` = (project in file("."))
-  .aggregate(`biker-lagom-api`, `biker-lagom-impl`,`track-lagom-api`,`track-lagom-impl`)
+  .dependsOn(`authentication-lagom-api`,
+    `authentication-lagom-impl`,
+    `biker-lagom-api`,
+    `biker-lagom-impl`,
+    `track-lagom-api`,
+    `track-lagom-impl`,
+    `ride-lagom-api`,
+    `ride-lagom-impl`,
+    `utils`)
+  .aggregate(`authentication-lagom-api`,
+    `authentication-lagom-impl`,
+    `biker-lagom-api`,
+    `biker-lagom-impl`,
+    `track-lagom-api`,
+    `track-lagom-impl`,
+    `ride-lagom-api`,
+    `ride-lagom-impl`,
+    `utils`)
+  .settings(aggregate in Docker := false,
+    packageName in Docker := "bikeride-backend",
+    packageSummary in Docker := "BikeRide Backend in Lagom",
+    packageDescription := "BikeRide Backend in Lagom",
+    version in Docker := "0.0.1",
+    maintainer in Docker := "Fernando Hackbart<fhackbart@gmail.com>",
+    dockerBaseImage in Docker := "bikeride/bikeride-backend:base",
+    daemonUser in Docker := "bikeride",
+    dockerExposedPorts in Docker := Seq(9000,8000,54610,61817,54431,49454),
+    //dockerExposedUdpPorts in Docker :=
+    //dockerExposedVolumes in Docker :=
+    //dockerLabels in Docker :=
+    //dockerEntrypoint in Docker :=
+    defaultLinuxInstallLocation in Docker := "/u01/bikeride-lagom",
+    dockerRepository in Docker := Some("bikeride")
+    //dockerUsername in Docker :=
+    //dockerUpdateLatest in Docker :=
+    //dockerAlias in Docker :=
+    //dockerBuildOptions in Docker :=
+    //dockerExecCommand in Docker := Seq("sudo","/usr/bin/docker")
+    //dockerBuildCommand in Docker :=
+    //dockerRmiCommand in Docker :=
+    )
+
+
 
 lazy val utils = (project in file("utils"))
   .settings(
@@ -109,7 +157,7 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`ride-lagom-api`,`track-lagom-api`,`biker-lagom-api`)
 
-lagomCassandraCleanOnStart in ThisBuild := true
+lagomCassandraCleanOnStart in ThisBuild := false
 lagomCassandraEnabled in ThisBuild := false
 lagomUnmanagedServices in ThisBuild := Map("cas_native" -> "http://192.168.1.200:9042")
 
@@ -117,38 +165,3 @@ lagomKafkaEnabled in ThisBuild := false
 lagomKafkaAddress in ThisBuild := "192.168.1.200:9092"
 
 //#########################################################################
-// http://www.scala-sbt.org/sbt-native-packager/formats/docker.html
-enablePlugins(DockerPlugin)
-//#########################################################################
-//Informational Settings
-packageName in Docker := "bikeride-backend"
-packageSummary in Docker := "BikeRide Backend in Lagom"
-packageDescription := "BikeRide Backend in Lagom"
-version in Docker := "0.0.1"
-maintainer in Docker := "Fernando Hackbart<fhackbart@gmail.com>"
-
-//Environment Settings
-dockerBaseImage := "bikeride/bikeride-backend:base"
-daemonUser in Docker := "bikeride"
-dockerExposedPorts := Seq(9000,8000,54610,61817,54431,49454)
-//dockerExposedUdpPorts :=
-//dockerExposedVolumes :=
-//dockerLabels :=
-//dockerEntrypoint :=
-defaultLinuxInstallLocation in Docker := "/u01/bikeride-lagom"
-
-//Publishing Settings
-dockerRepository := Some("bikeride")
-//dockerUsername :=
-//dockerUpdateLatest :=
-//dockerAlias :=
-//dockerBuildOptions :=
-//dockerExecCommand := Seq("sudo","/usr/bin/docker")
-//dockerBuildCommand :=
-//dockerRmiCommand :=
-
-
-
-
-
-
