@@ -10,9 +10,17 @@ docker:publishLocal
 docker:publish
 docker:clean
 
+show dockerCommands
+
 ########################################################################################################################################################
 # Build the Docker container with bikeride-backend
+
 docker build -f C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\bikeride-backend\BikeRide-base.docker -t bikeride/bikeride-backend:base C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\bikeride-backend
+
+docker build -f /opt/bikeride/bikeride-lagom/Docker/bikeride-backend/BikeRide-base.docker -t bikeride/bikeride-backend:base /opt/bikeride/bikeride-lagom/Docker/bikeride-backend
+
+
+
 docker run -t --name bikeride-backend --network bikeride-network --ip 172.18.0.3 -i bikeride/bikeride-backend:base
 docker run -i bikeride/bikeride-backend:base
 docker ps -a
@@ -59,20 +67,26 @@ docker network create --driver bridge --subnet=172.18.0.0/16 bikeride-network
 
 
 
+
+########################################################################################################################################################
+# Jenkins
+docker run --name jenkins -d -p 8080:8080 -p 50000:50000 -v /opt/docker/jenkins/jenkins_home:/var/jenkins_home jenkins/jenkins:lts
 ########################################################################################################################################################
 # BIND on Docker
 docker pull sameersbn/bind
 docker run --name bind -d --restart=always -p 53:53/tcp -p 53:53/udp -p 10000:10000/tcp --volume /srv/docker/bind:/opt/docker/bind sameersbn/bind
 # docker run --name bind -d --network bikeride-network --ip 172.18.0.3  --restart=always -p 53:53/tcp -p 53:53/udp -p 10000:10000/tcp --volume /srv/docker/bind:/opt/docker/bind sameersbn/bind
 ########################################################################################################################################################
+# Cassandra
 docker pull cassandra
-docker run -d --name bikeride-cassandra -p  9042:9042 -i cassandra
+docker run -d --name cassandra -p  9042:9042 -i cassandra
 # docker run -d --name bikeride-cassandra --network bikeride-network --ip 172.18.0.2 -p  9042:9042 -i cassandra
 # docker run -t --name bikeride-cassandra --network bikeride-network --ip 172.18.0.2 -p  9042:9042 -i cassandra
 docker start bikeride-cassandra
 docker attach bikeride-cassandra
 docker stop bikeride-cassandra
 ########################################################################################################################################################
+# Kafka
 docker pull spotify/kafka
 docker run -d --name bikeride-kafka -p  9094:9094 -i spotify/kafka
 #docker run -d --name bikeride-kafka --network bikeride-network --ip 172.18.0.3 -p  9094:9094 -i spotify/kafka

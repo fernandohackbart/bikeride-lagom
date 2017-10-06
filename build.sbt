@@ -4,24 +4,43 @@ scalaVersion in ThisBuild := "2.11.8"
 
 //#########################################################################
 // http://www.scala-sbt.org/sbt-native-packager/formats/docker.html
+enablePlugins(UniversalPlugin)
 enablePlugins(DockerPlugin)
-//enablePlugins(DockerSpotifyClientPlugin)
+enablePlugins(JavaServerAppPackaging)
 
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided"
 val jwt = "com.pauldijou" %% "jwt-play-json" % "0.14.0"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % Test
 //val serviceLocatorDNS =  "com.lightbend" % "lagom13-scala-service-locator-dns_2.11" % "2.1.1"
 
+
+lazy val dockerSettings = Seq(packageName in Docker := "bikeride-backend",
+  packageName in Docker := "bikeride-backend",
+  //aggregate in Docker := true
+  packageSummary in Docker := "BikeRide Backend in Lagom",
+  packageDescription in Docker := "BikeRide Backend in Lagom",
+  version in Docker := "0.0.1",
+  maintainer in Docker := "Fernando Hackbart<fhackbart@gmail.com>",
+  dockerBaseImage := "bikeride/bikeride-backend:base",
+  daemonUser in Docker := "bikeride",
+  dockerExposedPorts := Seq(9000,8000,54610,61817,54431,49454),
+  //dockerExposedUdpPorts in Docker :=
+  //dockerExposedVolumes in Docker :=
+  //dockerLabels in Docker :=
+  dockerEntrypoint in Docker := Seq("/u01/bikeride/bin/bikeride-lagom"),
+  //defaultLinuxInstallLocation in Docker := "/u01/bikeride",
+  dockerRepository in Docker := Some("bikeride")
+  //dockerUsername in Docker :=
+  //dockerUpdateLatest in Docker :=
+  //dockerAlias in Docker :=
+  //dockerBuildOptions in Docker :=
+  //dockerExecCommand in Docker := Seq("sudo","/usr/bin/docker")
+  //dockerBuildCommand in Docker :=
+  //dockerRmiCommand in Docker :=
+  )
+
+
 lazy val `bikeride-lagom` = (project in file("."))
-  .dependsOn(`authentication-lagom-api`,
-    `authentication-lagom-impl`,
-    `biker-lagom-api`,
-    `biker-lagom-impl`,
-    `track-lagom-api`,
-    `track-lagom-impl`,
-    `ride-lagom-api`,
-    `ride-lagom-impl`,
-    `utils`)
   .aggregate(`authentication-lagom-api`,
     `authentication-lagom-impl`,
     `biker-lagom-api`,
@@ -31,31 +50,6 @@ lazy val `bikeride-lagom` = (project in file("."))
     `ride-lagom-api`,
     `ride-lagom-impl`,
     `utils`)
-  .settings(aggregate in Docker := false,
-    packageName in Docker := "bikeride-backend",
-    packageSummary in Docker := "BikeRide Backend in Lagom",
-    packageDescription := "BikeRide Backend in Lagom",
-    version in Docker := "0.0.1",
-    maintainer in Docker := "Fernando Hackbart<fhackbart@gmail.com>",
-    dockerBaseImage in Docker := "bikeride/bikeride-backend:base",
-    daemonUser in Docker := "bikeride",
-    dockerExposedPorts in Docker := Seq(9000,8000,54610,61817,54431,49454),
-    //dockerExposedUdpPorts in Docker :=
-    //dockerExposedVolumes in Docker :=
-    //dockerLabels in Docker :=
-    //dockerEntrypoint in Docker :=
-    defaultLinuxInstallLocation in Docker := "/u01/bikeride-lagom",
-    dockerRepository in Docker := Some("bikeride")
-    //dockerUsername in Docker :=
-    //dockerUpdateLatest in Docker :=
-    //dockerAlias in Docker :=
-    //dockerBuildOptions in Docker :=
-    //dockerExecCommand in Docker := Seq("sudo","/usr/bin/docker")
-    //dockerBuildCommand in Docker :=
-    //dockerRmiCommand in Docker :=
-    )
-
-
 
 lazy val utils = (project in file("utils"))
   .settings(
@@ -84,7 +78,8 @@ lazy val `authentication-lagom-impl` = (project in file("authentication-lagom-im
       lagomScaladslTestKit,
       macwire,
       scalaTest
-    )
+    ),
+    dockerSettings
   )
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`authentication-lagom-api`,`biker-lagom-api`,`utils`)
@@ -106,7 +101,8 @@ lazy val `biker-lagom-impl` = (project in file("biker-lagom-impl"))
       lagomScaladslTestKit,
       macwire,
       scalaTest
-    )
+    ),
+    dockerSettings
   )
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`biker-lagom-api`,`utils`)
@@ -128,7 +124,8 @@ lazy val `track-lagom-impl` = (project in file("track-lagom-impl"))
       lagomScaladslTestKit,
       macwire,
       scalaTest
-    )
+    ),
+    dockerSettings
   )
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`track-lagom-api`,`biker-lagom-api`,`utils`)
@@ -152,7 +149,8 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
       lagomScaladslTestKit,
       macwire,
       scalaTest
-    )
+    ),
+    dockerSettings
   )
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`ride-lagom-api`,`track-lagom-api`,`biker-lagom-api`)
