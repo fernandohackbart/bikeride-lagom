@@ -33,21 +33,26 @@ unzip  -q ../../../biker-lagom-impl/target/universal/biker-lagom-impl-${bundleVe
 mv biker-lagom-impl-${bundleVersion} biker-lagom-impl
 cd /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/files/biker-lagom-impl/bin
 
+
+
 https://github.com/typesafehub/service-locator-dns
 
+/opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/files/biker-lagom-impl/bin/biker-lagom-impl -d -Dlagom.cluster.join-self=on
 
 
+
+
+
+
+
+
+
+########################################################################################################################################################
 cd /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl
 docker build -f /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/Dockerfile -t bikeride/biker-lagom-impl:${bundleVersion} /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl
-
 docker run -p 9000 bikeride/biker-lagom-impl:0.0.1-SNAPSHOT
-
--Dlagom.cluster.join-self=on
-
 docker run -it --network bikeride-network --ip 172.18.0.5 -p 9000:9000 --rm bikeride/biker-lagom-impl:0.0.1-SNAPSHOT
 docker run -it --network bikeride-network --ip 172.18.0.5 -p 9000:9000 -p 9012:9012 --rm biker-lagom-impl:0.0.1-SNAPSHOT
-
-
 ########################################################################################################################################################
 https://thecoderwriter.wordpress.com/2016/09/24/run-a-lagom-service-standalone-with-zookeeper/
 ########################################################################################################################################################
