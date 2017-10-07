@@ -27,13 +27,17 @@ exit
 EOF
 mkdir -p /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/files
 cd /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/files
-unzip  ../../../biker-lagom-impl/target/universal/biker-lagom-impl-${bundleVersion}.zip
+unzip  -q ../../../biker-lagom-impl/target/universal/biker-lagom-impl-${bundleVersion}.zip
 mv biker-lagom-impl-${bundleVersion} biker-lagom-impl
 cd /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl
 docker build -f /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/Dockerfile -t bikeride/biker-lagom-impl:${bundleVersion} /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl
 
+docker run -p 9000 bikeride/biker-lagom-impl:0.0.1-SNAPSHOT
 
-docker run -it --rm bikeride/biker-lagom-impl:0.0.1-SNAPSHOT
+docker run -it -p 9000:9000 --rm bikeride/biker-lagom-impl:0.0.1-SNAPSHOT
+
+#ENTRYPOINT should go back to prompt
+#Port assignement not being respected
 
 
 ########################################################################################################################################################
