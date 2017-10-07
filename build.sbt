@@ -79,7 +79,8 @@ lazy val `authentication-lagom-impl` = (project in file("authentication-lagom-im
       macwire,
       scalaTest
     ),
-    dockerSettings
+    dockerSettings,
+    lagomServicePort := 9010
   )
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`authentication-lagom-api`,`biker-lagom-api`,`utils`)
@@ -102,7 +103,8 @@ lazy val `biker-lagom-impl` = (project in file("biker-lagom-impl"))
       macwire,
       scalaTest
     ),
-    dockerSettings
+    dockerSettings,
+    lagomServicePort := 9011
   )
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`biker-lagom-api`,`utils`)
@@ -125,7 +127,8 @@ lazy val `track-lagom-impl` = (project in file("track-lagom-impl"))
       macwire,
       scalaTest
     ),
-    dockerSettings
+    dockerSettings,
+    lagomServicePort := 9012
   )
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`track-lagom-api`,`biker-lagom-api`,`utils`)
@@ -150,7 +153,8 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
       macwire,
       scalaTest
     ),
-    dockerSettings
+    dockerSettings,
+    lagomServicePort := 9013
   )
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`ride-lagom-api`,`track-lagom-api`,`biker-lagom-api`)

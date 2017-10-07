@@ -8,40 +8,17 @@ docker:publishLocal
 docker:publish
 docker:clean
 show dockerCommands
-
 ########################################################################################################################################################
 # Build the Docker container with bikeride-backend
 
-docker build -f /opt/bikeride/bikeride-lagom/Docker/bikeride-backend/BikeRide-base.docker -t bikeride/bikeride-backend:base /opt/bikeride/bikeride-lagom/Docker/bikeride-backend
+docker build -f /opt/bikeride/bikeride-lagom/Docker/bikeride-backend/Dockerfile -t bikeride/bikeride-backend:base /opt/bikeride/bikeride-lagom/Docker/bikeride-backend
 
-docker build -f /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/Dockerfile --build-arg bundleVersion=0.0.1-SNAPSHOT --build-arg bundlePort=9010 -t bikeride/biker-lagom-impl:0.0.1-SNAPSHOT /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl
-
-docker run -it --name cassandra-cqlsh --rm cassandra sh -c 'exec cqlsh "192.168.1.200"'
-
-########################################################################################################################################################
-docker:/var/lib/docker # btrfs subvolume delete btrfs/subvolumes/*
-########################################################################################################################################################
-http://jodies.de/ipcalc
-docker network inspect bridge
-docker network inspect bikeride-network
+export bundleVersion=0.0.1-SNAPSHOT
+docker build -f /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/Dockerfile --build-arg bundleVersion=${bundleVersion} -t bikeride/biker-lagom-impl:${bundleVersion} /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl
 
 ########################################################################################################################################################
-docker login
-docker push bikeride/bikeride-backend:base
-docker push bikeride/bikeride-backend:0.0.1
-########################################################################################################################################################
-
-
-########################################################################################################################################################
-docker build -f C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker\linux-shell\DockerFile.txt -t bikeride/linux-shell:1.0.0 C:\Users\fehac2\IdeaProjects\bikeride-lagom\Docker
-docker run -t  --name linux-shell --network bikeride-network --ip 172.18.0.5 -i bikeride/linux-shell:1.0.0 bash
-yum install -y nc
-nc -v 172.18.0.2 9042
-########################################################################################################################################################
-
-
 https://thecoderwriter.wordpress.com/2016/09/24/run-a-lagom-service-standalone-with-zookeeper/
-
+########################################################################################################################################################
 docker run -t --name bikeride-backend --network bikeride-network --ip 172.18.0.3 -i bikeride/bikeride-backend:base
 docker run -i bikeride/bikeride-backend:base
 docker ps -a
@@ -49,3 +26,7 @@ docker rm <container>
 docker images
 docker rmi bikeride/bikeride-backend:base
 docker push bikeride/bikeride-backend:base
+########################################################################################################################################################
+docker login
+docker push bikeride/bikeride-backend:base
+docker push bikeride/bikeride-backend:0.0.1
