@@ -13,8 +13,28 @@ show dockerCommands
 
 docker build -f /opt/bikeride/bikeride-lagom/Docker/bikeride-backend/Dockerfile -t bikeride/bikeride-backend:base /opt/bikeride/bikeride-lagom/Docker/bikeride-backend
 
+
+########################################################################################################################################################
+cd /opt/bikeride
+rm -rf bikeride-lagom
+git clone https://github.com/fernandohackbart/bikeride-lagom.git
 export bundleVersion=0.0.1-SNAPSHOT
-docker build -f /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/Dockerfile --build-arg bundleVersion=${bundleVersion} -t bikeride/biker-lagom-impl:${bundleVersion} /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl
+cd /opt/bikeride/bikeride-lagom
+sbt <<EOF
+project biker-lagom-impl
+dist
+exit
+EOF
+mkdir -p /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/files
+cd /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/files
+unzip  ../../../biker-lagom-impl/target/universal/biker-lagom-impl-${bundleVersion}.zip
+mv biker-lagom-impl-${bundleVersion} biker-lagom-impl
+cd /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl
+docker build -f /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/Dockerfile -t bikeride/biker-lagom-impl:${bundleVersion} /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl
+
+
+docker run -it --rm bikeride/biker-lagom-impl:0.0.1-SNAPSHOT
+
 
 ########################################################################################################################################################
 https://thecoderwriter.wordpress.com/2016/09/24/run-a-lagom-service-standalone-with-zookeeper/
