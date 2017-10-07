@@ -20,7 +20,7 @@ enablePlugins(JavaServerAppPackaging)
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided"
 val jwt = "com.pauldijou" %% "jwt-play-json" % "0.14.0"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % Test
-//val serviceLocatorDNS =  "com.lightbend" % "lagom13-scala-service-locator-dns_2.11" % "2.1.1"
+val serviceLocatorDNS =  "com.lightbend" % "lagom13-scala-service-locator-dns_2.11" % "2.1.1"
 
 
 //lazy val dockerSettings = Seq(packageName in Docker := "bikeride-backend",
@@ -109,6 +109,7 @@ lazy val `biker-lagom-impl` = (project in file("biker-lagom-impl"))
       lagomScaladslPersistenceCassandra,
       lagomScaladslKafkaBroker,
       lagomScaladslTestKit,
+      serviceLocatorDNS,
       macwire,
       scalaTest
     ),

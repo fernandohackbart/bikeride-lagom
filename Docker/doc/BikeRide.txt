@@ -18,6 +18,8 @@ docker build -f /opt/bikeride/bikeride-lagom/Docker/bikeride-backend/Dockerfile 
 cd /opt/bikeride
 rm -rf bikeride-lagom
 git clone https://github.com/fernandohackbart/bikeride-lagom.git
+
+
 export bundleVersion=0.0.1-SNAPSHOT
 cd /opt/bikeride/bikeride-lagom
 sbt <<EOF
@@ -29,15 +31,21 @@ mkdir -p /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/files
 cd /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/files
 unzip  -q ../../../biker-lagom-impl/target/universal/biker-lagom-impl-${bundleVersion}.zip
 mv biker-lagom-impl-${bundleVersion} biker-lagom-impl
+cd /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/files/biker-lagom-impl/bin
+
+https://github.com/typesafehub/service-locator-dns
+
+
+
 cd /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl
 docker build -f /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/Dockerfile -t bikeride/biker-lagom-impl:${bundleVersion} /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl
 
 docker run -p 9000 bikeride/biker-lagom-impl:0.0.1-SNAPSHOT
 
-docker run -it -p 9000:9000 --rm bikeride/biker-lagom-impl:0.0.1-SNAPSHOT
+-Dlagom.cluster.join-self=on
 
-#ENTRYPOINT should go back to prompt
-#Port assignement not being respected
+docker run -it --network bikeride-network --ip 172.18.0.5 -p 9000:9000 --rm bikeride/biker-lagom-impl:0.0.1-SNAPSHOT
+docker run -it --network bikeride-network --ip 172.18.0.5 -p 9000:9000 -p 9012:9012 --rm biker-lagom-impl:0.0.1-SNAPSHOT
 
 
 ########################################################################################################################################################
