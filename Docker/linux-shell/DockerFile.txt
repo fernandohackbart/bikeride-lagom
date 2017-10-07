@@ -1,2 +1,0 @@
-FROM fedora
-MAINTAINER Fernando Hackbart<fhackbart@gmail.com>
