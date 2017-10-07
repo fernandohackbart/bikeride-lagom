@@ -85,6 +85,7 @@ lazy val `authentication-lagom-impl` = (project in file("authentication-lagom-im
       lagomScaladslPersistenceCassandra,
       lagomScaladslKafkaBroker,
       lagomScaladslTestKit,
+      serviceLocatorDNS,
       macwire,
       scalaTest
     ),
@@ -134,6 +135,7 @@ lazy val `track-lagom-impl` = (project in file("track-lagom-impl"))
       lagomScaladslPersistenceCassandra,
       lagomScaladslKafkaBroker,
       lagomScaladslTestKit,
+      serviceLocatorDNS,
       macwire,
       scalaTest
     ),
@@ -160,6 +162,7 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
       lagomScaladslPersistenceCassandra,
       lagomScaladslKafkaBroker,
       lagomScaladslTestKit,
+      serviceLocatorDNS,
       macwire,
       scalaTest
     ),
