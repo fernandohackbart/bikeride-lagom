@@ -1,11 +1,13 @@
 package com.bikeride.utils.servicelocator.dns
 
 import java.util.concurrent.ThreadLocalRandom
-import akka.actor.{ Actor, ActorLogging, ActorRef, Props }
+
+import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.io.AsyncDnsResolver.SrvResolved
-import akka.io.{ Dns, IO }
-import akka.pattern.{ AskTimeoutException, ask, pipe }
-import ru.smslv.akka.dns.raw.SRVRecord
+import akka.io.{Dns, IO}
+import akka.pattern.{AskTimeoutException, ask, pipe}
+import ru.smslv.akka.dns.raw.{ARecord, SRVRecord}
+
 import scala.annotation.tailrec
 import scala.concurrent.Future
 import scala.concurrent.duration.FiniteDuration
