@@ -10,6 +10,7 @@
     <logger name="com.lightbend.lagom" level="ALL" />
     <logger name="akka.io.SimpleDnsManager" level="ALL" />
     <logger name="com.lightbend.dns.locator" level="ALL" />
+    <logger name="com.bikeride.utils.servicelocator.dns" level="ALL" />
     <logger name="org.apache.cassandra" level="ERROR" />
     <logger name="com.datastax.driver" level="ERROR" />
     <logger name="com.datastax.driver.core.ControlConnection" level="ERROR" />
