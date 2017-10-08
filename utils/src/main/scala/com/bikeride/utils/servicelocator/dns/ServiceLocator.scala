@@ -6,7 +6,7 @@ import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.io.AsyncDnsResolver.SrvResolved
 import akka.io.{Dns, IO}
 import akka.pattern.{AskTimeoutException, ask, pipe}
-import ru.smslv.akka.dns.raw.{ARecord, SRVRecord}
+import ru.smslv.akka.dns.raw.SRVRecord
 
 import scala.annotation.tailrec
 import scala.concurrent.Future
@@ -115,6 +115,7 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
 
       val replyTo = sender()
       import context.dispatcher
+      log.debug("###################### resolveSrv - resolveSrvOnce {} ", mn)
       resolveSrvOnce(mn, settings.resolveTimeout1)
         .recoverWith {
           case _: AskTimeoutException =>
