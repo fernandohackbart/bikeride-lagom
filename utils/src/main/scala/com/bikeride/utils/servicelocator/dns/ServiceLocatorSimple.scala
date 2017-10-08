@@ -63,13 +63,16 @@ class ServiceLocatorSimple extends Actor with ActorSettings with ActorLogging {
 
   override def receive: Receive = {
     case GetAddress(name) =>
+      log.debug("receive - Resolving: {}", name)
       resolveSrv(name, resolveOne = true)
 
     case GetAddresses(name) =>
+      log.debug("receive - Resolving many: {}", name)
       resolveSrv(name, resolveOne = false)
 
     case rc: RequestContext =>
       // When we return just one address then we randomize which of the candidates to return
+      log.debug("receive - RequestContext: {}", rc)
       val (srvFrom, srvSize) =
         if (rc.resolveOne && rc.srv.nonEmpty)
           (ThreadLocalRandom.current.nextInt(rc.srv.size), 1)
@@ -88,7 +91,7 @@ class ServiceLocatorSimple extends Actor with ActorSettings with ActorLogging {
         .pipeTo(self)
 
     case ReplyContext(resolutions, rc) =>
-      log.debug("Resolved: {}", resolutions)
+      log.debug("receive - Resolved: {}", resolutions)
       val addresses =
         resolutions
           .flatMap {
@@ -102,11 +105,11 @@ class ServiceLocatorSimple extends Actor with ActorSettings with ActorLogging {
   }
 
   private def resolveSrv(name: String, resolveOne: Boolean): Unit = {
-    log.debug("Resolving: {}", name)
+    log.debug("resolveSrv - Resolving: {}", name)
     val matchedName = matchTranslation(name, settings.nameTranslators)
     matchedName.foreach { mn =>
       if (name != mn)
-        log.debug("Translated {} to {}", name, mn)
+        log.debug("resolveSrv - Translated {} to {}", name, mn)
 
       val replyTo = sender()
       import context.dispatcher
@@ -121,15 +124,15 @@ class ServiceLocatorSimple extends Actor with ActorSettings with ActorLogging {
         }
         .recover {
           case iobe: IndexOutOfBoundsException =>
-            log.error("Could not substitute the service name with the name translator {}", iobe.getMessage)
+            log.error("resolveSrv - Could not substitute the service name with the name translator {}", iobe.getMessage)
             SrvResolved(mn, Nil)
 
           case ate: AskTimeoutException =>
-            log.debug("Timed out querying DNS SRV for {}", name)
+            log.debug("resolveSrv - Timed out querying DNS SRV for {}", name)
             SrvResolved(mn, Nil)
 
           case NonFatal(e) =>
-            log.error(e, "Unexpected error when resolving an SRV record")
+            log.error(e, "resolveSrv - Unexpected error when resolving an SRV record")
             SrvResolved(mn, Nil)
         }
         .map(resolved =>
@@ -139,9 +142,10 @@ class ServiceLocatorSimple extends Actor with ActorSettings with ActorLogging {
             resolved.srv.map { record =>
               matchTranslation(record.name, settings.srvTranslators) match {
                 case Some(newName) if name != newName =>
-                  log.debug("Translated {} to {}", record.name, newName)
+                  log.debug("resolveSrv - Translated {} to {}", record.name, newName)
                   record.copy(name = newName)
                 case _ =>
+                  log.debug("resolveSrv - NOT Translated {}", record.name)
                   record
               }
             }
@@ -169,6 +173,7 @@ class ServiceLocatorSimple extends Actor with ActorSettings with ActorLogging {
       .ask(Dns.Resolve(name))(settings.resolveTimeout1)
       .recoverWith {
         case _: AskTimeoutException =>
+          log.debug("resolveDns - resolving {}", name)
           dns.ask(Dns.Resolve(name))(settings.resolveTimeout1)
             .recoverWith {
               case _: AskTimeoutException =>
@@ -178,11 +183,11 @@ class ServiceLocatorSimple extends Actor with ActorSettings with ActorLogging {
       .mapTo[Dns.Resolved]
       .recover {
         case ate: AskTimeoutException =>
-          log.debug("Timed out querying DNS for {}", name)
+          log.debug("resolveDns - Timed out querying DNS for {}", name)
           Dns.Resolved(name, Nil)
 
         case NonFatal(e) =>
-          log.error(e, "Unexpected error when resolving an DNS record")
+          log.error(e, "resolveDns - Unexpected error when resolving an DNS record")
           Dns.Resolved(name, Nil)
       }
   }
