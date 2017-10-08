@@ -163,8 +163,14 @@ class ServiceLocatorSimple extends Actor with ActorSettings with ActorLogging {
     dns
       .ask(Dns.Resolve(name))(resolveTimeout)
       .map {
-        case srvResolved: SrvResolved => srvResolved
-        case _: Dns.Resolved          => SrvResolved(name, Nil)
+        case srvResolved: SrvResolved => {
+          log.debug("resolveSrvOnce - resolved {}", srvResolved)
+          srvResolved
+        }
+        case _: Dns.Resolved          => {
+          log.debug("resolveSrvOnce - NOT resolved {}", _)
+          SrvResolved(name, Nil)
+        }
       }
   }
 
