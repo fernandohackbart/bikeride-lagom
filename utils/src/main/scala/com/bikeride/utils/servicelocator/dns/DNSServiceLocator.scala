@@ -19,10 +19,10 @@ class DNSServiceLocator(
 
   override def locate(name: String, serviceCall: Descriptor.Call[_, _]): Future[Option[URI]] =
     serviceLocatorService
-      .ask(ServiceLocatorSimple.GetAddress(name))(settings.resolveTimeout1 + settings.resolveTimeout1 + settings.resolveTimeout2)
-      .mapTo[ServiceLocatorSimple.Addresses]
+      .ask(ServiceLocator.GetAddress(name))(settings.resolveTimeout1 + settings.resolveTimeout1 + settings.resolveTimeout2)
+      .mapTo[ServiceLocator.Addresses]
       .map {
-        case ServiceLocatorSimple.Addresses(addresses) =>
+        case ServiceLocator.Addresses(addresses) =>
           addresses
             .headOption
             .map(sa => new URI(sa.protocol, null, sa.host, sa.port, null, null, null))
