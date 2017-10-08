@@ -159,6 +159,7 @@ class ServiceLocatorSimple extends Actor with ActorSettings with ActorLogging {
 
   private def resolveSrvOnce(name: String, resolveTimeout: FiniteDuration): Future[SrvResolved] = {
     import context.dispatcher
+    log.debug("resolveSrvOnce - resolving {}", name)
     dns
       .ask(Dns.Resolve(name))(resolveTimeout)
       .map {
