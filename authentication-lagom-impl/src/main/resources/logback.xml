@@ -8,7 +8,7 @@
     <logger name="play" level="ERROR" />
     <logger name="akka" level="ERROR" />
     <logger name="com.lightbend.lagom" level="ALL" />
-    <logger name="akka.io.SimpleDnsManager" level="ALL" />
+    <logger name="akka.io" level="ALL" />
     <logger name="com.lightbend.dns.locator" level="ERROR" />
     <logger name="com.bikeride.utils.servicelocator.dns" level="ALL" />
     <logger name="org.apache.cassandra" level="ERROR" />
