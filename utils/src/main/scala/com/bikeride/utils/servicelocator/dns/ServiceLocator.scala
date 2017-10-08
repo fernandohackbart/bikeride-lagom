@@ -169,7 +169,7 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
           srvResolved
         }
         case _: Dns.Resolved          => {
-          log.debug("resolveSrvOnce - NOT resolved {}", _)
+          log.debug("resolveSrvOnce - NOT resolved")
           SrvResolved(name, Nil)
         }
       }
