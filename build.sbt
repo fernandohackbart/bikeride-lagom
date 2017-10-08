@@ -1,3 +1,5 @@
+import sbt.Resolver.bintrayRepo
+
 organization in ThisBuild := "com.bikeride"
 version in ThisBuild := "0.0.1-SNAPSHOT"
 scalaVersion in ThisBuild := "2.11.8"
@@ -21,6 +23,17 @@ val macwire = "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided"
 val jwt = "com.pauldijou" %% "jwt-play-json" % "0.14.0"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % Test
 val serviceLocatorDNS =  "com.lightbend" % "lagom13-scala-service-locator-dns_2.11" % "2.1.1"
+
+//For the DNS locator
+val srvDNSakkaVersion       = "2.4.20"
+val srvDNSakkaDnsVersion    = "2.4.2"
+val srvDNSlagom13Version    = "1.3.7"
+val srvDNSakkaDns            = "ru.smslv.akka"       %% "akka-dns"              % srvDNSakkaDnsVersion
+val srvDNSakkaTestkit        = "com.typesafe.akka"   %% "akka-testkit"          % srvDNSakkaVersion
+val srvDNSlagom13JavaClient  = "com.lightbend.lagom" %% "lagom-javadsl-client"  % srvDNSlagom13Version
+val srvDNSlagom13ScalaClient = "com.lightbend.lagom" %% "lagom-scaladsl-client" % srvDNSlagom13Version
+val srvDNSlagom13ScalaServer = "com.lightbend.lagom" %% "lagom-scaladsl-server" % srvDNSlagom13Version
+val srvDNShajile = bintrayRepo("hajile", "maven")
 
 
 //lazy val dockerSettings = Seq(packageName in Docker := "bikeride-backend",
@@ -66,7 +79,13 @@ lazy val utils = (project in file("utils"))
       lagomScaladslApi,
       lagomScaladslServer % Optional,
       scalaTest,
-      jwt
+      jwt,
+      //For the DNS locator
+      srvDNSakkaDns,
+      srvDNSlagom13ScalaClient,
+      srvDNSakkaTestkit % "test",
+      srvDNSlagom13ScalaServer % "test"
+      //For the DNS locator
     )
   )
 
