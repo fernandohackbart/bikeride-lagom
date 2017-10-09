@@ -174,8 +174,7 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
         }
         case _: Dns.Resolved          => {
           log.debug("###################### resolveSrvOnce - NOT resolved forcing values ")
-//          SrvResolved(name, Nil)
-          SrvResolved(name,immutable.Seq(SRVRecord("biker",1,1,1,9000,"kong.bikeride.com")))
+          SrvResolved(name, Nil)
         }
       }
     //####################################################################################

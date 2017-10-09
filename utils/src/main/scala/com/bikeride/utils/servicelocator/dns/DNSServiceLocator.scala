@@ -22,9 +22,12 @@ class DNSServiceLocator(
       .ask(ServiceLocator.GetAddress(name))(settings.resolveTimeout1 + settings.resolveTimeout1 + settings.resolveTimeout2)
       .mapTo[ServiceLocator.Addresses]
       .map {
-        case ServiceLocator.Addresses(addresses) =>
+        case ServiceLocator.Addresses(addresses) => {
+          println(s"###################### ${addresses}")
           addresses
             .headOption
             .map(sa => new URI(sa.protocol, null, sa.host, sa.port, null, null, null))
+
+          }
       }
 }
