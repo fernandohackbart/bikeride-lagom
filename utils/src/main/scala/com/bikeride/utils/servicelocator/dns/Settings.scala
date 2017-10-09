@@ -1,5 +1,4 @@
 package com.bikeride.utils.servicelocator.dns
-
 import akka.actor.{Actor, ExtendedActorSystem, Extension, ExtensionKey}
 
 import scala.concurrent.duration.{Duration, FiniteDuration, MILLISECONDS}

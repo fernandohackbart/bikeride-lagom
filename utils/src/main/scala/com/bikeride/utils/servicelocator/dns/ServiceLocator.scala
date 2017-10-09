@@ -145,10 +145,10 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
             resolved.srv.map { record =>
               matchTranslation(record.name, settings.srvTranslators) match {
                 case Some(newName) if name != newName =>
-                  log.debug("###################### resolveSrv - Translated {} to {}", record.name, newName)
+                  log.debug("###################### resolveSrv - RequestContext response Translated {} to {}", record.name, newName)
                   record.copy(name = newName)
                 case _ =>
-                  log.debug("###################### resolveSrv - NOT Translated {}", record.name)
+                  log.debug("###################### resolveSrv - RequestContext NOT Translated {}", record.name)
                   record
               }
             }
@@ -157,7 +157,7 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
         .pipeTo(self)
     }
     if (matchedName.isEmpty)
-      log.debug("###################### resolveSrv - EMPTY")
+      log.debug("###################### resolveSrv - matchedName.isEmpty")
       sender() ! Addresses(Nil)
   }
 
