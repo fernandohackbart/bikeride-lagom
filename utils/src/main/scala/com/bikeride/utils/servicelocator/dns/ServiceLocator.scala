@@ -99,9 +99,9 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
               val port = srv.port
               resolved.ipv4.map(host => ServiceAddress(protocol, srv.target, host.getHostAddress, port)) ++
                 resolved.ipv6.map(host => ServiceAddress(protocol, srv.target, host.getHostAddress, port))
-
             }
           }
+      log.debug("###################### resolved: {} ", addresses)
       rc.replyTo ! Addresses(addresses)
   }
 
@@ -142,10 +142,9 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
             resolved.srv.map { record =>
               matchTranslation(record.name, settings.srvTranslators) match {
                 case Some(newName) if name != newName =>
-                  log.debug("###################### resolveSrv - RequestContext response Translated {} to {}", record.name, newName)
+                  log.debug("###################### resolveSrv - Serrvice translated from {} to {}", record.name, newName)
                   record.copy(name = newName)
                 case _ =>
-                  log.debug("###################### resolveSrv - RequestContext NOT Translated {}", record.name)
                   record
               }
             }
