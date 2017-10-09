@@ -112,7 +112,6 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
   }
 
   private def resolveSrv(name: String, resolveOne: Boolean): Unit = {
-//    log.debug("###################### resolveSrv - Resolving: {}", name)
     val matchedName = matchTranslation(name, settings.nameTranslators)
     matchedName.foreach { mn =>
       if (name != mn)
@@ -120,7 +119,6 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
 
       val replyTo = sender()
       import context.dispatcher
-//      log.debug("###################### resolveSrv - resolveSrvOnce {} ", mn)
       resolveSrvOnce(mn, settings.resolveTimeout1)
         .recoverWith {
           case _: AskTimeoutException =>
@@ -162,27 +160,21 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
         .pipeTo(self)
     }
     if (matchedName.isEmpty)
-      log.debug("###################### resolveSrv - matchedName.isEmpty")
       sender() ! Addresses(Nil)
   }
 
   private def resolveSrvOnce(name: String, resolveTimeout: FiniteDuration): Future[SrvResolved] = {
     import context.dispatcher
-//    log.debug("###################### resolveSrvOnce - resolving {}", name)
     dns
       .ask(Dns.Resolve(name))(resolveTimeout)
       .map {
         case srvResolved: SrvResolved => {
-//          log.debug("###################### resolveSrvOnce - resolved {}", srvResolved)
           srvResolved
         }
         case _: Dns.Resolved          => {
-//          log.debug("###################### resolveSrvOnce - NOT resolved")
           SrvResolved(name, Nil)
         }
       }
-    //####################################################################################
-    // HERE SOMETHING IS WRONG
   }
 
   private def resolveDns(name: String): Future[Dns.Resolved] = {
@@ -191,22 +183,18 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
       .ask(Dns.Resolve(name))(settings.resolveTimeout1)
       .recoverWith {
         case _: AskTimeoutException =>
-//          log.debug("###################### resolveDns - resolving {}", name)
           dns.ask(Dns.Resolve(name))(settings.resolveTimeout1)
             .recoverWith {
               case _: AskTimeoutException =>
-//                log.debug("###################### resolveDns - timeout ")
                 dns.ask(Dns.Resolve(name))(settings.resolveTimeout2)
             }
       }
       .mapTo[Dns.Resolved]
       .recover {
         case ate: AskTimeoutException =>
-//          log.debug("###################### resolveDns - Timed out querying DNS for {}", name)
           Dns.Resolved(name, Nil)
 
         case NonFatal(e) =>
-//          log.error(e, "###################### resolveDns - Unexpected error when resolving an DNS record")
           Dns.Resolved(name, Nil)
       }
   }
