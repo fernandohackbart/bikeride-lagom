@@ -66,16 +66,16 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
 
   override def receive: Receive = {
     case GetAddress(name) =>
-      log.debug("###################### receive - Resolving: {}", name)
+//      log.debug("###################### receive - Resolving: {}", name)
       resolveSrv(name, resolveOne = true)
 
     case GetAddresses(name) =>
-      log.debug("###################### receive - Resolving many: {}", name)
+//      log.debug("###################### receive - Resolving many: {}", name)
       resolveSrv(name, resolveOne = false)
 
     case rc: RequestContext =>
       // When we return just one address then we randomize which of the candidates to return
-      log.debug("###################### receive - RequestContext: {}", rc)
+//      log.debug("###################### receive - RequestContext: {}", rc)
       val (srvFrom, srvSize) =
         if (rc.resolveOne && rc.srv.nonEmpty)
           (ThreadLocalRandom.current.nextInt(rc.srv.size), 1)
@@ -94,21 +94,24 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
         .pipeTo(self)
 
     case ReplyContext(resolutions, rc) =>
-      log.debug("###################### receive - Resolved: {} {}", resolutions,rc)
+      log.debug("###################### receive - Resolved: {} ", resolutions)
       val addresses =
         resolutions
           .flatMap {
-            case (resolved, srv) =>
+            case (resolved, srv) => {
               val protocol = protocolFromName(srv.name)
               val port = srv.port
+              log.debug("###################### receive - Resolved: protocol:{} port:{} target:{}", protocol,port,srv.target)
               resolved.ipv4.map(host => ServiceAddress(protocol, srv.target, host.getHostAddress, port)) ++
                 resolved.ipv6.map(host => ServiceAddress(protocol, srv.target, host.getHostAddress, port))
+
+            }
           }
       rc.replyTo ! Addresses(addresses)
   }
 
   private def resolveSrv(name: String, resolveOne: Boolean): Unit = {
-    log.debug("###################### resolveSrv - Resolving: {}", name)
+//    log.debug("###################### resolveSrv - Resolving: {}", name)
     val matchedName = matchTranslation(name, settings.nameTranslators)
     matchedName.foreach { mn =>
       if (name != mn)
@@ -116,7 +119,7 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
 
       val replyTo = sender()
       import context.dispatcher
-      log.debug("###################### resolveSrv - resolveSrvOnce {} ", mn)
+//      log.debug("###################### resolveSrv - resolveSrvOnce {} ", mn)
       resolveSrvOnce(mn, settings.resolveTimeout1)
         .recoverWith {
           case _: AskTimeoutException =>
@@ -164,16 +167,16 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
 
   private def resolveSrvOnce(name: String, resolveTimeout: FiniteDuration): Future[SrvResolved] = {
     import context.dispatcher
-    log.debug("###################### resolveSrvOnce - resolving {}", name)
+//    log.debug("###################### resolveSrvOnce - resolving {}", name)
     dns
       .ask(Dns.Resolve(name))(resolveTimeout)
       .map {
         case srvResolved: SrvResolved => {
-          log.debug("###################### resolveSrvOnce - resolved {}", srvResolved)
+//          log.debug("###################### resolveSrvOnce - resolved {}", srvResolved)
           srvResolved
         }
         case _: Dns.Resolved          => {
-          log.debug("###################### resolveSrvOnce - NOT resolved forcing values ")
+//          log.debug("###################### resolveSrvOnce - NOT resolved")
           SrvResolved(name, Nil)
         }
       }
@@ -187,22 +190,22 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
       .ask(Dns.Resolve(name))(settings.resolveTimeout1)
       .recoverWith {
         case _: AskTimeoutException =>
-          log.debug("###################### resolveDns - resolving {}", name)
+//          log.debug("###################### resolveDns - resolving {}", name)
           dns.ask(Dns.Resolve(name))(settings.resolveTimeout1)
             .recoverWith {
               case _: AskTimeoutException =>
-                log.debug("###################### resolveDns - timeout ")
+//                log.debug("###################### resolveDns - timeout ")
                 dns.ask(Dns.Resolve(name))(settings.resolveTimeout2)
             }
       }
       .mapTo[Dns.Resolved]
       .recover {
         case ate: AskTimeoutException =>
-          log.debug("###################### resolveDns - Timed out querying DNS for {}", name)
+//          log.debug("###################### resolveDns - Timed out querying DNS for {}", name)
           Dns.Resolved(name, Nil)
 
         case NonFatal(e) =>
-          log.error(e, "###################### resolveDns - Unexpected error when resolving an DNS record")
+//          log.error(e, "###################### resolveDns - Unexpected error when resolving an DNS record")
           Dns.Resolved(name, Nil)
       }
   }
