@@ -166,7 +166,7 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
     import context.dispatcher
     log.debug("###################### resolveSrvOnce - resolving {}", name)
     dns
-      .ask(Dns.Resolve("xpto"))(resolveTimeout)
+      .ask(Dns.Resolve(name))(resolveTimeout)
       .map {
         case srvResolved: SrvResolved => {
           log.debug("###################### resolveSrvOnce - resolved {}", srvResolved)
@@ -174,8 +174,8 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
         }
         case _: Dns.Resolved          => {
           log.debug("###################### resolveSrvOnce - NOT resolved")
-//          SrvResolved(name, Nil)
-          SrvResolved(name,immutable.Seq(SRVRecord("biker",1,1,1,9000,"/api/bikers")))
+          SrvResolved(name, Nil)
+//          SrvResolved(name,immutable.Seq(SRVRecord("biker",1,1,1,9000,"/api/bikers")))
         }
       }
     //####################################################################################
