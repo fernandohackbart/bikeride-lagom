@@ -66,16 +66,13 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
 
   override def receive: Receive = {
     case GetAddress(name) =>
-//      log.debug("###################### receive - Resolving: {}", name)
       resolveSrv(name, resolveOne = true)
 
     case GetAddresses(name) =>
-//      log.debug("###################### receive - Resolving many: {}", name)
       resolveSrv(name, resolveOne = false)
 
     case rc: RequestContext =>
       // When we return just one address then we randomize which of the candidates to return
-//      log.debug("###################### receive - RequestContext: {}", rc)
       val (srvFrom, srvSize) =
         if (rc.resolveOne && rc.srv.nonEmpty)
           (ThreadLocalRandom.current.nextInt(rc.srv.size), 1)
@@ -94,20 +91,17 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
         .pipeTo(self)
 
     case ReplyContext(resolutions, rc) =>
-      log.debug("###################### receive - Resolved: resolutions: {} ", resolutions)
       val addresses =
         resolutions
           .flatMap {
             case (resolved, srv) => {
               val protocol = protocolFromName(srv.name)
               val port = srv.port
-              log.debug("###################### receive - Resolved: protocol:{} port:{} target:{}", protocol,port,srv.target)
               resolved.ipv4.map(host => ServiceAddress(protocol, srv.target, host.getHostAddress, port)) ++
                 resolved.ipv6.map(host => ServiceAddress(protocol, srv.target, host.getHostAddress, port))
 
             }
           }
-      log.debug("###################### receive - Resolved: addresses:{} ",addresses)
       rc.replyTo ! Addresses(addresses)
   }
 
