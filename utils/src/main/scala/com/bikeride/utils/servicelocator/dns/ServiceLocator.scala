@@ -94,7 +94,7 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
         .pipeTo(self)
 
     case ReplyContext(resolutions, rc) =>
-      log.debug("###################### receive - Resolved: {} ", resolutions)
+      log.debug("###################### receive - Resolved: resolutions: {} ", resolutions)
       val addresses =
         resolutions
           .flatMap {
@@ -107,6 +107,7 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
 
             }
           }
+      log.debug("###################### receive - Resolved: addresses:{} ",addresses)
       rc.replyTo ! Addresses(addresses)
   }
 
