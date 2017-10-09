@@ -9,6 +9,7 @@ import akka.pattern.{AskTimeoutException, ask, pipe}
 import ru.smslv.akka.dns.raw.SRVRecord
 
 import scala.annotation.tailrec
+import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration.FiniteDuration
 import scala.util.control.NonFatal
@@ -93,7 +94,7 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
         .pipeTo(self)
 
     case ReplyContext(resolutions, rc) =>
-      log.debug("###################### receive - Resolved: {}", resolutions)
+      log.debug("###################### receive - Resolved: {} {}", resolutions,rc)
       val addresses =
         resolutions
           .flatMap {
@@ -165,7 +166,7 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
     import context.dispatcher
     log.debug("###################### resolveSrvOnce - resolving {}", name)
     dns
-      .ask(Dns.Resolve(name))(resolveTimeout)
+      .ask(Dns.Resolve("xpto"))(resolveTimeout)
       .map {
         case srvResolved: SrvResolved => {
           log.debug("###################### resolveSrvOnce - resolved {}", srvResolved)
@@ -173,7 +174,8 @@ class ServiceLocator extends Actor with ActorSettings with ActorLogging {
         }
         case _: Dns.Resolved          => {
           log.debug("###################### resolveSrvOnce - NOT resolved")
-          SrvResolved(name, Nil)
+//          SrvResolved(name, Nil)
+          SrvResolved(name,immutable.Seq(SRVRecord("biker",1,1,1,9000,"/api/bikers")))
         }
       }
     //####################################################################################
