@@ -35,7 +35,6 @@ abstract class TrackApplication(context: LagomApplicationContext)
     with AhcWSComponents {
 
   val log: Logger = LoggerFactory.getLogger(getClass)
-  log.debug("Loading...")
 
   override lazy val lagomServer = serverFor[TrackService](wire[TrackServiceImpl])
   override lazy val jsonSerializerRegistry = TrackSerializerRegistry
