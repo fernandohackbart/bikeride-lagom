@@ -1,9 +1,7 @@
 package com.bikeride.biker.impl
 
 import com.bikeride.biker.api.BikerService
-import com.lightbend.lagom.scaladsl.api.ServiceLocator
-import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
-import com.lightbend.lagom.scaladsl.dns.DnsServiceLocatorComponents
+import com.bikeride.utils.servicelocator.dns.DNSServiceLocatorComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server._
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
@@ -14,12 +12,7 @@ import com.softwaremill.macwire._
 class BikerLoader extends LagomApplicationLoader{
 
   override def load(context: LagomApplicationContext) =
-    new BikerApplication(context) with DnsServiceLocatorComponents
-
-//  override def load(context: LagomApplicationContext): LagomApplication =
-//    new BikerApplication(context) {
-//      override def serviceLocator: ServiceLocator = NoServiceLocator
-//    }
+    new BikerApplication(context) with DNSServiceLocatorComponents
 
   override def loadDevMode(context: LagomApplicationContext): LagomApplication =
     new BikerApplication(context) with LagomDevModeComponents
