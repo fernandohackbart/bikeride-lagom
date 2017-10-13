@@ -191,3 +191,4 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`ride-lagom-api`,`track-lagom-api`,`biker-lagom-api`)
 
+
