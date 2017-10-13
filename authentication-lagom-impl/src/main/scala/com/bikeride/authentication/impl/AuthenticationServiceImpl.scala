@@ -33,6 +33,7 @@ class AuthenticationServiceImpl (bikerService: BikerService,
 
     //TODO: check if the request contains the expected JSON structure
     //TODO: check if the email or mobile are provided
+    //TODO: Check if it is possible to set the hostname to the remote service (biker.api.bikeride.com)
 
     Await.result(bikerService.getBikerByEmail.invoke(BikerByEmailRequest(req.email.get)).map {
       case (bikerByEmailResponse) => {

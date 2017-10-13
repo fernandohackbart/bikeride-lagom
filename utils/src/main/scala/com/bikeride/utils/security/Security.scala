@@ -45,8 +45,8 @@ object SecurityHeaderFilter extends HeaderFilter {
     //TODO check how to tell which service is going out and use the appropriate headers
     request.withHeaders(immutable.Seq(
       ("bikerideClientID",ConfigFactory.load().getString("authentication.clientID")),
-      ("bikerideClientToken",createAutoLoginToken.authToken))
-    )
+      ("bikerideClientToken",createAutoLoginToken.authToken),
+    ))
   }
 
   override def transformServerRequest(request: RequestHeader) = {
