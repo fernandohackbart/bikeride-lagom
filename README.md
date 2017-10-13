@@ -1,5 +1,8 @@
 # bikeride-lagom
 
+[![Build Status](https://travis-ci.org/fernandohackbart/bikeride-lagom.svg?branch=master)](https://travis-ci.org/fernandohackbart/bikeride-lagom)
+
+
 This project is a learning project to understand Lagom framework
 
 The application is composed of a context of three aggregates:
