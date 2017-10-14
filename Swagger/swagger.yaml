@@ -12,536 +12,1073 @@ info:
 host: '192.168.1.200:8000'
 basePath: /
 tags:
-  - name: Authentication
-    description: Operations over Authentication
+  - name: "Authentication"
+    description: "Operations over Authentication"
     externalDocs:
-      description: ''
-      url: 'https://github.com/fernandohackbart/bikeride-lagom'
-  - name: Biker
-    description: Operations over Biker
+      description: ""
+      url: "https://github.com/fernandohackbart/bikeride-lagom"
+  - name: "Biker"
+    description: "Operations over Biker"
     externalDocs:
-      description: ''
-      url: 'https://github.com/fernandohackbart/bikeride-lagom'
-  - name: Track
-    description: Operations over Track
+      description: ""
+      url: "https://github.com/fernandohackbart/bikeride-lagom"
+  - name: "Track"
+    description: "Operations over Track"
     externalDocs:
-      description: ''
-      url: 'https://github.com/fernandohackbart/bikeride-lagom'
-  - name: Ride
-    description: Operations over Ride
+      description: ""
+      url: "https://github.com/fernandohackbart/bikeride-lagom"
+  - name: "Ride"
+    description: "Operations over Ride"
     externalDocs:
-      description: ''
-      url: 'https://github.com/fernandohackbart/bikeride-lagom'
+      description: ""
+      url: "https://github.com/fernandohackbart/bikeride-lagom"
 paths:
+  /api/authn/biker:
+    post:
+      tags:
+      - "Authentication"
+      summary: "Create a new biker in the application without authentication token"
+      description: ""
+      operationId: "createBikerOnAuth"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Biker fields"
+        required: true
+        schema:
+          $ref: "#/definitions/BikerCreateRequest"
+      responses:
+        200:
+          description: "Biker ID and authentication token"
+          schema:
+            $ref: "#/definitions/BikerToken"
+  /api/authn/validate:
+    post:
+      tags:
+      - "Authentication"
+      summary: "Validate a given PIN and return a new token"
+      description: ""
+      operationId: "validatePIN"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Pin to be validated"
+        required: true
+        schema:
+          $ref: "#/definitions/ValidatePINRequest"
+      responses:
+        200:
+          description: "Biker ID and authentication token"
+          schema:
+            $ref: "#/definitions/BikerToken"
+        404:
+          description: "PIN informed not found"
+  /api/authn/generatepin:
+    post:
+      tags:
+      - "Authentication"
+      summary: "Request a PIN to be generated for the given client, the PIN will be sent by email or SMS"
+      description: ""
+      operationId: "generatePIN"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Pin to be validated, email and mobile"
+        required: true
+        schema:
+          $ref: "#/definitions/GeneratePINRequest"
+      responses:
+        200:
+          description: "Informational message"
+          schema:
+            $ref: "#/definitions/GeneratePINResponse"
+        404:
+          description: "Biker with the email or mobile informed not found"
   /api/biker:
     post:
       tags:
-        - Biker
-      summary: Create a new biker in the application
-      description: ''
-      operationId: createBiker
+      - "Biker"
+      summary: "Create a new biker in the application"
+      description: ""
+      operationId: "createBiker"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - name: bikerideClientID
-          in: header
-          description: ID of the client which have the token generated to
-          type: string
-          format: uuid
-          required: true
-        - name: bikerideClientToken
-          in: header
-          description: Authentication token generated for the current client
-          type: string
-          format: uuid
-          required: true
-        - in: body
-          name: body
-          description: Biker fields
-          required: true
-          schema:
-            $ref: '#/definitions/BikerCreateRequest'
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - in: "body"
+        name: "body"
+        description: "Biker fields"
+        required: true
+        schema:
+          $ref: "#/definitions/BikerCreateRequest"
       responses:
-        '200':
-          description: Biker ID and authentication token
+        200:
+          description: "Biker ID and authentication token"
           schema:
-            $ref: '#/definitions/BikerToken'
+            $ref: "#/definitions/BikerToken"
   /api/biker/byeemail:
     get:
       tags:
-        - Biker
-      summary: Get the biker ID providing its email
-      description: ''
-      operationId: getBikerByEmail
+      - "Biker"
+      summary: "Get the biker ID providing its email"
+      description: ""
+      operationId: "getBikerByEmail"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - name: bikerideClientID
-          in: header
-          description: ID of the client which have the token generated to
-          type: string
-          format: uuid
-          required: true
-        - name: bikerideClientToken
-          in: header
-          description: Authentication token generated for the current client
-          type: string
-          format: uuid
-          required: true
-        - in: body
-          name: body
-          description: Biker email
-          required: true
-          schema:
-            $ref: '#/definitions/BikerByEmailRequest'
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - in: "body"
+        name: "body"
+        description: "Biker email"
+        required: true
+        schema:
+          $ref: "#/definitions/BikerByEmailRequest"
       responses:
-        '200':
-          description: Biker ID and fields
+        200:
+          description: "Biker ID and fields"
           schema:
-            $ref: '#/definitions/BikerByEmailResponse'
-        '404':
-          description: Biker not found
+            $ref: "#/definitions/BikerByEmailResponse"
+        404:
+          description: "Biker not found"
           schema:
             type: string
-  '/api/biker/{bikerID}/name':
+  /api/biker/{bikerID}/name:
     put:
       tags:
-        - Biker
-      summary: Change biker's name
-      description: ''
-      operationId: changeBikerName
+      - "Biker"
+      summary: "Change biker's name"
+      description: ""
+      operationId: "changeBikerName"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - name: bikerideClientID
-          in: header
-          description: ID of the client which have the token generated to
-          type: string
-          format: uuid
-          required: true
-        - name: bikerideClientToken
-          in: header
-          description: Authentication token generated for the current client
-          type: string
-          format: uuid
-          required: true
-        - name: bikerID
-          in: path
-          description: ID of biker
-          required: true
-          type: string
-          format: uuid
-        - name: body
-          in: body
-          description: Biker change fields
-          required: true
-          schema:
-            $ref: '#/definitions/BikerChangeFields'
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "bikerID"
+        in: "path"
+        description: "ID of biker"
+        required: true
+        type: "string"
+        format: "uuid"
+      - name: "body"
+        in: "body"
+        description: "Biker change fields"
+        required: true
+        schema:
+          $ref: "#/definitions/BikerChangeFields"
       responses:
-        '200':
-          description: Biker ID
+        200:
+          description: "Biker ID"
           schema:
-            $ref: '#/definitions/BikerID'
-        '404':
-          description: Biker not found
+            $ref: "#/definitions/BikerID"
+        404:
+          description: "Biker not found"
           schema:
             type: string
-  '/api/biker/{bikerID}/avatar64':
+  /api/biker/{bikerID}/avatar64:
     put:
       tags:
-        - Biker
-      summary: Change biker's avatar Base64 picture
-      description: ''
-      operationId: changeBikerAvatarB64
+      - "Biker"
+      summary: "Change biker's avatar Base64 picture"
+      description: ""
+      operationId: "changeBikerAvatarB64"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - name: bikerideClientID
-          in: header
-          description: ID of the client which have the token generated to
-          type: string
-          format: uuid
-          required: true
-        - name: bikerideClientToken
-          in: header
-          description: Authentication token generated for the current client
-          type: string
-          format: uuid
-          required: true
-        - name: bikerID
-          in: path
-          description: ID of biker
-          required: true
-          type: string
-          format: uuid
-        - name: body
-          in: body
-          description: Biker change fields
-          required: true
-          schema:
-            $ref: '#/definitions/BikerChangeFields'
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "bikerID"
+        in: "path"
+        description: "ID of biker"
+        required: true
+        type: "string"
+        format: "uuid"
+      - name: "body"
+        in: "body"
+        description: "Biker change fields"
+        required: true
+        schema:
+          $ref: "#/definitions/BikerChangeFields"
       responses:
-        '200':
-          description: Biker ID
+        200:
+          description: "Biker ID"
           schema:
-            $ref: '#/definitions/BikerID'
-        '404':
-          description: Biker not found
+            $ref: "#/definitions/BikerID"
+        404:
+          description: "Biker not found"
           schema:
             type: string
-  '/api/biker/{bikerID}/bloodtype':
+  /api/biker/{bikerID}/bloodtype:
     put:
       tags:
-        - Biker
-      summary: Change biker's bloodtype
-      description: ''
-      operationId: changeBikerBloodType
+      - "Biker"
+      summary: "Change biker's bloodtype"
+      description: ""
+      operationId: "changeBikerBloodType"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - name: bikerideClientID
-          in: header
-          description: ID of the client which have the token generated to
-          type: string
-          format: uuid
-          required: true
-        - name: bikerideClientToken
-          in: header
-          description: Authentication token generated for the current client
-          type: string
-          format: uuid
-          required: true
-        - name: bikerID
-          in: path
-          description: ID of biker
-          required: true
-          type: string
-          format: uuid
-        - name: body
-          in: body
-          description: Biker change fields
-          required: true
-          schema:
-            $ref: '#/definitions/BikerChangeFields'
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "bikerID"
+        in: "path"
+        description: "ID of biker"
+        required: true
+        type: "string"
+        format: "uuid"
+      - name: "body"
+        in: "body"
+        description: "Biker change fields"
+        required: true
+        schema:
+          $ref: "#/definitions/BikerChangeFields"
       responses:
-        '200':
-          description: Biker ID
+        200:
+          description: "Biker ID"
           schema:
-            $ref: '#/definitions/BikerID'
-        '404':
-          description: Biker not found
+            $ref: "#/definitions/BikerID"
+        404:
+          description: "Biker not found"
           schema:
             type: string
-  '/api/biker/{bikerID}/mobile':
+  /api/biker/{bikerID}/mobile:
     put:
       tags:
-        - Biker
-      summary: Change biker's mobile
-      description: ''
-      operationId: changeBikerMobile
+      - "Biker"
+      summary: "Change biker's mobile"
+      description: ""
+      operationId: "changeBikerMobile"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - name: bikerideClientID
-          in: header
-          description: ID of the client which have the token generated to
-          type: string
-          format: uuid
-          required: true
-        - name: bikerideClientToken
-          in: header
-          description: Authentication token generated for the current client
-          type: string
-          format: uuid
-          required: true
-        - name: bikerID
-          in: path
-          description: ID of biker
-          required: true
-          type: string
-          format: uuid
-        - name: body
-          in: body
-          description: Biker change fields
-          required: true
-          schema:
-            $ref: '#/definitions/BikerChangeFields'
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "bikerID"
+        in: "path"
+        description: "ID of biker"
+        required: true
+        type: "string"
+        format: "uuid"
+      - name: "body"
+        in: "body"
+        description: "Biker change fields"
+        required: true
+        schema:
+          $ref: "#/definitions/BikerChangeFields"
       responses:
-        '200':
-          description: Biker ID
+        200:
+          description: "Biker ID"
           schema:
-            $ref: '#/definitions/BikerID'
-        '404':
-          description: Biker not found
+            $ref: "#/definitions/BikerID"
+        404:
+          description: "Biker not found"
           schema:
             type: string
-  '/api/biker/{bikerID}/email':
+  /api/biker/{bikerID}/email:
     put:
       tags:
-        - Biker
-      summary: Change biker's email
-      description: ''
-      operationId: changeBikerEmail
+      - "Biker"
+      summary: "Change biker's email"
+      description: ""
+      operationId: "changeBikerEmail"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - name: bikerideClientID
-          in: header
-          description: ID of the client which have the token generated to
-          type: string
-          format: uuid
-          required: true
-        - name: bikerideClientToken
-          in: header
-          description: Authentication token generated for the current client
-          type: string
-          format: uuid
-          required: true
-        - name: bikerID
-          in: path
-          description: ID of biker
-          required: true
-          type: string
-          format: uuid
-        - name: body
-          in: body
-          description: Biker change fields
-          required: true
-          schema:
-            $ref: '#/definitions/BikerChangeFields'
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "bikerID"
+        in: "path"
+        description: "ID of biker"
+        required: true
+        type: "string"
+        format: "uuid"
+      - name: "body"
+        in: "body"
+        description: "Biker change fields"
+        required: true
+        schema:
+          $ref: "#/definitions/BikerChangeFields"
       responses:
-        '200':
-          description: Biker ID
+        200:
+          description: "Biker ID"
           schema:
-            $ref: '#/definitions/BikerID'
-        '404':
-          description: Biker not found
+            $ref: "#/definitions/BikerID"
+        404:
+          description: "Biker not found"
           schema:
             type: string
-  '/api/biker/{bikerID}/activate':
+  /api/biker/{bikerID}/activate:
     post:
       tags:
-        - Biker
-      summary: Activate biker
-      description: ''
-      operationId: activateBiker
+      - "Biker"
+      summary: "Activate biker"
+      description: ""
+      operationId: "activateBiker"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - name: bikerideClientID
-          in: header
-          description: ID of the client which have the token generated to
-          type: string
-          format: uuid
-          required: true
-        - name: bikerideClientToken
-          in: header
-          description: Authentication token generated for the current client
-          type: string
-          format: uuid
-          required: true
-        - name: bikerID
-          in: path
-          description: ID of biker
-          required: true
-          type: string
-          format: uuid
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "bikerID"
+        in: "path"
+        description: "ID of biker"
+        required: true
+        type: "string"
+        format: "uuid"
       responses:
-        '200':
-          description: Biker ID
+        200:
+          description: "Biker ID"
           schema:
-            $ref: '#/definitions/BikerID'
-        '404':
-          description: Biker not found
+            $ref: "#/definitions/BikerID"
+        404:
+          description: "Biker not found"
           schema:
             type: string
-  '/api/biker/{bikerID}/deactivate':
+  /api/biker/{bikerID}/deactivate:
     post:
       tags:
-        - Biker
-      summary: Deactivate biker
-      description: ''
-      operationId: deactivateBiker
+      - "Biker"
+      summary: "Deactivate biker"
+      description: ""
+      operationId: "deactivateBiker"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - name: bikerideClientID
-          in: header
-          description: ID of the client which have the token generated to
-          type: string
-          format: uuid
-          required: true
-        - name: bikerideClientToken
-          in: header
-          description: Authentication token generated for the current client
-          type: string
-          format: uuid
-          required: true
-        - name: bikerID
-          in: path
-          description: ID of biker
-          required: true
-          type: string
-          format: uuid
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "bikerID"
+        in: "path"
+        description: "ID of biker"
+        required: true
+        type: "string"
+        format: "uuid"
       responses:
-        '200':
-          description: Biker ID
+        200:
+          description: "Biker ID"
           schema:
-            $ref: '#/definitions/BikerID'
-        '404':
-          description: Biker not found
+            $ref: "#/definitions/BikerID"
+        404:
+          description: "Biker not found"
           schema:
             type: string
-  '/api/biker/{bikerID}/isactive':
+  /api/biker/{bikerID}/isactive:
     get:
       tags:
-        - Biker
-      summary: Is biker active?
-      description: ''
-      operationId: getBikerIsActive
+      - "Biker"
+      summary: "Is biker active?"
+      description: ""
+      operationId: "getBikerIsActive"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - name: bikerideClientID
-          in: header
-          description: ID of the client which have the token generated to
-          type: string
-          format: uuid
-          required: true
-        - name: bikerideClientToken
-          in: header
-          description: Authentication token generated for the current client
-          type: string
-          format: uuid
-          required: true
-        - name: bikerID
-          in: path
-          description: ID of biker
-          required: true
-          type: string
-          format: uuid
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "bikerID"
+        in: "path"
+        description: "ID of biker"
+        required: true
+        type: "string"
+        format: "uuid"
       responses:
-        '200':
-          description: Biker ID and active status
+        200:
+          description: "Biker ID and active status"
           schema:
-            $ref: '#/definitions/BikerIsActive'
-        '404':
-          description: Biker not found
+            $ref: "#/definitions/BikerIsActive"
+        404:
+          description: "Biker not found"
           schema:
             type: string
-  '/api/biker/{bikerID}/avatarb64':
+  /api/biker/{bikerID}/avatarb64:
     get:
       tags:
-        - Biker
-      summary: Get biker avatar Base64 image
-      description: ''
-      operationId: getBikerAvatarB64
+      - "Biker"
+      summary: "Get biker avatar Base64 image"
+      description: ""
+      operationId: "getBikerAvatarB64"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - name: bikerideClientID
-          in: header
-          description: ID of the client which have the token generated to
-          type: string
-          format: uuid
-          required: true
-        - name: bikerideClientToken
-          in: header
-          description: Authentication token generated for the current client
-          type: string
-          format: uuid
-          required: true
-        - name: bikerID
-          in: path
-          description: ID of biker
-          required: true
-          type: string
-          format: uuid
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "bikerID"
+        in: "path"
+        description: "ID of biker"
+        required: true
+        type: "string"
+        format: "uuid"
       responses:
-        '200':
-          description: Biker ID and avatar Base64 image
+        200:
+          description: "Biker ID and avatar Base64 image"
           schema:
-            $ref: '#/definitions/BikerAvatarB64'
-        '404':
-          description: Biker not found
+            $ref: "#/definitions/BikerAvatarB64"
+        404:
+          description: "Biker not found"
           schema:
             type: string
-  '/api/biker/{bikerID}':
+  /api/biker/{bikerID}:
     get:
       tags:
-        - Biker
-      summary: Get biker
-      description: ''
-      operationId: getBiker
+      - "Biker"
+      summary: "Get biker"
+      description: ""
+      operationId: "getBiker"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - name: bikerideClientID
-          in: header
-          description: ID of the client which have the token generated to
-          type: string
-          format: uuid
-          required: true
-        - name: bikerideClientToken
-          in: header
-          description: Authentication token generated for the current client
-          type: string
-          format: uuid
-          required: true
-        - name: bikerID
-          in: path
-          description: ID of biker
-          required: true
-          type: string
-          format: uuid
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "bikerID"
+        in: "path"
+        description: "ID of biker"
+        required: true
+        type: "string"
+        format: "uuid"
       responses:
-        '200':
-          description: Biker record
+        200:
+          description: "Biker record"
           schema:
-            $ref: '#/definitions/Biker'
-        '404':
-          description: Biker not found
+            $ref: "#/definitions/Biker"
+        404:
+          description: "Biker not found"
           schema:
             type: string
   /api/bikers:
     get:
       tags:
-        - Biker
-      summary: Get biker
-      description: ''
-      operationId: getBikers
+      - "Biker"
+      summary: "Get biker"
+      description: ""
+      operationId: "getBikers"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - name: bikerideClientID
-          in: header
-          description: ID of the client which have the token generated to
-          type: string
-          format: uuid
-          required: true
-        - name: bikerideClientToken
-          in: header
-          description: Authentication token generated for the current client
-          type: string
-          format: uuid
-          required: true
-        - name: pageNo
-          in: query
-          description: Page number to be retrieved
-          type: integer
-        - name: pageSize
-          in: query
-          description: Size of the page to be retrieved
-          type: integer
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: pageNo
+        in: query
+        description: "Page number to be retrieved"
+        type: integer
+      - name: pageSize
+        in: query
+        description: "Size of the page to be retrieved"
+        type: integer
       responses:
-        '200':
-          description: Biker record
+        200:
+          description: "Biker record"
           schema:
-            $ref: '#/definitions/Biker'
-        '404':
-          description: Biker not found
+            type: array
+            items:
+              $ref: "#/definitions/Biker"
+        404:
+          description: "Biker not found"
           schema:
             type: string
+  /api/track:
+    post:
+      tags:
+      - "Track"
+      summary: "Create a new track in the application"
+      description: ""
+      operationId: "createTrack"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - in: "body"
+        name: "body"
+        description: "Track fields"
+        required: true
+        schema:
+          $ref: "#/definitions/TrackFields"
+      responses:
+        200:
+          description: "Track ID"
+          schema:
+            $ref: "#/definitions/TrackID"
+  /api/track/{trackID}/name:
+    put:
+      tags:
+      - "Track"
+      summary: "Chang a track name"
+      description: ""
+      operationId: "changeTrackName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "trackID"
+        in: "path"
+        description: "ID of track"
+        required: true
+        type: "string"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        description: "Track change fields containing the name"
+        required: true
+        schema:
+          $ref: "#/definitions/TrackChangeFields"
+      responses:
+        200:
+          description: "Track ID"
+          schema:
+            $ref: "#/definitions/TrackID"
+  /api/track/{trackID}/maintainer:
+    put:
+      tags:
+      - "Track"
+      summary: "Chang a track maintainer"
+      description: ""
+      operationId: "changeTrackMaintainer"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "trackID"
+        in: "path"
+        description: "ID of track"
+        required: true
+        type: "string"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        description: "Track change fields containing the maintainer"
+        required: true
+        schema:
+          $ref: "#/definitions/TrackChangeFields"
+      responses:
+        200:
+          description: "Track ID"
+          schema:
+            $ref: "#/definitions/TrackID"
+  /api/track/{trackID}/activate:
+    post:
+      tags:
+      - "Track"
+      summary: "Activate a track"
+      description: ""
+      operationId: "activateTrack"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "trackID"
+        in: "path"
+        description: "ID of track"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Track ID"
+          schema:
+            $ref: "#/definitions/TrackID"
+  /api/track/{trackID}/deactivate:
+    post:
+      tags:
+      - "Track"
+      summary: "Deactivate a track"
+      description: ""
+      operationId: "deactivateTrack"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "trackID"
+        in: "path"
+        description: "ID of track"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Track ID"
+          schema:
+            $ref: "#/definitions/TrackID"
+  /api/track/{trackID}/isactivate:
+    get:
+      tags:
+      - "Track"
+      summary: "Check if a given track is active"
+      description: ""
+      operationId: "getTrackIsActive"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "trackID"
+        in: "path"
+        description: "ID of track"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Track ID and active boolean value"
+          schema:
+            $ref: "#/definitions/TrackIsActive"
+  /api/track/{trackID}/waypoint:
+    post:
+      tags:
+      - "Track"
+      summary: "Add one waypoint to the track"
+      description: ""
+      operationId: "addTrackWayPoint"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "trackID"
+        in: "path"
+        description: "ID of track"
+        required: true
+        type: "string"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        description: "Track waypoint fields"
+        required: true
+        schema:
+          $ref: "#/definitions/TrackWaypointFields"
+      responses:
+        200:
+          description: "Track waypoint ID"
+          schema:
+            $ref: "#/definitions/TrackWaypointID"
+  /api/track/{trackID}/{waypointid}:
+    delete:
+      tags:
+      - "Track"
+      summary: "Delete one waypoint from the track"
+      description: ""
+      operationId: "deleteTrackWayPoint"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "trackID"
+        in: "path"
+        description: "ID of track"
+        required: true
+        type: "string"
+        format: "uuid"
+      - name: "waypointid"
+        in: "path"
+        description: "ID of waypoint"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Track ID"
+          schema:
+            $ref: "#/definitions/TrackID"
+  /api/track/{trackID}/{waypointid}/initial:
+    post:
+      tags:
+      - "Track"
+      summary: "Set one waypoint as the initial of the track"
+      description: ""
+      operationId: "defineTrackInitialWayPoint"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "trackID"
+        in: "path"
+        description: "ID of track"
+        required: true
+        type: "string"
+        format: "uuid"
+      - name: "waypointid"
+        in: "path"
+        description: "ID of waypoint"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Track ID"
+          schema:
+            $ref: "#/definitions/TrackID"
+  /api/track/{trackID}/waypoints:
+    get:
+      tags:
+      - "Track"
+      summary: "Get the waypoints of the track in order"
+      description: ""
+      operationId: "getTrackWayPoints"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "trackID"
+        in: "path"
+        description: "ID of track"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Track waypoint ID"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TrackWaypoint'
+  /api/track/{trackID}:
+    get:
+      tags:
+      - "Track"
+      summary: "Get one track"
+      description: ""
+      operationId: "getTrack"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "trackID"
+        in: "path"
+        description: "ID of track"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Track waypoint ID"
+          schema:
+            $ref: '#/definitions/Track'
+  /api/tracks:
+    get:
+      tags:
+      - "Track"
+      summary: "Get a page of tracks"
+      description: ""
+      operationId: "getTracks"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: pageNo
+        in: query
+        description: "Page number to be retrieved"
+        type: integer
+      - name: pageSize
+        in: query
+        description: "Size of the page to be retrieved"
+        type: integer
+      responses:
+        200:
+          description: "Track waypoint ID"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Track'
+  /api/track/{trackID}/readwaypoints:
+    get:
+      tags:
+      - "Track"
+      summary: "Get the waypoints of the track from the readside in order"
+      description: ""
+      operationId: "readTrackWayPoints"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "trackID"
+        in: "path"
+        description: "ID of track"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Array os track waypoint"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TrackWaypoint'
+
 definitions:
   Token:
     type: object
@@ -549,6 +1086,27 @@ definitions:
       authToken:
         type: string
       refreshToken:
+        type: string
+  ValidatePINRequest:
+    type: object
+    properties:
+      client:
+        $ref: '#/definitions/BikerClient'
+      pin:
+        type: string
+  GeneratePINRequest:
+    type: object
+    properties:
+      client:
+        $ref: '#/definitions/BikerClient'
+      email:
+        type: string
+      mobile:
+        type: string
+  GeneratePINResponse:
+    type: object
+    properties:
+      message:
         type: string
   BikerToken:
     type: object
@@ -639,6 +1197,104 @@ definitions:
         $ref: '#/definitions/BikerID'
       bikerFields:
         $ref: '#/definitions/BikerFields'
+  TrackID:
+    type: object
+    properties:
+      trackID:
+        type: string
+        format: uuid
+  TrackFields:
+    type: object
+    properties:
+      name:
+        type: string
+      maintainer:
+        type: string
+        format: uuid
+      active:
+        type: boolean
+  TrackChangeFields:
+    type: object
+    properties:
+      name:
+        type: string
+      maintainer:
+        type: string
+        format: uuid
+  TrackWaypointFields:
+    type: object
+    properties:
+      name:
+        type: string
+      coordinates:
+        type: string
+  TrackWaypointID:
+    type: object
+    properties:
+      trackid:
+        type: string
+        format: uuid
+      trackwaypointid:
+        type: string
+        format: uuid
+  TrackWaypoint:
+    type: object
+    properties:
+      trackwaypointid:
+        $ref: '#/definitions/TrackWaypointID'
+      trackWaypointFields:
+        $ref: '#/definitions/TrackWaypointFields'
+  TrackIsActive:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      active:
+        type: boolean
+  Track:
+    type: object
+    properties:
+      trackID:
+        $ref: '#/definitions/TrackID'
+      trackFields:
+        $ref: '#/definitions/TrackFields'
+      trackWaypoints:
+        type: array
+        items:
+          $ref: '#/definitions/TrackWaypoint'
+  RideID:
+    type: object
+    properties:
+      rideID:
+        type: string
+        format: uuid
+  RideCreateFields:
+    type: object
+    properties:
+      name:
+        type: string
+      limit:
+        type: integer
+      track:
+        $ref: '#/definitions/TrackID'
+      opentime:
+        type: string
+        format: date-time
+      closetime:
+        type: string
+        format: date-time
+      starttime:
+        type: string
+        format: date-time
+      finishtime:
+        type: string
+        format: date-time
+  RideFields:
+
+
+
+
 externalDocs:
   description: Find out more about BikeRide Lagom
   url: 'https://github.com/fernandohackbart/bikeride-lagom'
