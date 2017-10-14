@@ -1,0 +1,644 @@
+swagger: '2.0'
+info:
+  description: This is the BikeRide Lagom microservices description
+  version: 0.0.1-SNAPSHOT
+  title: BikeRide Lagom
+  termsOfService: 'https://github.com/fernandohackbart/bikeride-lagom/blob/master/LICENSE'
+  contact:
+    email: fhackbart@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: '192.168.1.200:8000'
+basePath: /
+tags:
+  - name: Authentication
+    description: Operations over Authentication
+    externalDocs:
+      description: ''
+      url: 'https://github.com/fernandohackbart/bikeride-lagom'
+  - name: Biker
+    description: Operations over Biker
+    externalDocs:
+      description: ''
+      url: 'https://github.com/fernandohackbart/bikeride-lagom'
+  - name: Track
+    description: Operations over Track
+    externalDocs:
+      description: ''
+      url: 'https://github.com/fernandohackbart/bikeride-lagom'
+  - name: Ride
+    description: Operations over Ride
+    externalDocs:
+      description: ''
+      url: 'https://github.com/fernandohackbart/bikeride-lagom'
+paths:
+  /api/biker:
+    post:
+      tags:
+        - Biker
+      summary: Create a new biker in the application
+      description: ''
+      operationId: createBiker
+      produces:
+        - application/json
+      parameters:
+        - name: bikerideClientID
+          in: header
+          description: ID of the client which have the token generated to
+          type: string
+          format: uuid
+          required: true
+        - name: bikerideClientToken
+          in: header
+          description: Authentication token generated for the current client
+          type: string
+          format: uuid
+          required: true
+        - in: body
+          name: body
+          description: Biker fields
+          required: true
+          schema:
+            $ref: '#/definitions/BikerCreateRequest'
+      responses:
+        '200':
+          description: Biker ID and authentication token
+          schema:
+            $ref: '#/definitions/BikerToken'
+  /api/biker/byeemail:
+    get:
+      tags:
+        - Biker
+      summary: Get the biker ID providing its email
+      description: ''
+      operationId: getBikerByEmail
+      produces:
+        - application/json
+      parameters:
+        - name: bikerideClientID
+          in: header
+          description: ID of the client which have the token generated to
+          type: string
+          format: uuid
+          required: true
+        - name: bikerideClientToken
+          in: header
+          description: Authentication token generated for the current client
+          type: string
+          format: uuid
+          required: true
+        - in: body
+          name: body
+          description: Biker email
+          required: true
+          schema:
+            $ref: '#/definitions/BikerByEmailRequest'
+      responses:
+        '200':
+          description: Biker ID and fields
+          schema:
+            $ref: '#/definitions/BikerByEmailResponse'
+        '404':
+          description: Biker not found
+          schema:
+            type: string
+  '/api/biker/{bikerID}/name':
+    put:
+      tags:
+        - Biker
+      summary: Change biker's name
+      description: ''
+      operationId: changeBikerName
+      produces:
+        - application/json
+      parameters:
+        - name: bikerideClientID
+          in: header
+          description: ID of the client which have the token generated to
+          type: string
+          format: uuid
+          required: true
+        - name: bikerideClientToken
+          in: header
+          description: Authentication token generated for the current client
+          type: string
+          format: uuid
+          required: true
+        - name: bikerID
+          in: path
+          description: ID of biker
+          required: true
+          type: string
+          format: uuid
+        - name: body
+          in: body
+          description: Biker change fields
+          required: true
+          schema:
+            $ref: '#/definitions/BikerChangeFields'
+      responses:
+        '200':
+          description: Biker ID
+          schema:
+            $ref: '#/definitions/BikerID'
+        '404':
+          description: Biker not found
+          schema:
+            type: string
+  '/api/biker/{bikerID}/avatar64':
+    put:
+      tags:
+        - Biker
+      summary: Change biker's avatar Base64 picture
+      description: ''
+      operationId: changeBikerAvatarB64
+      produces:
+        - application/json
+      parameters:
+        - name: bikerideClientID
+          in: header
+          description: ID of the client which have the token generated to
+          type: string
+          format: uuid
+          required: true
+        - name: bikerideClientToken
+          in: header
+          description: Authentication token generated for the current client
+          type: string
+          format: uuid
+          required: true
+        - name: bikerID
+          in: path
+          description: ID of biker
+          required: true
+          type: string
+          format: uuid
+        - name: body
+          in: body
+          description: Biker change fields
+          required: true
+          schema:
+            $ref: '#/definitions/BikerChangeFields'
+      responses:
+        '200':
+          description: Biker ID
+          schema:
+            $ref: '#/definitions/BikerID'
+        '404':
+          description: Biker not found
+          schema:
+            type: string
+  '/api/biker/{bikerID}/bloodtype':
+    put:
+      tags:
+        - Biker
+      summary: Change biker's bloodtype
+      description: ''
+      operationId: changeBikerBloodType
+      produces:
+        - application/json
+      parameters:
+        - name: bikerideClientID
+          in: header
+          description: ID of the client which have the token generated to
+          type: string
+          format: uuid
+          required: true
+        - name: bikerideClientToken
+          in: header
+          description: Authentication token generated for the current client
+          type: string
+          format: uuid
+          required: true
+        - name: bikerID
+          in: path
+          description: ID of biker
+          required: true
+          type: string
+          format: uuid
+        - name: body
+          in: body
+          description: Biker change fields
+          required: true
+          schema:
+            $ref: '#/definitions/BikerChangeFields'
+      responses:
+        '200':
+          description: Biker ID
+          schema:
+            $ref: '#/definitions/BikerID'
+        '404':
+          description: Biker not found
+          schema:
+            type: string
+  '/api/biker/{bikerID}/mobile':
+    put:
+      tags:
+        - Biker
+      summary: Change biker's mobile
+      description: ''
+      operationId: changeBikerMobile
+      produces:
+        - application/json
+      parameters:
+        - name: bikerideClientID
+          in: header
+          description: ID of the client which have the token generated to
+          type: string
+          format: uuid
+          required: true
+        - name: bikerideClientToken
+          in: header
+          description: Authentication token generated for the current client
+          type: string
+          format: uuid
+          required: true
+        - name: bikerID
+          in: path
+          description: ID of biker
+          required: true
+          type: string
+          format: uuid
+        - name: body
+          in: body
+          description: Biker change fields
+          required: true
+          schema:
+            $ref: '#/definitions/BikerChangeFields'
+      responses:
+        '200':
+          description: Biker ID
+          schema:
+            $ref: '#/definitions/BikerID'
+        '404':
+          description: Biker not found
+          schema:
+            type: string
+  '/api/biker/{bikerID}/email':
+    put:
+      tags:
+        - Biker
+      summary: Change biker's email
+      description: ''
+      operationId: changeBikerEmail
+      produces:
+        - application/json
+      parameters:
+        - name: bikerideClientID
+          in: header
+          description: ID of the client which have the token generated to
+          type: string
+          format: uuid
+          required: true
+        - name: bikerideClientToken
+          in: header
+          description: Authentication token generated for the current client
+          type: string
+          format: uuid
+          required: true
+        - name: bikerID
+          in: path
+          description: ID of biker
+          required: true
+          type: string
+          format: uuid
+        - name: body
+          in: body
+          description: Biker change fields
+          required: true
+          schema:
+            $ref: '#/definitions/BikerChangeFields'
+      responses:
+        '200':
+          description: Biker ID
+          schema:
+            $ref: '#/definitions/BikerID'
+        '404':
+          description: Biker not found
+          schema:
+            type: string
+  '/api/biker/{bikerID}/activate':
+    post:
+      tags:
+        - Biker
+      summary: Activate biker
+      description: ''
+      operationId: activateBiker
+      produces:
+        - application/json
+      parameters:
+        - name: bikerideClientID
+          in: header
+          description: ID of the client which have the token generated to
+          type: string
+          format: uuid
+          required: true
+        - name: bikerideClientToken
+          in: header
+          description: Authentication token generated for the current client
+          type: string
+          format: uuid
+          required: true
+        - name: bikerID
+          in: path
+          description: ID of biker
+          required: true
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Biker ID
+          schema:
+            $ref: '#/definitions/BikerID'
+        '404':
+          description: Biker not found
+          schema:
+            type: string
+  '/api/biker/{bikerID}/deactivate':
+    post:
+      tags:
+        - Biker
+      summary: Deactivate biker
+      description: ''
+      operationId: deactivateBiker
+      produces:
+        - application/json
+      parameters:
+        - name: bikerideClientID
+          in: header
+          description: ID of the client which have the token generated to
+          type: string
+          format: uuid
+          required: true
+        - name: bikerideClientToken
+          in: header
+          description: Authentication token generated for the current client
+          type: string
+          format: uuid
+          required: true
+        - name: bikerID
+          in: path
+          description: ID of biker
+          required: true
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Biker ID
+          schema:
+            $ref: '#/definitions/BikerID'
+        '404':
+          description: Biker not found
+          schema:
+            type: string
+  '/api/biker/{bikerID}/isactive':
+    get:
+      tags:
+        - Biker
+      summary: Is biker active?
+      description: ''
+      operationId: getBikerIsActive
+      produces:
+        - application/json
+      parameters:
+        - name: bikerideClientID
+          in: header
+          description: ID of the client which have the token generated to
+          type: string
+          format: uuid
+          required: true
+        - name: bikerideClientToken
+          in: header
+          description: Authentication token generated for the current client
+          type: string
+          format: uuid
+          required: true
+        - name: bikerID
+          in: path
+          description: ID of biker
+          required: true
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Biker ID and active status
+          schema:
+            $ref: '#/definitions/BikerIsActive'
+        '404':
+          description: Biker not found
+          schema:
+            type: string
+  '/api/biker/{bikerID}/avatarb64':
+    get:
+      tags:
+        - Biker
+      summary: Get biker avatar Base64 image
+      description: ''
+      operationId: getBikerAvatarB64
+      produces:
+        - application/json
+      parameters:
+        - name: bikerideClientID
+          in: header
+          description: ID of the client which have the token generated to
+          type: string
+          format: uuid
+          required: true
+        - name: bikerideClientToken
+          in: header
+          description: Authentication token generated for the current client
+          type: string
+          format: uuid
+          required: true
+        - name: bikerID
+          in: path
+          description: ID of biker
+          required: true
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Biker ID and avatar Base64 image
+          schema:
+            $ref: '#/definitions/BikerAvatarB64'
+        '404':
+          description: Biker not found
+          schema:
+            type: string
+  '/api/biker/{bikerID}':
+    get:
+      tags:
+        - Biker
+      summary: Get biker
+      description: ''
+      operationId: getBiker
+      produces:
+        - application/json
+      parameters:
+        - name: bikerideClientID
+          in: header
+          description: ID of the client which have the token generated to
+          type: string
+          format: uuid
+          required: true
+        - name: bikerideClientToken
+          in: header
+          description: Authentication token generated for the current client
+          type: string
+          format: uuid
+          required: true
+        - name: bikerID
+          in: path
+          description: ID of biker
+          required: true
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Biker record
+          schema:
+            $ref: '#/definitions/Biker'
+        '404':
+          description: Biker not found
+          schema:
+            type: string
+  /api/bikers:
+    get:
+      tags:
+        - Biker
+      summary: Get biker
+      description: ''
+      operationId: getBikers
+      produces:
+        - application/json
+      parameters:
+        - name: bikerideClientID
+          in: header
+          description: ID of the client which have the token generated to
+          type: string
+          format: uuid
+          required: true
+        - name: bikerideClientToken
+          in: header
+          description: Authentication token generated for the current client
+          type: string
+          format: uuid
+          required: true
+        - name: pageNo
+          in: query
+          description: Page number to be retrieved
+          type: integer
+        - name: pageSize
+          in: query
+          description: Size of the page to be retrieved
+          type: integer
+      responses:
+        '200':
+          description: Biker record
+          schema:
+            $ref: '#/definitions/Biker'
+        '404':
+          description: Biker not found
+          schema:
+            type: string
+definitions:
+  Token:
+    type: object
+    properties:
+      authToken:
+        type: string
+      refreshToken:
+        type: string
+  BikerToken:
+    type: object
+    properties:
+      bikerID:
+        $ref: '#/definitions/BikerID'
+      token:
+        $ref: '#/definitions/Token'
+  BikerClient:
+    type: object
+    properties:
+      clientID:
+        type: string
+        format: uuid
+  BikerCreateRequest:
+    type: object
+    properties:
+      client:
+        $ref: '#/definitions/BikerClient'
+      bikerFields:
+        $ref: '#/definitions/BikerFields'
+  BikerID:
+    type: object
+    properties:
+      bikerID:
+        type: string
+        format: uuid
+  BikerFields:
+    type: object
+    properties:
+      name:
+        type: string
+      avatarb64:
+        type: string
+      bloodType:
+        type: string
+      mobile:
+        type: string
+      email:
+        type: string
+      active:
+        type: boolean
+  BikerChangeFields:
+    type: object
+    properties:
+      name:
+        type: string
+      avatarb64:
+        type: string
+      bloodType:
+        type: string
+      mobile:
+        type: string
+      email:
+        type: string
+  Biker:
+    type: object
+    properties:
+      bikerID:
+        $ref: '#/definitions/BikerID'
+      bikerFields:
+        $ref: '#/definitions/BikerFields'
+  BikerAvatarB64:
+    type: object
+    properties:
+      bikerID:
+        type: string
+        format: uuid
+      avatarb64:
+        type: string
+  BikerIsActive:
+    type: object
+    properties:
+      bikerID:
+        type: string
+        format: uuid
+      active:
+        type: boolean
+  BikerByEmailRequest:
+    type: object
+    properties:
+      email:
+        type: string
+  BikerByEmailResponse:
+    type: object
+    properties:
+      bikerID:
+        $ref: '#/definitions/BikerID'
+      bikerFields:
+        $ref: '#/definitions/BikerFields'
+externalDocs:
+  description: Find out more about BikeRide Lagom
+  url: 'https://github.com/fernandohackbart/bikeride-lagom'
