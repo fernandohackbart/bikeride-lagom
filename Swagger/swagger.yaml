@@ -167,7 +167,7 @@ paths:
           schema:
             $ref: "#/definitions/BikerByEmailResponse"
         404:
-          description: "Biker not found"
+          description: "Biker with given email found"
           schema:
             type: string
   /api/biker/{bikerID}/name:
@@ -200,7 +200,7 @@ paths:
         format: "uuid"
       - name: "body"
         in: "body"
-        description: "Biker change fields"
+        description: "Biker change fields containing the name (other values will be ignored)"
         required: true
         schema:
           $ref: "#/definitions/BikerChangeFields"
@@ -243,7 +243,7 @@ paths:
         format: "uuid"
       - name: "body"
         in: "body"
-        description: "Biker change fields"
+        description: "Biker change fields containing the Base64 avatar image (other values will be ignored)"
         required: true
         schema:
           $ref: "#/definitions/BikerChangeFields"
@@ -286,7 +286,7 @@ paths:
         format: "uuid"
       - name: "body"
         in: "body"
-        description: "Biker change fields"
+        description: "Biker change fields containing the blood type (other values will be ignored)"
         required: true
         schema:
           $ref: "#/definitions/BikerChangeFields"
@@ -329,7 +329,7 @@ paths:
         format: "uuid"
       - name: "body"
         in: "body"
-        description: "Biker change fields"
+        description: "Biker change fields containing the mobile (other values will be ignored)"
         required: true
         schema:
           $ref: "#/definitions/BikerChangeFields"
@@ -372,7 +372,7 @@ paths:
         format: "uuid"
       - name: "body"
         in: "body"
-        description: "Biker change fields"
+        description: "Biker change fields containing the email (other values will be ignored)"
         required: true
         schema:
           $ref: "#/definitions/BikerChangeFields"
@@ -607,10 +607,6 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Biker"
-        404:
-          description: "Biker not found"
-          schema:
-            type: string
   /api/track:
     post:
       tags:
@@ -648,7 +644,7 @@ paths:
     put:
       tags:
       - "Track"
-      summary: "Chang a track name"
+      summary: "Change a track name"
       description: ""
       operationId: "changeTrackName"
       produces:
@@ -674,7 +670,7 @@ paths:
         format: "uuid"
       - in: "body"
         name: "body"
-        description: "Track change fields containing the name"
+        description: "Track change fields containing the name (other values will be ignored)"
         required: true
         schema:
           $ref: "#/definitions/TrackChangeFields"
@@ -683,11 +679,13 @@ paths:
           description: "Track ID"
           schema:
             $ref: "#/definitions/TrackID"
+        404:
+          description: "Track not found"
   /api/track/{trackID}/maintainer:
     put:
       tags:
       - "Track"
-      summary: "Chang a track maintainer"
+      summary: "Change a track maintainer"
       description: ""
       operationId: "changeTrackMaintainer"
       produces:
@@ -713,7 +711,7 @@ paths:
         format: "uuid"
       - in: "body"
         name: "body"
-        description: "Track change fields containing the maintainer"
+        description: "Track change fields containing the maintainer (other values will be ignored)"
         required: true
         schema:
           $ref: "#/definitions/TrackChangeFields"
@@ -722,6 +720,8 @@ paths:
           description: "Track ID"
           schema:
             $ref: "#/definitions/TrackID"
+        404:
+          description: "Track not found"
   /api/track/{trackID}/activate:
     post:
       tags:
@@ -755,6 +755,8 @@ paths:
           description: "Track ID"
           schema:
             $ref: "#/definitions/TrackID"
+        404:
+          description: "Track not found"
   /api/track/{trackID}/deactivate:
     post:
       tags:
@@ -788,6 +790,8 @@ paths:
           description: "Track ID"
           schema:
             $ref: "#/definitions/TrackID"
+        404:
+          description: "Track not found"
   /api/track/{trackID}/isactivate:
     get:
       tags:
@@ -821,6 +825,8 @@ paths:
           description: "Track ID and active boolean value"
           schema:
             $ref: "#/definitions/TrackIsActive"
+        404:
+          description: "Track not found"
   /api/track/{trackID}/waypoint:
     post:
       tags:
@@ -899,6 +905,8 @@ paths:
           description: "Track ID"
           schema:
             $ref: "#/definitions/TrackID"
+        404:
+          description: "Track or waypoint not found"
   /api/track/{trackID}/{waypointid}/initial:
     post:
       tags:
@@ -938,6 +946,8 @@ paths:
           description: "Track ID"
           schema:
             $ref: "#/definitions/TrackID"
+        404:
+          description: "Track or waypoint not found"
   /api/track/{trackID}/waypoints:
     get:
       tags:
@@ -973,6 +983,8 @@ paths:
             type: array
             items:
               $ref: '#/definitions/TrackWaypoint'
+        404:
+          description: "Track not found"
   /api/track/{trackID}:
     get:
       tags:
@@ -1006,6 +1018,8 @@ paths:
           description: "Track waypoint ID"
           schema:
             $ref: '#/definitions/Track'
+        404:
+          description: "Track not found"
   /api/tracks:
     get:
       tags:
@@ -1078,7 +1092,754 @@ paths:
             type: array
             items:
               $ref: '#/definitions/TrackWaypoint'
-
+        404:
+          description: "Track not found"
+  /api/ride:
+    post:
+      tags:
+      - "Ride"
+      summary: "Create a new ride in the application"
+      description: ""
+      operationId: "createRide"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - in: "body"
+        name: "body"
+        description: "Ride fields"
+        required: true
+        schema:
+          $ref: "#/definitions/RideCreateFields"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+  /api/ride/{rideID}/name:
+    put:
+      tags:
+      - "Ride"
+      summary: "Change a ride name"
+      description: ""
+      operationId: "changeRideName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        description: "Track change fields containing the name (other values will be ignored)"
+        required: true
+        schema:
+          $ref: "#/definitions/TrackChangeFields"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/organizer:
+    put:
+      tags:
+      - "Ride"
+      summary: "Change a ride organizer"
+      description: ""
+      operationId: "changeRideOrganizer"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        description: "Track change fields containing the organizer (other values will be ignored)"
+        required: true
+        schema:
+          $ref: "#/definitions/TrackChangeFields"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/track:
+    put:
+      tags:
+      - "Ride"
+      summary: "Change a ride track"
+      description: ""
+      operationId: "changeRideTrack"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        description: "Track change fields containing the track (other values will be ignored)"
+        required: true
+        schema:
+          $ref: "#/definitions/TrackChangeFields"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/limit:
+    put:
+      tags:
+      - "Ride"
+      summary: "Change a ride limit of riders"
+      description: ""
+      operationId: "changeRideLimit"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        description: "Track change fields containing the bikers limit (other values will be ignored)"
+        required: true
+        schema:
+          $ref: "#/definitions/TrackChangeFields"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/addleader:
+    put:
+      tags:
+      - "Ride"
+      summary: "Add a new leader to the ride"
+      description: ""
+      operationId: "addRideLeader"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        description: "Id of the biker to be added as leader"
+        required: true
+        schema:
+          $ref: "#/definitions/BikerID"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride or biker not found"
+  /api/ride/{rideID}/removeleader:
+    put:
+      tags:
+      - "Ride"
+      summary: "Remove a leader to the ride"
+      description: ""
+      operationId: "removeRideLeader"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        description: "Id of the biker to be removed from leaders"
+        required: true
+        schema:
+          $ref: "#/definitions/BikerID"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride or biker not found"
+  /api/ride/{rideID}/opensubscriptions:
+    post:
+      tags:
+      - "Ride"
+      summary: "Open subscriptions to the ride"
+      description: ""
+      operationId: "opensubscriptionsRide"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/closesubscriptions:
+    post:
+      tags:
+      - "Ride"
+      summary: "Close subscriptions to the ride"
+      description: ""
+      operationId: "closesubscriptionsRide"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/subscribe:
+    post:
+      tags:
+      - "Ride"
+      summary: "Subscribe to one ride"
+      description: ""
+      operationId: "subscribetoRide"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        description: "Id of the biker to be added as rider"
+        required: true
+        schema:
+          $ref: "#/definitions/BikerID"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/unsubscribe:
+    post:
+      tags:
+      - "Ride"
+      summary: "Unsubscribe to one ride"
+      description: ""
+      operationId: "unsubscribetoRide"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        description: "Id of the biker to be removed as rider"
+        required: true
+        schema:
+          $ref: "#/definitions/BikerID"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/start:
+    post:
+      tags:
+      - "Ride"
+      summary: "Start a ride"
+      description: ""
+      operationId: "startRide"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/suspend:
+    post:
+      tags:
+      - "Ride"
+      summary: "Suspend a ride"
+      description: ""
+      operationId: "suspendRide"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/resume:
+    post:
+      tags:
+      - "Ride"
+      summary: "Resume a ride"
+      description: ""
+      operationId: "resumeRide"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/finish:
+    post:
+      tags:
+      - "Ride"
+      summary: "Finish a ride"
+      description: ""
+      operationId: "finishRide"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Ride ID"
+          schema:
+            $ref: "#/definitions/RideID"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/isOpen:
+    post:
+      tags:
+      - "Ride"
+      summary: "Ride subscriptions are open?"
+      description: ""
+      operationId: "getRideIsOpen"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Ride is open response"
+          schema:
+            $ref: "#/definitions/RideIsOpen"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/isStarted:
+    post:
+      tags:
+      - "Ride"
+      summary: "Ride ia started?"
+      description: ""
+      operationId: "getRideIsStarted"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Ride is started response"
+          schema:
+            $ref: "#/definitions/RideIsStarted"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/isSuspended:
+    post:
+      tags:
+      - "Ride"
+      summary: "Ride ia suspended?"
+      description: ""
+      operationId: "getRideIsSuspended"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Ride is suspended response"
+          schema:
+            $ref: "#/definitions/RideIsSuspended"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}/isFinished:
+    post:
+      tags:
+      - "Ride"
+      summary: "Ride ia finished?"
+      description: ""
+      operationId: "getRideIsFinished"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Ride is finished response"
+          schema:
+            $ref: "#/definitions/RideIsFinished"
+        404:
+          description: "Ride not found"
+  /api/ride/{rideID}:
+    get:
+      tags:
+      - "Ride"
+      summary: "Get one ride"
+      description: ""
+      operationId: "getRide"
+      produces:
+      - "application/json"
+      parameters:
+      - name: bikerideClientID
+        in: header
+        description: "ID of the client which have the token generated to"
+        type: string
+        format: uuid
+        required: true
+      - name: bikerideClientToken
+        in: header
+        description: "Authentication token generated for the current client"
+        type: string
+        format: uuid
+        required: true
+      - name: "rideID"
+        in: "path"
+        description: "ID of ride"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "The corresponding ride"
+          schema:
+            $ref: '#/definitions/Ride'
+        404:
+          description: "Ride not found"
 definitions:
   Token:
     type: object
@@ -1291,10 +2052,114 @@ definitions:
         type: string
         format: date-time
   RideFields:
-
-
-
-
+    type: object
+    properties:
+      name:
+        type: string
+      organizer:
+        $ref: '#/definitions/BikerID'
+      limit:
+        type: integer
+      track:
+        $ref: '#/definitions/TrackID'
+      open:
+        type: boolean
+      started:
+        type: boolean
+      suspended:
+        type: boolean
+      finished:
+        type: boolean
+      opentime:
+        type: string
+        format: date-time
+      closetime:
+        type: string
+        format: date-time
+      starttime:
+        type: string
+        format: date-time
+      finishtime:
+        type: string
+        format: date-time
+  RideChangeFields:
+    type: object
+    properties:
+      name:
+        type: string
+      organizer:
+        $ref: '#/definitions/BikerID'
+      limit:
+        type: integer
+      opentime:
+        type: string
+        format: date-time
+      closetime:
+        type: string
+        format: date-time
+      starttime:
+        type: string
+        format: date-time
+      finishtime:
+        type: string
+        format: date-time
+      track:
+        $ref: '#/definitions/TrackID'
+  Ride:
+    type: object
+    properties:
+      rideID:
+        $ref: '#/definitions/RideID'
+      rideFields:
+        $ref: '#/definitions/RideFields'
+      leaders:
+        type: array
+        items:
+          $ref: '#/definitions/BikerID'
+      riders:
+        type: array
+        items:
+          $ref: '#/definitions/BikerID'
+  RideIsOpen:
+    type: object
+    properties:
+      rideID:
+        type: string
+        format: uuid
+      open:
+        type: boolean
+  RideIsClose:
+    type: object
+    properties:
+      rideID:
+        type: string
+        format: uuid
+      closed:
+        type: boolean
+  RideIsStarted:
+    type: object
+    properties:
+      rideID:
+        type: string
+        format: uuid
+      started:
+        type: boolean
+  RideIsSuspended:
+    type: object
+    properties:
+      rideID:
+        type: string
+        format: uuid
+      suspended:
+        type: boolean
+  RideIsFinished:
+    type: object
+    properties:
+      rideID:
+        type: string
+        format: uuid
+      finished:
+        type: boolean
 externalDocs:
   description: Find out more about BikeRide Lagom
   url: 'https://github.com/fernandohackbart/bikeride-lagom'
