@@ -209,6 +209,10 @@ paths:
           description: "Biker ID"
           schema:
             $ref: "#/definitions/BikerID"
+        403:
+          description: "Only the biker can change his data"
+          schema:
+            type: string
         404:
           description: "Biker not found"
           schema:
@@ -252,6 +256,10 @@ paths:
           description: "Biker ID"
           schema:
             $ref: "#/definitions/BikerID"
+        403:
+          description: "Only the biker can change his data"
+          schema:
+            type: string
         404:
           description: "Biker not found"
           schema:
@@ -295,6 +303,10 @@ paths:
           description: "Biker ID"
           schema:
             $ref: "#/definitions/BikerID"
+        403:
+          description: "Only the biker can change his data"
+          schema:
+            type: string
         404:
           description: "Biker not found"
           schema:
@@ -338,6 +350,10 @@ paths:
           description: "Biker ID"
           schema:
             $ref: "#/definitions/BikerID"
+        403:
+          description: "Only the biker can change his data"
+          schema:
+            type: string
         404:
           description: "Biker not found"
           schema:
@@ -381,6 +397,10 @@ paths:
           description: "Biker ID"
           schema:
             $ref: "#/definitions/BikerID"
+        403:
+          description: "Only the biker can change his data"
+          schema:
+            type: string
         404:
           description: "Biker not found"
           schema:
@@ -418,6 +438,10 @@ paths:
           description: "Biker ID"
           schema:
             $ref: "#/definitions/BikerID"
+        403:
+          description: "Only the biker can change his data"
+          schema:
+            type: string
         404:
           description: "Biker not found"
           schema:
@@ -455,6 +479,10 @@ paths:
           description: "Biker ID"
           schema:
             $ref: "#/definitions/BikerID"
+        403:
+          description: "Only the biker can change his data"
+          schema:
+            type: string
         404:
           description: "Biker not found"
           schema:
@@ -640,6 +668,10 @@ paths:
           description: "Track ID"
           schema:
             $ref: "#/definitions/TrackID"
+        400:
+          description: "Invalid maintainer biker ID"
+          schema:
+            type: string
   /api/track/{trackID}/name:
     put:
       tags:
@@ -679,8 +711,14 @@ paths:
           description: "Track ID"
           schema:
             $ref: "#/definitions/TrackID"
+        403:
+          description: "Only the maintainer can change track data"
+          schema:
+            type: string
         404:
           description: "Track not found"
+          schema:
+            type: string
   /api/track/{trackID}/maintainer:
     put:
       tags:
@@ -720,8 +758,18 @@ paths:
           description: "Track ID"
           schema:
             $ref: "#/definitions/TrackID"
+        400:
+          description: "Invalid maintainer biker ID"
+          schema:
+            type: string
+        403:
+          description: "Only the maintainer can change track data"
+          schema:
+            type: string
         404:
           description: "Track not found"
+          schema:
+            type: string
   /api/track/{trackID}/activate:
     post:
       tags:
@@ -755,8 +803,14 @@ paths:
           description: "Track ID"
           schema:
             $ref: "#/definitions/TrackID"
+        403:
+          description: "Only the maintainer can change track data"
+          schema:
+            type: string
         404:
           description: "Track not found"
+          schema:
+            type: string
   /api/track/{trackID}/deactivate:
     post:
       tags:
@@ -790,8 +844,14 @@ paths:
           description: "Track ID"
           schema:
             $ref: "#/definitions/TrackID"
+        403:
+          description: "Only the maintainer can change track data"
+          schema:
+            type: string
         404:
           description: "Track not found"
+          schema:
+            type: string
   /api/track/{trackID}/isactivate:
     get:
       tags:
@@ -827,6 +887,8 @@ paths:
             $ref: "#/definitions/TrackIsActive"
         404:
           description: "Track not found"
+          schema:
+            type: string
   /api/track/{trackID}/waypoint:
     post:
       tags:
@@ -866,6 +928,14 @@ paths:
           description: "Track waypoint ID"
           schema:
             $ref: "#/definitions/TrackWaypointID"
+        403:
+          description: "Only the maintainer can change track data"
+          schema:
+            type: string
+        404:
+          description: "Track not found"
+          schema:
+            type: string
   /api/track/{trackID}/{waypointid}:
     delete:
       tags:
@@ -905,8 +975,18 @@ paths:
           description: "Track ID"
           schema:
             $ref: "#/definitions/TrackID"
+        400:
+          description: "Invalid waypoint ID"
+          schema:
+            type: string
+        403:
+          description: "Only the maintainer can change track data"
+          schema:
+            type: string
         404:
-          description: "Track or waypoint not found"
+          description: "Track not found"
+          schema:
+            type: string
   /api/track/{trackID}/{waypointid}/initial:
     post:
       tags:
@@ -946,8 +1026,18 @@ paths:
           description: "Track ID"
           schema:
             $ref: "#/definitions/TrackID"
+        400:
+          description: "Invalid waypoint ID"
+          schema:
+            type: string
+        403:
+          description: "Only the maintainer can change track data"
+          schema:
+            type: string
         404:
-          description: "Track or waypoint not found"
+          description: "Track not found"
+          schema:
+            type: string
   /api/track/{trackID}/waypoints:
     get:
       tags:
@@ -985,6 +1075,8 @@ paths:
               $ref: '#/definitions/TrackWaypoint'
         404:
           description: "Track not found"
+          schema:
+            type: string
   /api/track/{trackID}:
     get:
       tags:
@@ -1020,6 +1112,8 @@ paths:
             $ref: '#/definitions/Track'
         404:
           description: "Track not found"
+          schema:
+            type: string
   /api/tracks:
     get:
       tags:
@@ -1094,6 +1188,8 @@ paths:
               $ref: '#/definitions/TrackWaypoint'
         404:
           description: "Track not found"
+          schema:
+            type: string
   /api/ride:
     post:
       tags:
@@ -1127,6 +1223,10 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        400:
+          description: "Invalid track ID"
+          schema:
+            type: string
   /api/ride/{rideID}/name:
     put:
       tags:
@@ -1166,8 +1266,14 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        403:
+          description: "Only the organizer can change ride data"
+          schema:
+            type: string
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/organizer:
     put:
       tags:
@@ -1207,8 +1313,18 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        400:
+          description: "Invalid orginizer biker ID"
+          schema:
+            type: string
+        403:
+          description: "Only the organizer can change ride data"
+          schema:
+            type: string
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/track:
     put:
       tags:
@@ -1248,8 +1364,14 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        403:
+          description: "Only the organizer can change ride data"
+          schema:
+            type: string
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/limit:
     put:
       tags:
@@ -1289,8 +1411,14 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        403:
+          description: "Only the organizer can change ride data"
+          schema:
+            type: string
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/addleader:
     put:
       tags:
@@ -1330,8 +1458,18 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        400:
+          description: "Invalid leader biker ID"
+          schema:
+            type: string
+        403:
+          description: "One biker can only add himself as leader"
+          schema:
+            type: string
         404:
           description: "Ride or biker not found"
+          schema:
+            type: string
   /api/ride/{rideID}/removeleader:
     put:
       tags:
@@ -1371,8 +1509,14 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        403:
+          description: "One biker can only remove himself from leaders"
+          schema:
+            type: string
         404:
-          description: "Ride or biker not found"
+          description: "Ride or leader not found"
+          schema:
+            type: string
   /api/ride/{rideID}/opensubscriptions:
     post:
       tags:
@@ -1406,8 +1550,14 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        403:
+          description: "Only the organizer can change ride data"
+          schema:
+            type: string
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/closesubscriptions:
     post:
       tags:
@@ -1441,8 +1591,14 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        403:
+          description: "Only the organizer can change ride data"
+          schema:
+            type: string
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/subscribe:
     post:
       tags:
@@ -1482,8 +1638,14 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        403:
+          description: "Only a biker can subscribe himself as rider"
+          schema:
+            type: string
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/unsubscribe:
     post:
       tags:
@@ -1523,8 +1685,14 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        403:
+          description: "Only a biker can unsubscribe himself from ride"
+          schema:
+            type: string
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/start:
     post:
       tags:
@@ -1558,8 +1726,14 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        403:
+          description: "Only a leader can start the ride"
+          schema:
+            type: string
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/suspend:
     post:
       tags:
@@ -1593,8 +1767,14 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        403:
+          description: "Only one leader can suspend the ride"
+          schema:
+            type: string
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/resume:
     post:
       tags:
@@ -1628,8 +1808,14 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        403:
+          description: "Only a leader can resume the ride"
+          schema:
+            type: string
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/finish:
     post:
       tags:
@@ -1663,8 +1849,14 @@ paths:
           description: "Ride ID"
           schema:
             $ref: "#/definitions/RideID"
+        403:
+          description: "Only a leader can finish a ride"
+          schema:
+            type: string
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/isOpen:
     post:
       tags:
@@ -1700,6 +1892,8 @@ paths:
             $ref: "#/definitions/RideIsOpen"
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/isStarted:
     post:
       tags:
@@ -1735,6 +1929,8 @@ paths:
             $ref: "#/definitions/RideIsStarted"
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/isSuspended:
     post:
       tags:
@@ -1770,6 +1966,8 @@ paths:
             $ref: "#/definitions/RideIsSuspended"
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}/isFinished:
     post:
       tags:
@@ -1805,6 +2003,8 @@ paths:
             $ref: "#/definitions/RideIsFinished"
         404:
           description: "Ride not found"
+          schema:
+            type: string
   /api/ride/{rideID}:
     get:
       tags:
@@ -1840,6 +2040,8 @@ paths:
             $ref: '#/definitions/Ride'
         404:
           description: "Ride not found"
+          schema:
+            type: string
 definitions:
   Token:
     type: object
