@@ -40,6 +40,8 @@ paths:
       summary: "Create a new biker in the application without authentication token"
       description: ""
       operationId: "createBikerOnAuth"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
@@ -54,13 +56,15 @@ paths:
           description: "Biker ID and authentication token"
           schema:
             $ref: "#/definitions/BikerToken"
-  /api/authn/validate:
+  /api/authn/validatepin:
     post:
       tags:
       - "Authentication"
       summary: "Validate a given PIN and return a new token"
       description: ""
       operationId: "validatePIN"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
@@ -84,6 +88,8 @@ paths:
       summary: "Request a PIN to be generated for the given client, the PIN will be sent by email or SMS"
       description: ""
       operationId: "generatePIN"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
@@ -107,21 +113,11 @@ paths:
       summary: "Create a new biker in the application"
       description: ""
       operationId: "createBiker"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - in: "body"
         name: "body"
         description: "Biker fields"
@@ -133,6 +129,9 @@ paths:
           description: "Biker ID and authentication token"
           schema:
             $ref: "#/definitions/BikerToken"
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/biker/byeemail:
     get:
       tags:
@@ -140,21 +139,11 @@ paths:
       summary: "Get the biker ID providing its email"
       description: ""
       operationId: "getBikerByEmail"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - in: "body"
         name: "body"
         description: "Biker email"
@@ -170,6 +159,9 @@ paths:
           description: "Biker with given email found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/biker/{bikerID}/name:
     put:
       tags:
@@ -177,21 +169,11 @@ paths:
       summary: "Change biker's name"
       description: ""
       operationId: "changeBikerName"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "bikerID"
         in: "path"
         description: "ID of biker"
@@ -217,6 +199,9 @@ paths:
           description: "Biker not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/biker/{bikerID}/avatar64:
     put:
       tags:
@@ -224,21 +209,11 @@ paths:
       summary: "Change biker's avatar Base64 picture"
       description: ""
       operationId: "changeBikerAvatarB64"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "bikerID"
         in: "path"
         description: "ID of biker"
@@ -264,6 +239,9 @@ paths:
           description: "Biker not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/biker/{bikerID}/bloodtype:
     put:
       tags:
@@ -271,21 +249,11 @@ paths:
       summary: "Change biker's bloodtype"
       description: ""
       operationId: "changeBikerBloodType"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "bikerID"
         in: "path"
         description: "ID of biker"
@@ -311,6 +279,9 @@ paths:
           description: "Biker not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/biker/{bikerID}/mobile:
     put:
       tags:
@@ -318,21 +289,11 @@ paths:
       summary: "Change biker's mobile"
       description: ""
       operationId: "changeBikerMobile"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "bikerID"
         in: "path"
         description: "ID of biker"
@@ -358,6 +319,9 @@ paths:
           description: "Biker not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/biker/{bikerID}/email:
     put:
       tags:
@@ -365,21 +329,11 @@ paths:
       summary: "Change biker's email"
       description: ""
       operationId: "changeBikerEmail"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "bikerID"
         in: "path"
         description: "ID of biker"
@@ -405,6 +359,9 @@ paths:
           description: "Biker not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/biker/{bikerID}/activate:
     post:
       tags:
@@ -412,21 +369,11 @@ paths:
       summary: "Activate biker"
       description: ""
       operationId: "activateBiker"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "bikerID"
         in: "path"
         description: "ID of biker"
@@ -446,6 +393,9 @@ paths:
           description: "Biker not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/biker/{bikerID}/deactivate:
     post:
       tags:
@@ -453,21 +403,11 @@ paths:
       summary: "Deactivate biker"
       description: ""
       operationId: "deactivateBiker"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "bikerID"
         in: "path"
         description: "ID of biker"
@@ -487,6 +427,9 @@ paths:
           description: "Biker not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/biker/{bikerID}/isactive:
     get:
       tags:
@@ -494,21 +437,11 @@ paths:
       summary: "Is biker active?"
       description: ""
       operationId: "getBikerIsActive"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "bikerID"
         in: "path"
         description: "ID of biker"
@@ -524,6 +457,9 @@ paths:
           description: "Biker not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/biker/{bikerID}/avatarb64:
     get:
       tags:
@@ -531,21 +467,11 @@ paths:
       summary: "Get biker avatar Base64 image"
       description: ""
       operationId: "getBikerAvatarB64"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "bikerID"
         in: "path"
         description: "ID of biker"
@@ -561,6 +487,9 @@ paths:
           description: "Biker not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/biker/{bikerID}:
     get:
       tags:
@@ -568,21 +497,11 @@ paths:
       summary: "Get biker"
       description: ""
       operationId: "getBiker"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "bikerID"
         in: "path"
         description: "ID of biker"
@@ -598,6 +517,9 @@ paths:
           description: "Biker not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/bikers:
     get:
       tags:
@@ -605,21 +527,11 @@ paths:
       summary: "Get biker"
       description: ""
       operationId: "getBikers"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: pageNo
         in: query
         description: "Page number to be retrieved"
@@ -635,6 +547,9 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Biker"
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/track:
     post:
       tags:
@@ -642,21 +557,11 @@ paths:
       summary: "Create a new track in the application"
       description: ""
       operationId: "createTrack"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - in: "body"
         name: "body"
         description: "Track fields"
@@ -672,6 +577,9 @@ paths:
           description: "Invalid maintainer biker ID"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/track/{trackID}/name:
     put:
       tags:
@@ -679,21 +587,11 @@ paths:
       summary: "Change a track name"
       description: ""
       operationId: "changeTrackName"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "trackID"
         in: "path"
         description: "ID of track"
@@ -719,6 +617,9 @@ paths:
           description: "Track not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/track/{trackID}/maintainer:
     put:
       tags:
@@ -726,21 +627,11 @@ paths:
       summary: "Change a track maintainer"
       description: ""
       operationId: "changeTrackMaintainer"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "trackID"
         in: "path"
         description: "ID of track"
@@ -770,6 +661,9 @@ paths:
           description: "Track not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/track/{trackID}/activate:
     post:
       tags:
@@ -777,21 +671,11 @@ paths:
       summary: "Activate a track"
       description: ""
       operationId: "activateTrack"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "trackID"
         in: "path"
         description: "ID of track"
@@ -811,6 +695,9 @@ paths:
           description: "Track not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/track/{trackID}/deactivate:
     post:
       tags:
@@ -818,21 +705,11 @@ paths:
       summary: "Deactivate a track"
       description: ""
       operationId: "deactivateTrack"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "trackID"
         in: "path"
         description: "ID of track"
@@ -852,6 +729,9 @@ paths:
           description: "Track not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/track/{trackID}/isactivate:
     get:
       tags:
@@ -859,21 +739,11 @@ paths:
       summary: "Check if a given track is active"
       description: ""
       operationId: "getTrackIsActive"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "trackID"
         in: "path"
         description: "ID of track"
@@ -889,6 +759,9 @@ paths:
           description: "Track not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/track/{trackID}/waypoint:
     post:
       tags:
@@ -896,21 +769,11 @@ paths:
       summary: "Add one waypoint to the track"
       description: ""
       operationId: "addTrackWayPoint"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "trackID"
         in: "path"
         description: "ID of track"
@@ -936,6 +799,9 @@ paths:
           description: "Track not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/track/{trackID}/{waypointid}:
     delete:
       tags:
@@ -943,21 +809,11 @@ paths:
       summary: "Delete one waypoint from the track"
       description: ""
       operationId: "deleteTrackWayPoint"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "trackID"
         in: "path"
         description: "ID of track"
@@ -987,6 +843,9 @@ paths:
           description: "Track not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/track/{trackID}/{waypointid}/initial:
     post:
       tags:
@@ -994,21 +853,11 @@ paths:
       summary: "Set one waypoint as the initial of the track"
       description: ""
       operationId: "defineTrackInitialWayPoint"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "trackID"
         in: "path"
         description: "ID of track"
@@ -1038,6 +887,9 @@ paths:
           description: "Track not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/track/{trackID}/waypoints:
     get:
       tags:
@@ -1045,21 +897,11 @@ paths:
       summary: "Get the waypoints of the track in order"
       description: ""
       operationId: "getTrackWayPoints"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "trackID"
         in: "path"
         description: "ID of track"
@@ -1077,6 +919,9 @@ paths:
           description: "Track not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/track/{trackID}:
     get:
       tags:
@@ -1084,21 +929,11 @@ paths:
       summary: "Get one track"
       description: ""
       operationId: "getTrack"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "trackID"
         in: "path"
         description: "ID of track"
@@ -1114,6 +949,9 @@ paths:
           description: "Track not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/tracks:
     get:
       tags:
@@ -1121,21 +959,11 @@ paths:
       summary: "Get a page of tracks"
       description: ""
       operationId: "getTracks"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: pageNo
         in: query
         description: "Page number to be retrieved"
@@ -1151,6 +979,9 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Track'
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/track/{trackID}/readwaypoints:
     get:
       tags:
@@ -1158,21 +989,11 @@ paths:
       summary: "Get the waypoints of the track from the readside in order"
       description: ""
       operationId: "readTrackWayPoints"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "trackID"
         in: "path"
         description: "ID of track"
@@ -1190,6 +1011,9 @@ paths:
           description: "Track not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride:
     post:
       tags:
@@ -1197,21 +1021,11 @@ paths:
       summary: "Create a new ride in the application"
       description: ""
       operationId: "createRide"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - in: "body"
         name: "body"
         description: "Ride fields"
@@ -1227,6 +1041,9 @@ paths:
           description: "Invalid track ID"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/name:
     put:
       tags:
@@ -1234,21 +1051,11 @@ paths:
       summary: "Change a ride name"
       description: ""
       operationId: "changeRideName"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1274,6 +1081,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/organizer:
     put:
       tags:
@@ -1281,21 +1091,11 @@ paths:
       summary: "Change a ride organizer"
       description: ""
       operationId: "changeRideOrganizer"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1325,6 +1125,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/track:
     put:
       tags:
@@ -1332,21 +1135,11 @@ paths:
       summary: "Change a ride track"
       description: ""
       operationId: "changeRideTrack"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1372,6 +1165,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/limit:
     put:
       tags:
@@ -1379,21 +1175,11 @@ paths:
       summary: "Change a ride limit of riders"
       description: ""
       operationId: "changeRideLimit"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1419,6 +1205,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/addleader:
     put:
       tags:
@@ -1426,21 +1215,11 @@ paths:
       summary: "Add a new leader to the ride"
       description: ""
       operationId: "addRideLeader"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1470,6 +1249,9 @@ paths:
           description: "Ride or biker not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/removeleader:
     put:
       tags:
@@ -1477,21 +1259,11 @@ paths:
       summary: "Remove a leader to the ride"
       description: ""
       operationId: "removeRideLeader"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1517,6 +1289,9 @@ paths:
           description: "Ride or leader not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/opensubscriptions:
     post:
       tags:
@@ -1524,21 +1299,11 @@ paths:
       summary: "Open subscriptions to the ride"
       description: ""
       operationId: "opensubscriptionsRide"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1558,6 +1323,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/closesubscriptions:
     post:
       tags:
@@ -1565,21 +1333,11 @@ paths:
       summary: "Close subscriptions to the ride"
       description: ""
       operationId: "closesubscriptionsRide"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1599,6 +1357,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/subscribe:
     post:
       tags:
@@ -1606,21 +1367,11 @@ paths:
       summary: "Subscribe to one ride"
       description: ""
       operationId: "subscribetoRide"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1646,6 +1397,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/unsubscribe:
     post:
       tags:
@@ -1653,21 +1407,11 @@ paths:
       summary: "Unsubscribe to one ride"
       description: ""
       operationId: "unsubscribetoRide"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1693,6 +1437,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/start:
     post:
       tags:
@@ -1700,21 +1447,11 @@ paths:
       summary: "Start a ride"
       description: ""
       operationId: "startRide"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1734,6 +1471,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/suspend:
     post:
       tags:
@@ -1741,21 +1481,11 @@ paths:
       summary: "Suspend a ride"
       description: ""
       operationId: "suspendRide"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1775,6 +1505,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/resume:
     post:
       tags:
@@ -1782,21 +1515,11 @@ paths:
       summary: "Resume a ride"
       description: ""
       operationId: "resumeRide"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1816,6 +1539,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/finish:
     post:
       tags:
@@ -1823,21 +1549,11 @@ paths:
       summary: "Finish a ride"
       description: ""
       operationId: "finishRide"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1857,6 +1573,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/isOpen:
     post:
       tags:
@@ -1864,21 +1583,11 @@ paths:
       summary: "Ride subscriptions are open?"
       description: ""
       operationId: "getRideIsOpen"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1894,6 +1603,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/isStarted:
     post:
       tags:
@@ -1901,21 +1613,11 @@ paths:
       summary: "Ride ia started?"
       description: ""
       operationId: "getRideIsStarted"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1931,6 +1633,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/isSuspended:
     post:
       tags:
@@ -1938,21 +1643,11 @@ paths:
       summary: "Ride ia suspended?"
       description: ""
       operationId: "getRideIsSuspended"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -1968,6 +1663,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}/isFinished:
     post:
       tags:
@@ -1975,21 +1673,11 @@ paths:
       summary: "Ride ia finished?"
       description: ""
       operationId: "getRideIsFinished"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -2005,6 +1693,9 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
   /api/ride/{rideID}:
     get:
       tags:
@@ -2012,21 +1703,11 @@ paths:
       summary: "Get one ride"
       description: ""
       operationId: "getRide"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: bikerideClientID
-        in: header
-        description: "ID of the client which have the token generated to"
-        type: string
-        format: uuid
-        required: true
-      - name: bikerideClientToken
-        in: header
-        description: "Authentication token generated for the current client"
-        type: string
-        format: uuid
-        required: true
       - name: "rideID"
         in: "path"
         description: "ID of ride"
@@ -2042,6 +1723,20 @@ paths:
           description: "Ride not found"
           schema:
             type: string
+      security:
+      - bikerideClientID: []
+      - bikerideClientToken: []
+securityDefinitions:
+  bikerideClientID:
+    type: "apiKey"
+    name: "bikerideClientID"
+    description: "ID of the client which have the token generated to"
+    in: "header"
+  bikerideClientToken:
+    type: "apiKey"
+    name: "bikerideClientToken"
+    description: "Authentication token generated for the current client"
+    in: "header"
 definitions:
   Token:
     type: object
