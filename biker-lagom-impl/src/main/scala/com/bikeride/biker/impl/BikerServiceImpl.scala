@@ -88,12 +88,12 @@ class BikerServiceImpl (bikerService: BikerService,
     }
   })
 
-  //override def activateBiker(bikerId: UUID) = authenticated( userId => ServerServiceCall { req =>
-  override def activateBiker(bikerId: UUID) = ServiceCall { req =>
+  //override def activateBiker(bikerId: UUID) = ServiceCall { req =>
+  override def activateBiker(bikerId: UUID) = authenticated( userId => ServerServiceCall { req =>
     refFor(bikerId).ask(ActivateBiker(bikerId)).map { _ =>
       api.BikerID(bikerId)
     }
-  }//)
+  })
 
 //  override def deactivateBiker(bikerId: UUID) = ServiceCall { req =>
   override def deactivateBiker(bikerId: UUID) = authenticated( userId => ServerServiceCall { req =>
