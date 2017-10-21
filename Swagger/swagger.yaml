@@ -106,6 +106,58 @@ paths:
             $ref: "#/definitions/GeneratePINResponse"
         404:
           description: "Biker with the email or mobile informed not found"
+  /api/authn/refreshtoken:
+    post:
+      tags:
+      - "Authentication"
+      summary: "Request a new token by using a valid token"
+      description: ""
+      operationId: "refreshClientToken"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "ClientID and BikerToken"
+        required: true
+        schema:
+          $ref: "#/definitions/RefreshTokenRequest"
+      responses:
+        200:
+          description: "Biker ID and authentication token"
+          schema:
+            $ref: "#/definitions/BikerToken"
+        404:
+          description: "Biker not found"
+        500:
+          description: "Token not provided or not valid"
+  /api/authn/validatetoken:
+    post:
+      tags:
+      - "Authentication"
+      summary: "Validate a provided token"
+      description: ""
+      operationId: "validateClientToken"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "BikerToken"
+        required: true
+        schema:
+          $ref: "#/definitions/BikerToken"
+      responses:
+        200:
+          description: "Token valid ot not"
+          schema:
+            $ref: "#/definitions/ValidateTokenResponse"
+        500:
+          description: "Token should be informed"
   /api/biker:
     post:
       tags:
@@ -1745,6 +1797,18 @@ definitions:
         type: string
       refreshToken:
         type: string
+  RefreshTokenRequest:
+    type: object
+    properties:
+      client:
+        $ref: '#/definitions/BikerClient'
+      bikerToken:
+        $ref: '#/definitions/BikerToken'
+  ValidateTokenResponse:
+    type: object
+    properties:
+      valid:
+        type: boolean
   ValidatePINRequest:
     type: object
     properties:
