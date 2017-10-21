@@ -1,7 +1,7 @@
 package com.bikeride.authentication.api
 
 import play.api.libs.json.{Format, Json}
-import com.bikeride.biker.api.{BikerCreateRequest, BikerToken, BikerClient}
+import com.bikeride.biker.api.{BikerClient, BikerCreateRequest, BikerID, BikerToken}
 import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
 import com.lightbend.lagom.scaladsl.api.transport.Method
 
@@ -10,6 +10,8 @@ trait AuthenticationService extends Service {
   def createBiker: ServiceCall[BikerCreateRequest, BikerToken]
   def validatePIN: ServiceCall[ValidatePINRequest, BikerToken]
   def generatePIN: ServiceCall[GeneratePINRequest, GeneratePINResponse]
+  def refreshClientToken: ServiceCall[RefreshTokenRequest, BikerToken]
+  def validateClientToken: ServiceCall[BikerToken, ValidateTokenResponse]
 
   override final def descriptor = {
     import Service._
@@ -17,10 +19,22 @@ trait AuthenticationService extends Service {
       .withCalls(
         restCall(Method.POST,"/api/authn/biker", createBiker),
         restCall(Method.POST,"/api/authn/validatepin", validatePIN _),
-        restCall(Method.POST,"/api/authn/generatepin", generatePIN _)
+        restCall(Method.POST,"/api/authn/generatepin", generatePIN _),
+        restCall(Method.POST,"/api/authn/refreshtoken", refreshClientToken),
+        restCall(Method.POST,"/api/authn/validatetoken", validateClientToken)
       ).withAutoAcl(true)
   }
+}
 
+case class RefreshTokenRequest(client: BikerClient,
+                               bikerToken : BikerToken)
+object  RefreshTokenRequest {
+  implicit val format: Format[RefreshTokenRequest] = Json.format
+}
+
+case class ValidateTokenResponse(valid: Boolean = false)
+object  ValidateTokenResponse {
+  implicit val format: Format[ValidateTokenResponse] = Json.format
 }
 
 case class ValidatePINRequest(client: BikerClient,

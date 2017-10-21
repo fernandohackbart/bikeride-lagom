@@ -5,17 +5,16 @@ import java.time.Instant
 
 import akka.stream.Materializer
 import com.bikeride.authentication.api
-import com.bikeride.authentication.api.AuthenticationService
+import com.bikeride.authentication.api.{AuthenticationService, ValidateTokenResponse}
 import com.bikeride.biker.api._
 import com.bikeride.utils.security._
 import com.lightbend.lagom.scaladsl.api.ServiceCall
-import com.lightbend.lagom.scaladsl.api.transport.{BadRequest, NotFound, RequestHeader}
+import com.lightbend.lagom.scaladsl.api.transport.{BadRequest, NotFound}
 import com.lightbend.lagom.scaladsl.persistence.{PersistentEntityRegistry, ReadSide}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
-import com.typesafe.config.ConfigFactory
-import scala.concurrent.duration._
 
-import scala.concurrent.{Await, ExecutionContext}
+import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.Random
 
 class AuthenticationServiceImpl (bikerService: BikerService,
@@ -71,8 +70,28 @@ class AuthenticationServiceImpl (bikerService: BikerService,
     else throw NotFound(s"PIN with id $req.pin not found!")
   }
 
+  override def refreshClientToken = ServiceCall { req =>
+    if (!req.bikerToken.token.authToken.isEmpty)
+    {
+      if(TokenValidation.isTokenValid(req.bikerToken.token.authToken))
+        {
+          bikerService.getBiker(req.bikerToken.bikerID.bikerID).invoke().map {
+            case biker =>
+              val tokenContent = TokenContent(req.client.clientID, req.bikerToken.bikerID.bikerID, biker.bikerFields.name, false)
+              val token = JwtTokenUtil.generateAuthTokenOnly(tokenContent)
+              BikerToken(BikerID(req.bikerToken.bikerID.bikerID),Token(req.bikerToken.token.authToken,None))
+          }
+        } else throw BadRequest(s"Token should be valid!")
+    } else throw BadRequest(s"Token should be informed!")
+  }
+
+  override def validateClientToken = ServiceCall { req =>
+    if (!req.token.authToken.isEmpty){
+      Future(ValidateTokenResponse(TokenValidation.isTokenValid(req.token.authToken)))
+    } else throw BadRequest(s"Token should be informed!")
+  }
+
   override def createBiker = ServiceCall { req =>
     bikerService.createBiker.invoke(req)
   }
-
 }

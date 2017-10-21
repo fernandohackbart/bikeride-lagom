@@ -94,7 +94,6 @@ object SecurityHeaderFilter extends HeaderFilter {
 }
 
 object ServerSecurity {
-
   def authenticated[Request, Response](serviceCall: UUID => ServerServiceCall[Request, Response]) =
     ServerServiceCall.compose { requestHeader =>
       requestHeader.principal match {
@@ -112,3 +111,12 @@ object ClientSecurity {
   }
 }
 
+object TokenValidation {
+  def isTokenValid(token: String): Boolean = {
+    val jsonTokenContent = JwtJson.decode(token, JWTConstants.secret, Seq(JWTConstants.algorithm))
+    jsonTokenContent match {
+      case Success(json) => true
+      case Failure(_) => false
+      }
+    }
+}
