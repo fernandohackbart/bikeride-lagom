@@ -5,19 +5,14 @@ metadata:
   namespace: bikeride
   labels:
     k8s-app: jenkins
-    version: v0
-    kubernetes.io/cluster-service: "true"
 spec:
   replicas: 1
   selector:
     k8s-app: jenkins
-    version: v0
   template:
     metadata:
       labels:
         k8s-app: jenkins
-        version: v0
-        kubernetes.io/cluster-service: "true"
     spec:
       containers:
       - name: jenkins
