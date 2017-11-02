@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ReplicationController
 metadata:
   name: jenkins-v0
-  namespace: kube-public
+  namespace: bikeride
   labels:
     k8s-app: jenkins
     version: v0
