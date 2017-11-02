@@ -13,6 +13,8 @@ spec:
   - name: application
     port: 8080
     protocol: TCP
+    nodePort: 8080
   - name: node
     port: 50000
     protocol: TCP
+    nodePort: 50000
