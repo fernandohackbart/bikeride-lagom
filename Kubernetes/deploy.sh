@@ -25,6 +25,11 @@ kubectl create -f track-service.yml
 kubectl create -f ride-deploy.yml
 kubectl create -f ride-service.yml
 
+kubectl get all -n default
+kubectl get all -n bikeride
+
+
+
 export KONG_IP=`minikube ip`
 curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=authentication-api' --data 'hosts=authentication.api.bikeride.com' --data 'upstream_url=http://_authentication._tcp.bikerride-authentication-proxy.bikeride.svc.cluster.local'
 curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=biker-api' --data 'hosts=biker.api.bikeride.com' --data 'upstream_url=http://_biker._tcp.bikerride-biker-proxy.bikeride.svc.cluster.local'
