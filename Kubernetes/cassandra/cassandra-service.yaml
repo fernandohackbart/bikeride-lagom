@@ -9,6 +9,9 @@ spec:
   selector:
     k8s-app: cassandra
   ports:
-  - name: application
+  - name: casnative
     port: 9042
     protocol: TCP
+
+
+#_casnative._tcp.cassandra-service.bikeride.svc.cluster.local
