@@ -1,12 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: cassandra-service
+  namespace: bikeride
   labels:
-    app: cassandra
-  name: cassandra
+    k8s-app: cassandra
 spec:
-  clusterIP: None
-  ports:
-  - port: 9042
   selector:
-    app: cassandra
+    k8s-app: cassandra
+  ports:
+  - name: application
+    port: 9042
+    protocol: TCP

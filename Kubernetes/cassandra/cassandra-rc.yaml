@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: cassandra
+  namespace: bikeride
+  labels:
+    k8s-app: cassandra
+spec:
+  replicas: 1
+  selector:
+    k8s-app: cassandra
+  template:
+    metadata:
+      labels:
+        k8s-app: cassandra
+    spec:
+      containers:
+      - name: cassandra
+        image: cassandra
+        resources:
+          limits:
+            cpu: 100m
+            memory: 2048Mi
+        ports:
+        - containerPort: 9042
+          name: application
+          protocol: TCP
+
