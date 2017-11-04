@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: bikerride-authentication-rc
+  name: bikeride-authentication-rc
   namespace: bikeride
 spec:
   replicas: 1

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: bikerride-track-proxy
+  name: bikeride-track-proxy
 spec:
   type: ClusterIP
   ports:
