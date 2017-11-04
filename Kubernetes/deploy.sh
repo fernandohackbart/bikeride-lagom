@@ -1,21 +1,29 @@
 #!/bin/bash
+
+dcoker login
+docker push bikeride/bikeride-backend:base
+docker push bikeride/authentication-lagom-impl:0.0.1-SNAPSHOT
+docker push bikeride/biker-lagom-impl:0.0.1-SNAPSHOT
+docker push bikeride/track-lagom-impl:0.0.1-SNAPSHOT
+docker push bikeride/ride-lagom-impl:0.0.1-SNAPSHOT
+
 # Minikube
 minikube start
 #https://github.com/Kong/kong-dist-kubernetes/tree/master/minikube
-kubectl create -f cassandra.yaml
-kubectl create -f kong_migration_cassandra.yaml
-kubectl delete -f kong_migration_cassandra.yaml
-kubectl create -f kong_cassandra.yaml
+kubectl create -f cassandra.yml
+kubectl create -f kong_migration_cassandra.yml
+kubectl delete -f kong_migration_cassandra.yml
+kubectl create -f kong_cassandra.yml
 # Bikeride microservices
-kubectl create -f bikeride-namespace.yaml
-kubectl create -f authentication-deploy.yaml
-kubectl create -f authentication-service.yaml
-kubectl create -f biker-deploy.yaml
-kubectl create -f biker-service.yaml
-kubectl create -f track-deploy.yaml
-kubectl create -f track-service.yaml
-kubectl create -f ride-deploy.yaml
-kubectl create -f ride-service.yaml
+kubectl create -f bikeride-namespace.yml
+kubectl create -f authentication-deploy.yml
+kubectl create -f authentication-service.yml
+kubectl create -f biker-deploy.yml
+kubectl create -f biker-service.yml
+kubectl create -f track-deploy.yml
+kubectl create -f track-service.yml
+kubectl create -f ride-deploy.yml
+kubectl create -f ride-service.yml
 
 export KONG_IP=`minikube ip`
 curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=authentication-api' --data 'hosts=authentication.api.bikeride.com' --data 'upstream_url=http://_authentication._tcp.bikerride-authentication-proxy.bikeride.svc.cluster.local'
