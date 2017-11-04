@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: bikerride-ride-rc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: bikeride-ride-rc
+        app: ride-lagom
+    spec:
+      containers:
+      - name: ride-lagom-impl
+        image: bikeride/ride-lagom-impl:0.0.1-SNAPSHOT
+        env:
+          - name: BIKERIDE_SERVICE_DOMAIN
+            value: "bikeride.svc.cluster.local"
+          - name: BIKERIDE_CASSANDRA_SERVICE
+            value: "_casnative._tcp.cassandra.default.svc.cluster.local"
+        ports:
+        - name: lagom
+          containerPort: 9000
+          protocol: TCP
