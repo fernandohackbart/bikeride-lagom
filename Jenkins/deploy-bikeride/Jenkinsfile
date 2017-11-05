@@ -4,9 +4,9 @@ node('docker') {
   stage('GIT') {
     git 'https://github.com/fernandohackbart/bikeride-lagom.git'
   }
-  stage('Depoy Cassandra') {
-    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/cassandra.yml'
-  }
+  //stage('Deploy Cassandra') {
+  //  sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/cassandra.yml'
+  //}
   stage('wait') {
     timeout(time:5, unit:'DAYS') {
       input message:'Cassandra ready?'
