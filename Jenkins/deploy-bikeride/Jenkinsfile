@@ -24,7 +24,7 @@ node('docker') {
   //  sh '/opt/kubernetes/bin/kubectl delete -f Kubernetes/kong_migration_cassandra.yml'
   //}
   stage('Deploy Kong') {
-    sh '/opt/kubernetes/bin/kubectl create -f kong_cassandra.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/kong_cassandra.yml'
   }
   stage('Deploy Bikeride') {
     sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/authentication-deploy.yml'
