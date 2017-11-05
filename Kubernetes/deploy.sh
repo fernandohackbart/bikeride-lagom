@@ -8,7 +8,29 @@ docker push bikeride/track-lagom-impl:0.0.1-SNAPSHOT
 docker push bikeride/ride-lagom-impl:0.0.1-SNAPSHOT
 
 # Minikube
-minikube start
+
+#virsh destroy minikube
+#virsh undefine minikube
+#virsh net-destroy docker-machines
+#virsh net-undefine docker-machines
+#minikube delete
+
+virsh list --all
+virsh net-list
+
+minikube config set vm-driver kvm
+minikube start --memory 7600 --cpus 3 --disk-size 40g
+
+#https://github.com/fernandohackbart/bikeride-lagom/issues/162
+generate-minikube-proxy.sh
+
+mkdir -p /opt/kubernetes
+git clone https://github.com/fernandohackbart/bikeride-lagom.git
+
+cd bikeride-lagom/Kubernetes
+
+kubectl create -f jenkins-ephemeral.yml
+
 #https://github.com/Kong/kong-dist-kubernetes/tree/master/minikube
 kubectl create -f cassandra.yml
 kubectl create -f kong_migration_cassandra.yml
