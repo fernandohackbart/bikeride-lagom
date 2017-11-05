@@ -6,7 +6,6 @@ node {
   stage('GIT') {
     git 'https://github.com/fernandohackbart/bikeride-lagom.git'
   }
-  # https://github.com/Kong/kong-dist-kubernetes/tree/master/minikube
   stage('Depoy Cassandra') {
     sh 'kubectl create -f Kubernetes/cassandra.yml'
   }
