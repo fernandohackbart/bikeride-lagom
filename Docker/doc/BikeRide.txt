@@ -13,12 +13,10 @@ show dockerCommands
 
 docker build -f /opt/bikeride/bikeride-lagom/Docker/bikeride-backend/Dockerfile -t bikeride/bikeride-backend:base /opt/bikeride/bikeride-lagom/Docker/bikeride-backend
 
-
 ########################################################################################################################################################
 cd /opt/bikeride
 rm -rf bikeride-lagom
 git clone https://github.com/fernandohackbart/bikeride-lagom.git
-
 
 export bundleVersion=0.0.1-SNAPSHOT
 cd /opt/bikeride/bikeride-lagom
@@ -33,19 +31,9 @@ unzip  -q ../../../biker-lagom-impl/target/universal/biker-lagom-impl-${bundleVe
 mv biker-lagom-impl-${bundleVersion} biker-lagom-impl
 cd /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/files/biker-lagom-impl/bin
 
-
-
 https://github.com/typesafehub/service-locator-dns
 
 /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl/files/biker-lagom-impl/bin/biker-lagom-impl -d -Dlagom.cluster.join-self=on
-
-
-
-
-
-
-
-
 
 ########################################################################################################################################################
 cd /opt/bikeride/bikeride-lagom/Docker/biker-lagom-impl

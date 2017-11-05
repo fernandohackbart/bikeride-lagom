@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 # Minikube
 
 #virsh destroy minikube
