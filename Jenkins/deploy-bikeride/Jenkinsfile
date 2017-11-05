@@ -5,7 +5,7 @@ node('docker') {
     git 'https://github.com/fernandohackbart/bikeride-lagom.git'
   }
   stage('Depoy Cassandra') {
-    sh 'kubectl create -f Kubernetes/cassandra.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/cassandra.yml'
   }
   stage('wait') {
     timeout(time:5, unit:'DAYS') {
@@ -13,7 +13,7 @@ node('docker') {
     }
   }
   stage('Start Kong database configuration') {
-    sh 'kubectl create -f Kubernetes/kong_migration_cassandra.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/kong_migration_cassandra.yml'
   }
   stage('wait') {
     timeout(time:5, unit:'DAYS') {
@@ -21,23 +21,23 @@ node('docker') {
     }
   }
   stage('remove Kong database configuration job') {
-    sh 'kubectl delete -f Kubernetes/kong_migration_cassandra.yml'
+    sh '/opt/kubernetes/bin/kubectl delete -f Kubernetes/kong_migration_cassandra.yml'
   }
   stage('Deploy Kong') {
     sh 'kubectl create -f kong_cassandra.yml'
   }
   stage('Deploy Bikeride') {
-    sh 'kubectl create -f Kubernetes/authentication-deploy.yml'
-    sh 'kubectl create -f Kubernetes/authentication-service.yml'
-    sh 'kubectl create -f Kubernetes/biker-deploy.yml'
-    sh 'kubectl create -f Kubernetes/biker-service.yml'
-    sh 'kubectl create -f Kubernetes/track-deploy.yml'
-    sh 'kubectl create -f Kubernetes/track-service.yml'
-    sh 'kubectl create -f Kubernetes/ride-deploy.yml'
-    sh 'kubectl create -f Kubernetes/ride-service.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/authentication-deploy.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/authentication-service.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/biker-deploy.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/biker-service.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/track-deploy.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/track-service.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/ride-deploy.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/ride-service.yml'
   }
   stage('Deploy Bikeride') {
-    sh 'kubectl get all -n default'
+    sh '/opt/kubernetes/bin/kubectl get all -n default'
   }
 }
 
