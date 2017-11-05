@@ -1,13 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: bikeride-ride-proxy
+  labels:
+    app: bikeride-ride-proxy
+  name: bikeride-ride
   #namespace: bikeride
 spec:
-  type: ClusterIP
+  clusterIP: None
   ports:
-  - name: lagom
-    port: 9000
-    protocol: TCP
+    - name: lagom
+      port: 9000
+      protocol: TCP
   selector:
     app: ride-lagom

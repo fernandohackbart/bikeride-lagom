@@ -17,7 +17,8 @@ spec:
         imagePullPolicy: Always
         env:
           - name: BIKERIDE_SERVICE_DOMAIN
-            value: "bikeride.svc.cluster.local"
+            #value: "bikeride.svc.cluster.local"
+            value: "default.svc.cluster.local"
           - name: BIKERIDE_CASSANDRA_SERVICE
             value: "_casnative._tcp.cassandra.default.svc.cluster.local"
         ports:
