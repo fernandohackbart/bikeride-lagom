@@ -12,6 +12,7 @@ node {
   stage('wait') {
     timeout(time:5, unit:'DAYS') {
       input message:'Cassandra ready?'
+    }
   }
   stage('Start Kong database configuration') {
     sh 'kubectl create -f Kubernetes/kong_migration_cassandra.yml'
@@ -19,6 +20,7 @@ node {
   stage('wait') {
     timeout(time:5, unit:'DAYS') {
       input message:'Kong database configuration ready?'
+    }
   }
   stage('remove Kong database configuration job') {
     sh 'kubectl delete -f Kubernetes/kong_migration_cassandra.yml'
