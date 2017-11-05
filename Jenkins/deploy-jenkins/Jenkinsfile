@@ -4,10 +4,10 @@ node('docker') {
     git 'https://github.com/fernandohackbart/bikeride-lagom.git'
   }
   stage('Start Jenkinsn') {
-    sh 'kubectl create -f Kubernetes/jenkins-ephemeral.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/jenkins-ephemeral.yml'
   }
   stage('Start Jenkinsn') {
-    sh 'kubectl get po'
+    sh '/opt/kubernetes/bin/kubectl get po'
   }
 
 }
