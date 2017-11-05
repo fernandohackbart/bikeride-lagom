@@ -1,0 +1,47 @@
+env.BUNDLE_VERSION="0.0.1-SNAPSHOT"
+
+
+node {
+
+  stage('GIT') {
+    git 'https://github.com/fernandohackbart/bikeride-lagom.git'
+  }
+  # https://github.com/Kong/kong-dist-kubernetes/tree/master/minikube
+  stage('Depoy Cassandra') {
+    sh 'kubectl create -f Kubernetes/cassandra.yml'
+  }
+  stage('wait') {
+    timeout(time:5, unit:'DAYS') {
+      input message:'Cassandra ready?'
+  }
+  stage('Start Kong database configuration') {
+    sh 'kubectl create -f Kubernetes/kong_migration_cassandra.yml'
+  }
+  stage('wait') {
+    timeout(time:5, unit:'DAYS') {
+      input message:'Kong database configuration ready?'
+  }
+  stage('remove Kong database configuration job') {
+    sh 'kubectl delete -f Kubernetes/kong_migration_cassandra.yml'
+  }
+  stage('Deploy Kong') {
+    sh 'kubectl create -f kong_cassandra.yml'
+  }
+  stage('Deploy Bikeride') {
+    sh 'kubectl create -f Kubernetes/authentication-deploy.yml'
+    sh 'kubectl create -f Kubernetes/authentication-service.yml'
+    sh 'kubectl create -f Kubernetes/biker-deploy.yml'
+    sh 'kubectl create -f Kubernetes/biker-service.yml'
+    sh 'kubectl create -f Kubernetes/track-deploy.yml'
+    sh 'kubectl create -f Kubernetes/track-service.yml'
+    sh 'kubectl create -f Kubernetes/ride-deploy.yml'
+    sh 'kubectl create -f Kubernetes/ride-service.yml'
+  }
+  stage('Deploy Bikeride') {
+    sh 'kubectl get all -n default'
+  }
+}
+
+
+
+
