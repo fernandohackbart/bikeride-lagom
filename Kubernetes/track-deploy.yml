@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: bikeride-track-rc
-  namespace: bikeride
+  #namespace: bikeride
 spec:
   replicas: 1
   template:

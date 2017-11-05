@@ -31,7 +31,9 @@ kubectl get all -n bikeride
 
 
 export KONG_IP=`minikube ip`
-curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=authentication-api' --data 'hosts=authentication.api.bikeride.com' --data 'upstream_url=http://_authentication._tcp.bikerride-authentication-proxy.bikeride.svc.cluster.local'
-curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=biker-api' --data 'hosts=biker.api.bikeride.com' --data 'upstream_url=http://_biker._tcp.bikerride-biker-proxy.bikeride.svc.cluster.local'
-curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=track-api' --data 'hosts=track.api.bikeride.com' --data 'upstream_url=http://_track._tcp.bikerride-track-proxy.bikeride.svc.cluster.local'
-curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=ride-api' --data 'hosts=ride.api.bikeride.com' --data 'upstream_url=http://_ride._tcp.bikerride-ride-proxy.bikeride.svc.cluster.local'
+
+curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=authentication-api' --data 'strip_uri=false' --data 'uris=/api/authn' --data 'upstream_url=http://_lagom._tcp.bikerride-authentication-proxy.default.svc.cluster.local'
+curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=biker-api' --data 'strip_uri=false' --data 'uris=/api/biker,/api/bikers' --data 'upstream_url=http://_lagom._tcp.bikerride-biker-proxy.default.svc.cluster.local'
+curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=track-api' --data 'strip_uri=false' --data 'uris=/api/track' --data 'upstream_url=http://_lagom._tcp.bikerride-track-proxy.default.svc.cluster.local'
+curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=ride-api' --data 'strip_uri=false' --data 'uris=/api/ride' --data 'upstream_url=http://_lagom._tcp.bikerride-ride-proxy.default.svc.cluster.local'
+
