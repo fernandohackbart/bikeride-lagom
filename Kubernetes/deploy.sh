@@ -16,6 +16,7 @@ kubectl delete -f kong_migration_cassandra.yml
 kubectl create -f kong_cassandra.yml
 # Bikeride microservices
 kubectl create -f bikeride-namespace.yml
+
 kubectl create -f authentication-deploy.yml
 kubectl create -f authentication-service.yml
 kubectl create -f biker-deploy.yml
