@@ -1,7 +1,7 @@
 env.BUNDLE_VERSION="0.0.1-SNAPSHOT"
 
 pipeline {
-  agent docker
+  agent any
   stages {
     stage('GIT') {
       git 'https://github.com/fernandohackbart/bikeride-lagom.git'
