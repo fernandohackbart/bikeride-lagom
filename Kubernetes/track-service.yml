@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: bikeride-track-proxy
-  name: bikeride-track-proxy
+  name: bikeride-track
   #namespace: bikeride
 spec:
   clusterIP: None
