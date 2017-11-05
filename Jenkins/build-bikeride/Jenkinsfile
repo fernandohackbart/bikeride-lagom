@@ -1,6 +1,6 @@
 env.BUNDLE_VERSION="0.0.1-SNAPSHOT"
 
-node {
+node('docker') {
 
   stage('GIT') {
     git 'https://github.com/fernandohackbart/bikeride-lagom.git'

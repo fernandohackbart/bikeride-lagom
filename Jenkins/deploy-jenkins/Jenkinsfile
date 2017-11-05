@@ -1,4 +1,4 @@
-node {
+node('docker') {
 
   stage('GIT') {
     git 'https://github.com/fernandohackbart/bikeride-lagom.git'
