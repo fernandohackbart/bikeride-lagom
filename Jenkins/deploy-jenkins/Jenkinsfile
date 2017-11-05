@@ -1,0 +1,13 @@
+node {
+
+  stage('GIT') {
+    git 'https://github.com/fernandohackbart/bikeride-lagom.git'
+  }
+  stage('Start Jenkinsn') {
+    sh 'kubectl create -f Kubernetes/jenkins-ephemeral.yml'
+  }
+  stage('Start Jenkinsn') {
+    sh 'kubectl get po'
+  }
+
+}
