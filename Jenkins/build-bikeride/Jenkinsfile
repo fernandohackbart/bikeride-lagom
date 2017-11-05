@@ -1,59 +1,57 @@
 env.BUNDLE_VERSION="0.0.1-SNAPSHOT"
 
-pipeline {
-  agent any
-  stages {
-    stage('GIT') {
-      git 'https://github.com/fernandohackbart/bikeride-lagom.git'
+node {
+
+  stage('GIT') {
+    git 'https://github.com/fernandohackbart/bikeride-lagom.git'
+  }
+  stage('Build') {
+    def builds = [:]
+    builds['scala'] = {
+      sh "${tool name: 'SBT at docker', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt dist"
     }
-    stage('Build') {
-      def builds = [:]
-      builds['scala'] = {
-        sh "${tool name: 'SBT at docker', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt dist"
-      }
-      builds['bundles'] = {
-        echo 'building distribution bundles'
-      }
-      parallel builds
+    builds['bundles'] = {
+      echo 'building distribution bundles'
     }
-    stage('Clean up files') {
-      sh 'rm -rf Docker/authentication-lagom-impl/files'
-      sh 'rm -rf Docker/biker-lagom-impl/files'
-      sh 'rm -rf Docker/track-lagom-impl/files'
-      sh 'rm -rf Docker/ride-lagom-impl/files'
-    }
-    stage('Unpack bundles') {
-      sh 'mkdir -p Docker/authentication-lagom-impl/files'
-      sh 'unzip -q authentication-lagom-impl/target/universal/authentication-lagom-impl-${BUNDLE_VERSION}.zip -d Docker/authentication-lagom-impl/files'
-      sh 'mv Docker/authentication-lagom-impl/files/authentication-lagom-impl-${BUNDLE_VERSION} Docker/authentication-lagom-impl/files/authentication-lagom-impl'
-      sh 'mkdir -p Docker/biker-lagom-impl/files'
-      sh 'unzip -q biker-lagom-impl/target/universal/biker-lagom-impl-${BUNDLE_VERSION}.zip -d Docker/biker-lagom-impl/files'
-      sh 'mv Docker/biker-lagom-impl/files/biker-lagom-impl-${BUNDLE_VERSION} Docker/biker-lagom-impl/files/biker-lagom-impl'
-      sh 'mkdir -p Docker/track-lagom-impl/files'
-      sh 'unzip -q track-lagom-impl/target/universal/track-lagom-impl-${BUNDLE_VERSION}.zip -d Docker/track-lagom-impl/files'
-      sh 'mv Docker/track-lagom-impl/files/track-lagom-impl-${BUNDLE_VERSION} Docker/track-lagom-impl/files/track-lagom-impl'
-      sh 'mkdir -p Docker/ride-lagom-impl/files'
-      sh 'unzip -q ride-lagom-impl/target/universal/ride-lagom-impl-${BUNDLE_VERSION}.zip -d Docker/ride-lagom-impl/files'
-      sh 'mv Docker/ride-lagom-impl/files/ride-lagom-impl-${BUNDLE_VERSION} Docker/ride-lagom-impl/files/ride-lagom-impl'
-    }
-    stage('Clean old images') {
-      sh 'chmod 755 Docker/docker-clean-images.sh; Docker/docker-clean-images.sh '
-    }
-    stage('Build images') {
-      sh 'docker build -f Docker/authentication-lagom-impl/Dockerfile  -t  bikeride/authentication-lagom-impl:${BUNDLE_VERSION} Docker/authentication-lagom-impl'
-      sh 'docker build -f Docker/biker-lagom-impl/Dockerfile  -t  bikeride/biker-lagom-impl:${BUNDLE_VERSION} Docker/biker-lagom-impl'
-      sh 'docker build -f Docker/track-lagom-impl/Dockerfile  -t  bikeride/track-lagom-impl:${BUNDLE_VERSION} Docker/track-lagom-impl'
-      sh 'docker build -f Docker/ride-lagom-impl/Dockerfile  -t  bikeride/ride-lagom-impl:${BUNDLE_VERSION} Docker/ride-lagom-impl'
-    }
-    stage('Docker login') {
-      sh '#docker login'
-    }
-    stage('Push images') {
-      sh 'docker push bikeride/bikeride-backend:base'
-      sh 'docker push bikeride/authentication-lagom-impl:${BUNDLE_VERSION}'
-      sh 'docker push bikeride/biker-lagom-impl:${BUNDLE_VERSION}'
-      sh 'docker push bikeride/track-lagom-impl:${BUNDLE_VERSION}'
-      sh 'docker push bikeride/ride-lagom-impl:${BUNDLE_VERSION}'
-    }
+    parallel builds
+  }
+  stage('Clean up files') {
+    sh 'rm -rf Docker/authentication-lagom-impl/files'
+    sh 'rm -rf Docker/biker-lagom-impl/files'
+    sh 'rm -rf Docker/track-lagom-impl/files'
+    sh 'rm -rf Docker/ride-lagom-impl/files'
+  }
+  stage('Unpack bundles') {
+    sh 'mkdir -p Docker/authentication-lagom-impl/files'
+    sh 'unzip -q authentication-lagom-impl/target/universal/authentication-lagom-impl-${BUNDLE_VERSION}.zip -d Docker/authentication-lagom-impl/files'
+    sh 'mv Docker/authentication-lagom-impl/files/authentication-lagom-impl-${BUNDLE_VERSION} Docker/authentication-lagom-impl/files/authentication-lagom-impl'
+    sh 'mkdir -p Docker/biker-lagom-impl/files'
+    sh 'unzip -q biker-lagom-impl/target/universal/biker-lagom-impl-${BUNDLE_VERSION}.zip -d Docker/biker-lagom-impl/files'
+    sh 'mv Docker/biker-lagom-impl/files/biker-lagom-impl-${BUNDLE_VERSION} Docker/biker-lagom-impl/files/biker-lagom-impl'
+    sh 'mkdir -p Docker/track-lagom-impl/files'
+    sh 'unzip -q track-lagom-impl/target/universal/track-lagom-impl-${BUNDLE_VERSION}.zip -d Docker/track-lagom-impl/files'
+    sh 'mv Docker/track-lagom-impl/files/track-lagom-impl-${BUNDLE_VERSION} Docker/track-lagom-impl/files/track-lagom-impl'
+    sh 'mkdir -p Docker/ride-lagom-impl/files'
+    sh 'unzip -q ride-lagom-impl/target/universal/ride-lagom-impl-${BUNDLE_VERSION}.zip -d Docker/ride-lagom-impl/files'
+    sh 'mv Docker/ride-lagom-impl/files/ride-lagom-impl-${BUNDLE_VERSION} Docker/ride-lagom-impl/files/ride-lagom-impl'
+  }
+  stage('Clean old images') {
+    sh 'chmod 755 Docker/docker-clean-images.sh; Docker/docker-clean-images.sh '
+  }
+  stage('Build images') {
+    sh 'docker build -f Docker/authentication-lagom-impl/Dockerfile  -t  bikeride/authentication-lagom-impl:${BUNDLE_VERSION} Docker/authentication-lagom-impl'
+    sh 'docker build -f Docker/biker-lagom-impl/Dockerfile  -t  bikeride/biker-lagom-impl:${BUNDLE_VERSION} Docker/biker-lagom-impl'
+    sh 'docker build -f Docker/track-lagom-impl/Dockerfile  -t  bikeride/track-lagom-impl:${BUNDLE_VERSION} Docker/track-lagom-impl'
+    sh 'docker build -f Docker/ride-lagom-impl/Dockerfile  -t  bikeride/ride-lagom-impl:${BUNDLE_VERSION} Docker/ride-lagom-impl'
+  }
+  stage('Docker login') {
+    sh '#docker login'
+  }
+  stage('Push images') {
+    sh 'docker push bikeride/bikeride-backend:base'
+    sh 'docker push bikeride/authentication-lagom-impl:${BUNDLE_VERSION}'
+    sh 'docker push bikeride/biker-lagom-impl:${BUNDLE_VERSION}'
+    sh 'docker push bikeride/track-lagom-impl:${BUNDLE_VERSION}'
+    sh 'docker push bikeride/ride-lagom-impl:${BUNDLE_VERSION}'
   }
 }
