@@ -23,15 +23,15 @@ node {
   }
   stage('Unpack bundles') {
     sh 'mkdir -p Docker/authentication-lagom-impl/files'
-    sh 'mkdir -p Docker/biker-lagom-impl/files'
-    sh 'mkdir -p Docker/track-lagom-impl/files'
-    sh 'mkdir -p Docker/ride-lagom-impl/files'
     sh 'unzip -q authentication-lagom-impl/target/universal/authentication-lagom-impl-${BUNDLE_VERSION}.zip -d Docker/authentication-lagom-impl/files'
     sh 'mv Docker/authentication-lagom-impl/files/authentication-lagom-impl-${BUNDLE_VERSION} Docker/authentication-lagom-impl/files/authentication-lagom-impl'
+    sh 'mkdir -p Docker/biker-lagom-impl/files'
     sh 'unzip -q biker-lagom-impl/target/universal/biker-lagom-impl-${BUNDLE_VERSION}.zip -d Docker/biker-lagom-impl/files'
     sh 'mv Docker/biker-lagom-impl/files/biker-lagom-impl-${BUNDLE_VERSION} Docker/biker-lagom-impl/files/biker-lagom-impl'
+    sh 'mkdir -p Docker/track-lagom-impl/files'
     sh 'unzip -q track-lagom-impl/target/universal/track-lagom-impl-${BUNDLE_VERSION}.zip -d Docker/track-lagom-impl/files'
     sh 'mv Docker/track-lagom-impl/files/track-lagom-impl-${BUNDLE_VERSION} Docker/track-lagom-impl/files/track-lagom-impl'
+    sh 'mkdir -p Docker/ride-lagom-impl/files'
     sh 'unzip -q ride-lagom-impl/target/universal/ride-lagom-impl-${BUNDLE_VERSION}.zip -d Docker/ride-lagom-impl/files'
     sh 'mv Docker/ride-lagom-impl/files/ride-lagom-impl-${BUNDLE_VERSION} Docker/ride-lagom-impl/files/ride-lagom-impl'
   }
