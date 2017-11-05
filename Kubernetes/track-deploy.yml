@@ -12,6 +12,7 @@ spec:
         app: track-lagom
     spec:
       containers:
+      imagePullPolicy: Always
       - name: track-lagom-impl
         image: bikeride/track-lagom-impl:0.0.1-SNAPSHOT
         env:
