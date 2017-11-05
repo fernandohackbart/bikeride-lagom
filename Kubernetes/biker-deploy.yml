@@ -12,9 +12,9 @@ spec:
         app: biker-lagom
     spec:
       containers:
-      imagePullPolicy: Always
       - name: biker-lagom-impl
         image: bikeride/biker-lagom-impl:0.0.1-SNAPSHOT
+        imagePullPolicy: Always
         env:
           - name: BIKERIDE_SERVICE_DOMAIN
             value: "bikeride.svc.cluster.local"

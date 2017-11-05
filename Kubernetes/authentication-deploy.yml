@@ -11,11 +11,10 @@ spec:
         name: bikeride-authentication-rc
         app: authentication-lagom
     spec:
-      imagePullPolicy: Always
       containers:
       - name: authentication-lagom-impl
         image: bikeride/authentication-lagom-impl:0.0.1-SNAPSHOT
-
+        imagePullPolicy: Always
         env:
           - name: BIKERIDE_SERVICE_DOMAIN
             value: "bikeride.svc.cluster.local"
