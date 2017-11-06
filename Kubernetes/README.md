@@ -46,6 +46,7 @@ For the example the kubectl was installed at `/opt/kubernetes/bin/kubectl`.
 nexte step is to deploy Jenkins:
 ```
 mkdir -p /opt/kubernetes
+cd /opt/kubernetes
 git clone https://github.com/fernandohackbart/bikeride-lagom.git
 cd bikeride-lagom
 /opt/kubernetes/bin/kubectl create -f Kubernetes/jenkins-ephemeral.yml
