@@ -10,9 +10,6 @@ node('docker') {
     builds['scala'] = {
       sh "${tool name: 'SBT at docker', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt dist"
     }
-    builds['bundles'] = {
-      echo 'building distribution bundles'
-    }
     parallel builds
   }
   stage('Unpack bundles') {
@@ -46,9 +43,6 @@ node('docker') {
   stage('Clean old images') {
     sh 'chmod 755 Docker/docker-clean-images.sh; Docker/docker-clean-images.sh '
   }
-  //stage('Build base image'){
-  //  sh 'docker build -f Docker/bikeride-backend/Dockerfile  -t  bikeride/bikeride-backend:base Docker/bikeride-backend'
-  //}
   stage('Build images') {
     sh 'docker build -f Docker/authentication-lagom-impl/Dockerfile  -t  bikeride/authentication-lagom-impl:${BUNDLE_VERSION} Docker/authentication-lagom-impl'
     sh 'docker build -f Docker/biker-lagom-impl/Dockerfile  -t  bikeride/biker-lagom-impl:${BUNDLE_VERSION} Docker/biker-lagom-impl'
