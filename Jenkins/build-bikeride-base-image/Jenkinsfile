@@ -1,0 +1,11 @@
+env.BUNDLE_VERSION="0.0.1-SNAPSHOT"
+
+node('docker') {
+
+  stage('GIT') {
+    git 'https://github.com/fernandohackbart/bikeride-lagom.git'
+  }
+  stage('Build base image'){
+    sh 'docker build -f Docker/bikeride-backend/Dockerfile  -t  bikeride/bikeride-backend:base Docker/bikeride-backend'
+  }
+}
