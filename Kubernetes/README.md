@@ -105,3 +105,15 @@ curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=ride-api' --dat
 
 Note that the `Kubernetes/*-service.yml` has hard coded port numbers, if you already have other stuff running on minikube this may badly collide.
 
+
+
+## Some documentation used during the setup of Kubernetes and minikube
+
+* https://github.com/kubernetes/kubernetes/tree/master/examples/guestbook-go
+* https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/
+* https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+* https://github.com/openshift/origin
+* https://github.com/kubernetes/kubernetes/blob/master/examples/guestbook/all-in-one/frontend.yaml
+* https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/
+* https://kubernetes.io/docs/concepts/containers/images/
+
