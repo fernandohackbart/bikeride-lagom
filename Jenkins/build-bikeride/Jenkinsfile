@@ -47,9 +47,14 @@ node('docker') {
     sh 'docker build -f Docker/track-lagom-impl/Dockerfile  -t  bikeride/track-lagom-impl:${BUNDLE_VERSION} Docker/track-lagom-impl'
     sh 'docker build -f Docker/ride-lagom-impl/Dockerfile  -t  bikeride/ride-lagom-impl:${BUNDLE_VERSION} Docker/ride-lagom-impl'
   }
-  stage('Docker login') {
-    sh '#docker login'
+  stage('Logged in?') {
+    timeout(time:5, unit:'DAYS') {
+      input message:'Have you logged in to Docker in the build machine?'
+    }
   }
+  //stage('Docker login') {
+  //  sh 'docker login'
+  //}
   stage('Push images') {
     sh 'docker push bikeride/bikeride-backend:base'
     sh 'docker push bikeride/authentication-lagom-impl:${BUNDLE_VERSION}'
