@@ -1,0 +1,56 @@
+apiVersion: "apps/v1beta1"
+kind: StatefulSet
+metadata:
+  name: bikeride-biker-ss
+spec:
+  serviceName: bikeride-biker-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: bikeride-biker-ss
+        app: biker-lagom
+    spec:
+      containers:
+      - name: biker-lagom-impl
+        image: bikeride/biker-lagom-impl:0.0.1-SNAPSHOT
+        imagePullPolicy: Always
+        ports:
+        - name: lagom
+          containerPort: 9000
+          protocol: TCP
+        - name: akka-remote
+          containerPort: 2551
+          protocol: TCP
+        env:
+          - name: SERVICE_DEBUG
+            value: "-d"
+          - name: BIKERIDE_SERVICE_DOMAIN
+            value: "default.svc.cluster.local"
+          #- name: BIKERIDE_CASSANDRA_SERVICE
+          #  value: "_casnative._tcp.cassandra.default.svc.cluster.local"
+          - name: APPLICATION_SECRET
+            value: "changeme!"
+          - name: CASSANDRA_SERVICE_NAME
+            value: "_casnative._tcp.cassandra.default.svc.cluster.local"
+          - name: SERVICE_BIND_PORT
+            value: "9000"
+          - name: SERVICE_BIND_IP
+            value: "0.0.0.0"
+          - name: AKKA_REMOTING_PORT
+            value: "2551"
+          - name: AKKA_REMOTING_BIND_PORT
+            value: "2551"
+          - name: AKKA_REMOTING_HOST
+            value: "$HOSTNAME.bikeride-biker-service.default.svc.cluster.local"
+          - name: AKKA_REMOTING_BIND_HOST
+            value: "$HOSTNAME.bikeride-biker-service.default.svc.cluster.local"
+          - name: AKKA_SEED_NODES
+            value: "bikeride-biker-ss-0.bikeride-biker-service.default.svc.cluster.local:2551,bikeride-biker-ss-1.bikeride-biker-service.default.svc.cluster.local:2551,bikeride-biker-ss-2.bikeride-biker-service.default.svc.cluster.local:2551"
+#        readinessProbe:
+#          httpGet:
+#            path: "/_status/circuit-breaker/current"
+#            port: 9000
+#          initialDelaySeconds: 15
+#          timeoutSeconds: 5
+
