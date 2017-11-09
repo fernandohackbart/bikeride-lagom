@@ -1,15 +1,15 @@
 apiVersion: "apps/v1beta1"
 kind: StatefulSet
 metadata:
-  name: bikeride-authentication-ss
+  name: bikeride-authentication
 spec:
-  serviceName: bikeride-authentication-service
+  serviceName: bikeride-authentication
   replicas: 1
   template:
     metadata:
       labels:
-        name: bikeride-authentication-ss
-        app: authentication-lagom
+        name: bikeride-authentication
+        app: authentication-lagom-impl
     spec:
       containers:
       - name: authentication-lagom-impl
@@ -46,7 +46,7 @@ spec:
           - name: AKKA_REMOTING_BIND_HOST
             value: "$HOSTNAME.bikeride-authentication-service.default.svc.cluster.local"
           - name: AKKA_SEED_NODES
-            value: "bikeride-authentication-ss-0.bikeride-authentication-service.default.svc.cluster.local:2551,bikeride-authentication-ss-1.bikeride-authentication-service.default.svc.cluster.local:2551,bikeride-authentication-ss-2.bikeride-authentication-service.default.svc.cluster.local:2551"
+            value: "bikeride-authentication-0.bikeride-authentication.default.svc.cluster.local:2551,bikeride-authentication-1.bikeride-authentication.default.svc.cluster.local:2551,bikeride-authentication-2.bikeride-authentication.default.svc.cluster.local:2551"
 #        readinessProbe:
 #          httpGet:
 #            path: "/_status/circuit-breaker/current"

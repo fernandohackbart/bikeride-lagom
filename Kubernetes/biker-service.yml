@@ -2,9 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: bikeride-biker-proxy
-  name: bikeride-biker
-  #namespace: bikeride
+    app: bikeride-biker-lagom
+  name: bikeride-biker-lagom
 spec:
   clusterIP: None
   ports:
@@ -12,7 +11,7 @@ spec:
       port: 9000
       protocol: TCP
   selector:
-    app: biker-lagom
+    app: biker-lagom-impl
 ---
 apiVersion: v1
 kind: Service
@@ -26,4 +25,4 @@ spec:
       port: 2551
       protocol: TCP
   selector:
-    app: biker-lagom
+    app: biker-lagom-impl

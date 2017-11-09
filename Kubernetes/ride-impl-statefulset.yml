@@ -1,15 +1,15 @@
 apiVersion: "apps/v1beta1"
 kind: StatefulSet
 metadata:
-  name: bikeride-ride-ss
+  name: bikeride-ride
 spec:
-  serviceName: bikeride-ride-service
+  serviceName: bikeride-ride
   replicas: 1
   template:
     metadata:
       labels:
-        name: bikeride-ride-ss
-        app: ride-lagom
+        name: bikeride-ride
+        app: ride-lagom-impl
     spec:
       containers:
       - name: ride-lagom-impl
@@ -46,7 +46,7 @@ spec:
           - name: AKKA_REMOTING_BIND_HOST
             value: "$HOSTNAME.bikeride-ride-service.default.svc.cluster.local"
           - name: AKKA_SEED_NODES
-            value: "bikeride-ride-ss-0.bikeride-ride-service.default.svc.cluster.local:2551,bikeride-ride-ss-1.bikeride-ride-service.default.svc.cluster.local:2551,bikeride-ride-ss-2.bikeride-ride-service.default.svc.cluster.local:2551"
+            value: "bikeride-ride-0.bikeride-ride.default.svc.cluster.local:2551,bikeride-ride-1.bikeride-ride.default.svc.cluster.local:2551,bikeride-ride-2.bikeride-ride.default.svc.cluster.local:2551"
 #        readinessProbe:
 #          httpGet:
 #            path: "/_status/circuit-breaker/current"

@@ -1,15 +1,15 @@
 apiVersion: "apps/v1beta1"
 kind: StatefulSet
 metadata:
-  name: bikeride-biker-ss
+  name: bikeride-biker
 spec:
-  serviceName: bikeride-biker-service
+  serviceName: bikeride-biker
   replicas: 1
   template:
     metadata:
       labels:
-        name: bikeride-biker-ss
-        app: biker-lagom
+        name: bikeride-biker
+        app: biker-lagom-impl
     spec:
       containers:
       - name: biker-lagom-impl
@@ -42,11 +42,11 @@ spec:
           - name: AKKA_REMOTING_BIND_PORT
             value: "2551"
           - name: AKKA_REMOTING_HOST
-            value: "$HOSTNAME.bikeride-biker-service.default.svc.cluster.local"
+            value: "$HOSTNAME.bikeride-biker.default.svc.cluster.local"
           - name: AKKA_REMOTING_BIND_HOST
-            value: "$HOSTNAME.bikeride-biker-service.default.svc.cluster.local"
+            value: "$HOSTNAME.bikeride-biker.default.svc.cluster.local"
           - name: AKKA_SEED_NODES
-            value: "bikeride-biker-ss-0.bikeride-biker-service.default.svc.cluster.local:2551,bikeride-biker-ss-1.bikeride-biker-service.default.svc.cluster.local:2551,bikeride-biker-ss-2.bikeride-biker-service.default.svc.cluster.local:2551"
+            value: "bikeride-biker-0.bikeride-biker.default.svc.cluster.local:2551,bikeride-biker-1.bikeride-biker.default.svc.cluster.local:2551,bikeride-biker-2.bikeride-biker.default.svc.cluster.local:2551"
 #        readinessProbe:
 #          httpGet:
 #            path: "/_status/circuit-breaker/current"
