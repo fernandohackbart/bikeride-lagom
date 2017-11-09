@@ -83,6 +83,9 @@ Should take some time to be in the `running` state, after in running state
   * build-bikeride
     * https://github.com/fernandohackbart/bikeride-lagom.git
     * `Jenkins/build-bikeride/Jenkinsfile`
+  * push-bikeride
+    * https://github.com/fernandohackbart/bikeride-lagom.git
+    * `Jenkins/push-bikeride/Jenkinsfile`    
   * deploy-bikeride
     * https://github.com/fernandohackbart/bikeride-lagom.git
     * `Jenkins/deploy-bikeride/Jenkinsfile`
