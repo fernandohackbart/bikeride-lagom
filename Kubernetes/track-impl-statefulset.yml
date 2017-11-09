@@ -42,9 +42,9 @@ spec:
           - name: AKKA_REMOTING_BIND_PORT
             value: "2551"
           - name: AKKA_REMOTING_HOST
-            value: "$HOSTNAME.bikeride-track-service.default.svc.cluster.local"
+            value: "$HOSTNAME.bikeride-track.default.svc.cluster.local"
           - name: AKKA_REMOTING_BIND_HOST
-            value: "$HOSTNAME.bikeride-track-service.default.svc.cluster.local"
+            value: "$HOSTNAME.bikeride-track.default.svc.cluster.local"
           - name: AKKA_SEED_NODES
             value: "bikeride-track-0.bikeride-track.default.svc.cluster.local:2551,bikeride-track-1.bikeride-track.default.svc.cluster.local:2551,bikeride-track-2.bikeride-track.default.svc.cluster.local:2551"
 #        readinessProbe:
