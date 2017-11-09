@@ -26,12 +26,6 @@ node('docker') {
   stage('Deploy Kong') {
     sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/kong_cassandra.yml'
   }
-  //stage('Deploy Bikeride') {
-  //  sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/authentication-deploy.yml'
-  //  sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/biker-deploy.yml'
-  //  sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/track-deploy.yml'
-  //  sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/ride-deploy.yml'
-  //}
   stage('Deploy Bikeride') {
     sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/authentication-statefulset.yml'
     sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/biker-statefulset.yml'
