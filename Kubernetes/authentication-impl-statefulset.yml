@@ -45,10 +45,10 @@ spec:
             value: "$HOSTNAME.bikeride-authentication.default.svc.cluster.local"
           - name: AKKA_SEED_NODES
             value: "bikeride-authentication-0.bikeride-authentication.default.svc.cluster.local:2551,bikeride-authentication-1.bikeride-authentication.default.svc.cluster.local:2551,bikeride-authentication-2.bikeride-authentication.default.svc.cluster.local:2551"
-        readinessProbe:
-          httpGet:
-            path: "/_status/circuit-breaker/current"
-            port: 9000
-          initialDelaySeconds: 15
-          timeoutSeconds: 5
+#        readinessProbe:
+#          httpGet:
+#            path: "/_status/circuit-breaker/current"
+#            port: 9000
+#          initialDelaySeconds: 15
+#          timeoutSeconds: 5
 
