@@ -27,8 +27,6 @@ spec:
             value: "-d"
           - name: BIKERIDE_SERVICE_DOMAIN
             value: "default.svc.cluster.local"
-          #- name: BIKERIDE_CASSANDRA_SERVICE
-          #  value: "_casnative._tcp.cassandra.default.svc.cluster.local"
           - name: APPLICATION_SECRET
             value: "changeme!"
           - name: CASSANDRA_SERVICE_NAME
