@@ -21,9 +21,6 @@ spec:
           limits:
             cpu: 100m
             memory: 2048Mi
-        volumeMounts:
-        - name: jenkins-home
-          mountPath: /var/jenkins_home
         ports:
         - containerPort: 8080
           name: application
@@ -31,7 +28,24 @@ spec:
         - containerPort: 50000
           name: node
           protocol: TCP
-      volumes:
-      - name: jenkins-home
-        persistentVolumeClaim:
-          claimName: jenkins-pv-claim
+        volumeMounts:
+        - name: jenkins-data
+          mountPath: /var/jenkins_home
+  volumeClaimTemplates:
+  - metadata:
+      name: jenkins-data
+      annotations:
+        volume.beta.kubernetes.io/storage-class: jenkins-fast
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 2Gi
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+  name: jenkins-fast
+provisioner: k8s.io/minikube-hostpath
+parameters:
+  type: pd-ssd

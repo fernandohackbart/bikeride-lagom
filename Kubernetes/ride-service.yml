@@ -13,3 +13,17 @@ spec:
       protocol: TCP
   selector:
     app: ride-lagom
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: bikeride-ride-akka-remoting
+  name: bikeride-ride-akka-remoting
+spec:
+  ports:
+    - name: akka-remote
+      port: 2551
+      protocol: TCP
+  selector:
+    app: ride-lagom

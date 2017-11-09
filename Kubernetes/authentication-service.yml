@@ -4,12 +4,25 @@ metadata:
   labels:
     app: bikeride-authentication-proxy
   name: bikeride-authentication
-  #namespace: bikeride
 spec:
   clusterIP: None
   ports:
     - name: lagom
       port: 9000
+      protocol: TCP
+  selector:
+    app: authentication-lagom
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: bikeride-authentication-akka-remoting
+  name: bikeride-authentication-akka-remoting
+spec:
+  ports:
+    - name: akka-remote
+      port: 2551
       protocol: TCP
   selector:
     app: authentication-lagom
