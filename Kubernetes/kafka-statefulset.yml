@@ -27,7 +27,7 @@ spec:
           - name: ADVERTISED_HOST
             value: "$HOSTNAME.bikeride-authentication.default.svc.cluster.local"
           - name: ADVERTISED_PORT
-            value: 9092
+            value: "9092"
 #        readinessProbe:
 #          httpGet:
 #            path: "/_status/circuit-breaker/current"
