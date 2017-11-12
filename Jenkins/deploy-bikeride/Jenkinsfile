@@ -27,16 +27,10 @@ node('docker') {
     sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/kong_cassandra.yml'
   }
   stage('Deploy Bikeride') {
-    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/authentication-statefulset.yml'
-    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/biker-statefulset.yml'
-    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/track-statefulset.yml'
-    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/ride-statefulset.yml'
-  }
-  stage('Deploy Bikeride services') {
-    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/authentication-service.yml'
-    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/biker-service.yml'
-    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/track-service.yml'
-    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/ride-service.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/authentication-impl-statefulset.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/biker-impl-statefulset.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/track-impl-statefulset.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/ride-impl-statefulset.yml'
   }
   stage('Deploy Bikeride') {
     sh '/opt/kubernetes/bin/kubectl get all -n default'
