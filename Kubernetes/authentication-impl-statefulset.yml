@@ -36,6 +36,8 @@ spec:
             value: "9000"
           - name: SERVICE_BIND_IP
             value: "0.0.0.0"
+          - name: KAFKA_SERVICE_NAME
+            value: "_kafka._tcp.kafka-kafka.default.svc.cluster.local"
           - name: AKKA_REMOTING_PORT
             value: "2551"
           - name: AKKA_REMOTING_BIND_PORT
