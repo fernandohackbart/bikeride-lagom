@@ -25,7 +25,10 @@ spec:
           protocol: TCP
         env:
           - name: ADVERTISED_HOST
-            value: "$HOSTNAME.kafka.default.svc.cluster.local"
+            #value: "$HOSTNAME.kafka.default.svc.cluster.local"
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
           - name: ADVERTISED_PORT
             value: "9092"
 ---
