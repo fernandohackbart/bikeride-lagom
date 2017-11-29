@@ -3,7 +3,6 @@ package com.bikeride.authentication.impl
 
 import com.bikeride.authentication.api.AuthenticationService
 import com.bikeride.biker.api.BikerService
-//import com.bikeride.utils.servicelocator.dns.DNSServiceLocatorComponents
 import com.lightbend.lagom.scaladsl.dns.DnsServiceLocatorComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server._
