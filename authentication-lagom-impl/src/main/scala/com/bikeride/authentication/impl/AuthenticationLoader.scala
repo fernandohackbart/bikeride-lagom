@@ -3,7 +3,8 @@ package com.bikeride.authentication.impl
 
 import com.bikeride.authentication.api.AuthenticationService
 import com.bikeride.biker.api.BikerService
-import com.bikeride.utils.servicelocator.dns.DNSServiceLocatorComponents
+//import com.bikeride.utils.servicelocator.dns.DNSServiceLocatorComponents
+import com.lightbend.lagom.scaladsl.dns.DnsServiceLocatorComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server._
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
@@ -14,7 +15,7 @@ import com.softwaremill.macwire._
 class AuthenticationLoader extends LagomApplicationLoader{
 
   override def load(context: LagomApplicationContext) =
-    new AuthenticationApplication(context) with DNSServiceLocatorComponents
+    new AuthenticationApplication(context) with DnsServiceLocatorComponents
 
   override def loadDevMode(context: LagomApplicationContext): LagomApplication =
     new AuthenticationApplication(context) with LagomDevModeComponents

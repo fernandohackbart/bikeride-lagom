@@ -1,7 +1,8 @@
 package com.bikeride.ride.impl
 
 import com.bikeride.ride.api.RideService
-import com.bikeride.utils.servicelocator.dns.DNSServiceLocatorComponents
+//import com.bikeride.utils.servicelocator.dns.DNSServiceLocatorComponents
+import com.lightbend.lagom.scaladsl.dns.DnsServiceLocatorComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server._
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
@@ -13,7 +14,7 @@ import org.slf4j.{Logger, LoggerFactory}
 class RideLoader extends LagomApplicationLoader{
 
   override def load(context: LagomApplicationContext) =
-    new RideApplication(context) with DNSServiceLocatorComponents
+    new RideApplication(context) with DnsServiceLocatorComponents
 
   override def loadDevMode(context: LagomApplicationContext): LagomApplication =
     new RideApplication(context) with LagomDevModeComponents
