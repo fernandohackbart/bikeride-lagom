@@ -1,0 +1,32 @@
+env.BUNDLE_VERSION="0.0.1-SNAPSHOT"
+
+node('docker') {
+  stage('GIT') {
+    git 'https://github.com/fernandohackbart/bikeride-lagom.git'
+  }
+  stage('Deploy Cassandra') {
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/cassandra.yml'
+  }
+  stage('wait') {
+    timeout(time:5, unit:'DAYS') {
+      input message:'Cassandra ready?'
+    }
+  }
+  stage('Start Kong database configuration') {
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/kong_migration_cassandra.yml'
+  }
+  stage('wait') {
+    timeout(time:5, unit:'DAYS') {
+      input message:'Kong database configuration ready?'
+    }
+  }
+  stage('remove Kong database configuration job') {
+    sh '/opt/kubernetes/bin/kubectl delete -f Kubernetes/kong-migration-cassandra.yml'
+  }
+  stage('Deploy Kong') {
+    sh '/opt/kubernetes/bin/kubectl create -f Kubernetes/kong-cassandra.yml'
+  }
+  stage('Deploy Bikeride') {
+    sh '/opt/kubernetes/bin/kubectl get all -n default'
+  }
+}
