@@ -13,7 +13,7 @@
     <logger name="com.datastax.driver" level="ERROR" />
     <logger name="com.datastax.driver.core.ControlConnection" level="ERROR" />
     <logger name="com.bikeride.authentication.impl" level="ERROR" />
-    <logger name="org.apache.kafka" level="ALL" />
+    <logger name="org.apache.kafka" level="DEBUG" />
     <root level="ERROR">
         <appender-ref ref="STDOUT" />
     </root>

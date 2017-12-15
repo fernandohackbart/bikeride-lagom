@@ -2,9 +2,9 @@ organization in ThisBuild := "com.bikeride"
 version in ThisBuild := "0.0.1-SNAPSHOT"
 scalaVersion in ThisBuild := "2.11.12"
 //#########################################################################
-lagomCassandraCleanOnStart in ThisBuild := true
-lagomCassandraEnabled in ThisBuild := false
-lagomKafkaEnabled in ThisBuild := false
+lagomCassandraCleanOnStart in ThisBuild := false
+lagomCassandraEnabled in ThisBuild := true
+lagomKafkaEnabled in ThisBuild := true
 //#########################################################################
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided"
 val jwt = "com.pauldijou" %% "jwt-play-json" % "0.14.0"
@@ -21,6 +21,8 @@ lazy val `bikeride-lagom` = (project in file("."))
     `track-lagom-impl`,
     `ride-lagom-api`,
     `ride-lagom-impl`,
+    `analytics-lagom-api`,
+    `analytics-lagom-impl`,
     `utils`)
 //#########################################################################
 lazy val utils = (project in file("utils"))
@@ -115,7 +117,6 @@ lazy val `ride-lagom-api` = (project in file("ride-lagom-api"))
   )
   .dependsOn(`utils`,`biker-lagom-api`,`track-lagom-api`)
 
-
 lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
   .enablePlugins(LagomScala)
   .settings(
@@ -131,3 +132,27 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
   )
   .settings(lagomForkedTestSettings: _*)
   .dependsOn(`ride-lagom-api`,`track-lagom-api`,`biker-lagom-api`)
+
+lazy val `analytics-lagom-api` = (project in file("analytics-lagom-api"))
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslApi
+    )
+  )
+  .dependsOn(`utils`)
+
+lazy val `analytics-lagom-impl` = (project in file("analytics-lagom-impl"))
+  .enablePlugins(LagomScala)
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslPersistenceCassandra,
+      lagomScaladslKafkaBroker,
+      lagomScaladslTestKit,
+      serviceLocatorDNS,
+      macwire,
+      scalaTest
+    ),
+    resolvers += Resolver.jcenterRepo
+  )
+  .settings(lagomForkedTestSettings: _*)
+  .dependsOn(`analytics-lagom-api`,`authentication-lagom-api`)

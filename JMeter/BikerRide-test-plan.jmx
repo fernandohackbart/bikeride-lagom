@@ -11,12 +11,124 @@
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
     <hashTree>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Local mode variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="BIKERIDE_HOSTNAME" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_HOSTNAME</stringProp>
+            <stringProp name="Argument.value">127.0.0.1</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_PORT" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_PORT</stringProp>
+            <stringProp name="Argument.value">9000</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_AUTHN_HOSTNAME" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_AUTHN_HOSTNAME</stringProp>
+            <stringProp name="Argument.value">127.0.0.1</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_AUTHN_PORT" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_AUTHN_PORT</stringProp>
+            <stringProp name="Argument.value">54610</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_BIKER_HOSTNAME" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_BIKER_HOSTNAME</stringProp>
+            <stringProp name="Argument.value">127.0.0.1</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_BIKER_PORT" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_BIKER_PORT</stringProp>
+            <stringProp name="Argument.value">61817</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_TRACK_HOSTNAME" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_TRACK_HOSTNAME</stringProp>
+            <stringProp name="Argument.value">127.0.0.1</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_TRACK_PORT" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_TRACK_PORT</stringProp>
+            <stringProp name="Argument.value">54431</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_RIDE_HOSTNAME" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_RIDE_HOSTNAME</stringProp>
+            <stringProp name="Argument.value">127.0.0.1</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_RIDE_PORT" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_RIDE_PORT</stringProp>
+            <stringProp name="Argument.value">49454</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+        <stringProp name="TestPlan.comments">Running in development mode</stringProp>
+      </Arguments>
+      <hashTree/>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Kubernetes mode variables" enabled="false">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="BIKERIDE_HOSTNAME" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_HOSTNAME</stringProp>
+            <stringProp name="Argument.value">192.168.99.100</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_PORT" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_PORT</stringProp>
+            <stringProp name="Argument.value">30020</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_AUTHN_HOSTNAME" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_AUTHN_HOSTNAME</stringProp>
+            <stringProp name="Argument.value">192.168.99.100</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_AUTHN_PORT" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_AUTHN_PORT</stringProp>
+            <stringProp name="Argument.value">30020</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_BIKER_HOSTNAME" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_BIKER_HOSTNAME</stringProp>
+            <stringProp name="Argument.value">192.168.99.100}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_BIKER_PORT" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_BIKER_PORT</stringProp>
+            <stringProp name="Argument.value">30020</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_TRACK_HOSTNAME" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_TRACK_HOSTNAME</stringProp>
+            <stringProp name="Argument.value">192.168.99.100</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_TRACK_PORT" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_TRACK_PORT</stringProp>
+            <stringProp name="Argument.value">30020</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_RIDE_HOSTNAME" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_RIDE_HOSTNAME</stringProp>
+            <stringProp name="Argument.value">192.168.99.100</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="BIKERIDE_RIDE_PORT" elementType="Argument">
+            <stringProp name="Argument.name">BIKERIDE_RIDE_PORT</stringProp>
+            <stringProp name="Argument.value">30020</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+        <stringProp name="TestPlan.comments">Services front ended by Kong</stringProp>
+      </Arguments>
+      <hashTree/>
       <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
           <collectionProp name="Arguments.arguments"/>
         </elementProp>
-        <stringProp name="HTTPSampler.domain">192.168.99.100</stringProp>
-        <stringProp name="HTTPSampler.port">30020</stringProp>
+        <stringProp name="HTTPSampler.domain">${BIKERIDE_HOSTNAME}</stringProp>
+        <stringProp name="HTTPSampler.port">${BIKERIDE_PORT}</stringProp>
         <stringProp name="HTTPSampler.protocol"></stringProp>
         <stringProp name="HTTPSampler.contentEncoding"></stringProp>
         <stringProp name="HTTPSampler.path"></stringProp>
@@ -45,8 +157,8 @@
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.domain">${BIKERIDE_AUTHN_HOSTNAME}</stringProp>
+          <stringProp name="HTTPSampler.port">${BIKERIDE_AUTHN_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path"></stringProp>
@@ -317,6 +429,20 @@ ${__setProperty(bikeride${bikerPosition}ClientID, ${bikerideClientID})};
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${BIKERIDE_AUTHN_HOSTNAME}</stringProp>
+          <stringProp name="HTTPSampler.port">${BIKERIDE_AUTHN_PORT}</stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path"></stringProp>
+          <stringProp name="HTTPSampler.concurrentPool">4</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout">5000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">30000</stringProp>
+        </ConfigTestElement>
+        <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get PIN for invalid request (missing clienID)" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -482,8 +608,8 @@ ${__setProperty(bikeride${bikerPosition}ClientID, ${bikerideClientID})};
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.domain">${BIKERIDE_BIKER_HOSTNAME}</stringProp>
+          <stringProp name="HTTPSampler.port">${BIKERIDE_BIKER_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path"></stringProp>
@@ -1122,8 +1248,8 @@ if ( bikerActive != &quot;true&quot;){
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.domain">${BIKERIDE_BIKER_HOSTNAME}</stringProp>
+          <stringProp name="HTTPSampler.port">${BIKERIDE_BIKER_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path"></stringProp>
@@ -1329,8 +1455,8 @@ if ( currentBikerID != bikerideBikerID){
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.domain">${BIKERIDE_BIKER_HOSTNAME}</stringProp>
+          <stringProp name="HTTPSampler.port">${BIKERIDE_BIKER_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path"></stringProp>
@@ -1492,8 +1618,8 @@ if ( currentBikerID != bikerideBikerID){
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.domain">${BIKERIDE_TRACK_HOSTNAME}</stringProp>
+          <stringProp name="HTTPSampler.port">${BIKERIDE_TRACK_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path"></stringProp>
@@ -2410,8 +2536,8 @@ if ( thirdWaypoint != waypoint1ID){
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.domain">${BIKERIDE_TRACK_HOSTNAME}</stringProp>
+          <stringProp name="HTTPSampler.port">${BIKERIDE_TRACK_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path"></stringProp>
@@ -2579,8 +2705,8 @@ if ( currentTrackID != trackID){
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.domain">${BIKERIDE_TRACK_HOSTNAME}</stringProp>
+          <stringProp name="HTTPSampler.port">${BIKERIDE_TRACK_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path"></stringProp>
@@ -2682,8 +2808,8 @@ if ( currentTrackID != trackID){
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.domain">${BIKERIDE_RIDE_HOSTNAME}</stringProp>
+          <stringProp name="HTTPSampler.port">${BIKERIDE_RIDE_PORT}</stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path"></stringProp>

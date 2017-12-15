@@ -4,13 +4,15 @@ import java.util.UUID
 import java.time.Instant
 
 import akka.stream.Materializer
+import akka.persistence.query.Offset
 import com.bikeride.authentication.api
 import com.bikeride.authentication.api.{AuthenticationService, ValidateTokenResponse}
 import com.bikeride.biker.api._
 import com.bikeride.utils.security._
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.transport.{BadRequest, NotFound}
-import com.lightbend.lagom.scaladsl.persistence.{PersistentEntityRegistry, ReadSide}
+import com.lightbend.lagom.scaladsl.broker.TopicProducer
+import com.lightbend.lagom.scaladsl.persistence.{EventStreamElement, PersistentEntityRegistry, ReadSide}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 
 import scala.concurrent.duration._
@@ -93,5 +95,24 @@ class AuthenticationServiceImpl (bikerService: BikerService,
 
   override def createBiker = ServiceCall { req =>
     bikerService.createBiker.invoke(req)
+  }
+
+  override def authenticationTopic = TopicProducer.taggedStreamWithOffset(AuthenticationEvent.Tags.allTags.toList) { (tag, offset) =>
+    persistentEntityRegistry.eventStream(tag, offset)
+      .filter {
+        _.event match {
+          case x@(_: AuthenticationPINGenerated ) => true
+          case _ => false
+        }
+      }.mapAsync(1)(convertEvent)
+  }
+
+  private def convertEvent(eventStreamElement: EventStreamElement[AuthenticationEvent]): Future[(api.BikerLoggedIn, Offset)] = {
+    eventStreamElement match {
+      case EventStreamElement(itemId, AuthenticationPINGenerated(_), offset) =>
+        Future(api.BikerLoggedIn(
+          clientID = UUID.randomUUID(),
+          bikerID = UUID.randomUUID()), offset)
+    }
   }
 }

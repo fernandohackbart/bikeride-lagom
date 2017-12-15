@@ -1,9 +1,9 @@
 package com.bikeride.authentication.api
 
-import play.api.libs.json.{Format, Json}
-import com.bikeride.biker.api.{BikerClient, BikerCreateRequest, BikerID, BikerToken}
+import com.bikeride.biker.api.{BikerCreateRequest, BikerToken}
 import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
 import com.lightbend.lagom.scaladsl.api.transport.Method
+import com.lightbend.lagom.scaladsl.api.broker.Topic
 
 trait AuthenticationService extends Service {
 
@@ -12,6 +12,11 @@ trait AuthenticationService extends Service {
   def generatePIN: ServiceCall[GeneratePINRequest, GeneratePINResponse]
   def refreshClientToken: ServiceCall[RefreshTokenRequest, BikerToken]
   def validateClientToken: ServiceCall[BikerToken, ValidateTokenResponse]
+  def authenticationTopic() : Topic [BikerLoggedIn]
+
+  object AuthenticationService  {
+    val TOPIC_NAME = "authentication"
+  }
 
   override final def descriptor = {
     import Service._
@@ -22,35 +27,8 @@ trait AuthenticationService extends Service {
         restCall(Method.POST,"/api/authn/generatepin", generatePIN _),
         restCall(Method.POST,"/api/authn/refreshtoken", refreshClientToken),
         restCall(Method.POST,"/api/authn/validatetoken", validateClientToken)
+      ).withTopics(
+        topic(AuthenticationService.TOPIC_NAME, authenticationTopic)
       ).withAutoAcl(true)
   }
-}
-
-case class RefreshTokenRequest(client: BikerClient,
-                               bikerToken : BikerToken)
-object  RefreshTokenRequest {
-  implicit val format: Format[RefreshTokenRequest] = Json.format
-}
-
-case class ValidateTokenResponse(valid: Boolean = false)
-object  ValidateTokenResponse {
-  implicit val format: Format[ValidateTokenResponse] = Json.format
-}
-
-case class ValidatePINRequest(client: BikerClient,
-                              pin: String)
-object  ValidatePINRequest {
-  implicit val format: Format[ValidatePINRequest] = Json.format
-}
-
-case class GeneratePINRequest(client: BikerClient,
-                              email: Option[String] = None,
-                              mobile: Option[String] = None)
-object  GeneratePINRequest {
-  implicit val format: Format[GeneratePINRequest] = Json.format
-}
-
-case class GeneratePINResponse(message: String)
-object  GeneratePINResponse {
-  implicit val format: Format[GeneratePINResponse] = Json.format
 }

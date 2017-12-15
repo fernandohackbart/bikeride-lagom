@@ -6,6 +6,6 @@ node('docker') {
     git 'https://github.com/fernandohackbart/bikeride-lagom.git'
   }
   stage('Build base image'){
-    sh 'docker build -f Docker/bikeride-backend/Dockerfile  -t  bikeride/bikeride-backend:base Docker/bikeride-backend'
+    sh 'docker build -f build/Docker/bikeride-backend/Dockerfile  -t  bikeride/bikeride-backend:base build/Docker/bikeride-backend'
   }
 }
