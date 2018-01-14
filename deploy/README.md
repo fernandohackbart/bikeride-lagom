@@ -49,7 +49,7 @@ mkdir -p /opt/kubernetes
 cd /opt/kubernetes
 git clone https://github.com/fernandohackbart/bikeride-lagom.git
 cd bikeride-lagom
-/opt/kubernetes/bin/kubectl create -f Kubernetes/jenkins-ephemeral.yml
+/opt/kubernetes/bin/kubectl create -f deploy/kubernetes/jenkins-ephemeral.yml
 /opt/kubernetes/bin/kubectl get po
 ```
 
@@ -79,22 +79,22 @@ Should take some time to be in the `running` state, after in running state
     * Tools Locations:
       * (Sbt) `SBT at docker`
       * Home: `/opt/sbt`
-* Create Pipelines (https://jenkins.io/doc/book/pipeline) using GIT based Jenkinsfile
+* Create Pipelines (https://jenkins.io/doc/book/pipeline) using GIT based Jenkinsfile (FIX PATHS !!)
   * build-bikeride
     * https://github.com/fernandohackbart/bikeride-lagom.git
-    * `Jenkins/build-bikeride/Jenkinsfile`
+    * `build/Jenkins/build-bikeride/Jenkinsfile`
   * push-bikeride
     * https://github.com/fernandohackbart/bikeride-lagom.git
-    * `Jenkins/push-bikeride/Jenkinsfile`    
+    * `build/Jenkins/push-bikeride/Jenkinsfile`
   * deploy-bikeride
     * https://github.com/fernandohackbart/bikeride-lagom.git
-    * `Jenkins/deploy-bikeride/Jenkinsfile`
+    * `build/Jenkins/deploy-bikeride/Jenkinsfile`
 
 So now basically is a matter of running the `build-bikeride` job, it will try to push the images to the dockerhub repo and so far that can only be done by me :P, you can skip this job if you arre not planning to customize it for you own repo.
 
 Deploy bikeride will deploy the Bikeride components into minikube, there are some steps that require waiting:
-* `Kubernetes/cassandra.yml` should be finished before start the database configuration
-* `Kubernetes/kong_migration_cassandra.yml` should be finished before removing the job from minikube...
+* `deploy/kubernetes/cassandra.yml` should be finished before start the database configuration
+* `deploy/kubernetes/kong_migration_cassandra.yml` should be finished before removing the job from minikube...
  
 After Kong (Deploy Kong: `Kubernetes/kong_cassandra.yml`) is configured you can create the Kong routes ( that are not yet automated but sometime in  the future will be)
 
@@ -106,7 +106,18 @@ curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=track-api' --da
 curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=ride-api' --data 'strip_uri=false' --data 'uris=/api/ride' --data 'upstream_url=http://_lagom._tcp.bikeride-ride-lagom.default.svc.cluster.local'
 ```
 
-Note that the `Kubernetes/*-service.yml` has hard coded port numbers, if you already have other stuff running on minikube this may badly collide.
+Running over LoadBalancer
+```
+export KONG_URL=http://`kubectl get services|grep "kong-service "|awk '{print $4}'`:`kubectl get service |grep "kong-service " |awk '{print $5}' |awk '{split($0,a,":"); print a[1]}'`
+curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=authentication-api' --data 'strip_uri=false' --data 'uris=/api/authn' --data 'upstream_url=http://_lagom._tcp.bikeride-authentication.default.svc.cluster.local'
+curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=biker-api' --data 'strip_uri=false' --data 'uris=/api/biker,/api/bikers' --data 'upstream_url=http://_lagom._tcp.bikeride-biker.default.svc.cluster.local'
+curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=track-api' --data 'strip_uri=false' --data 'uris=/api/track' --data 'upstream_url=http://_lagom._tcp.bikeride-track.default.svc.cluster.local'
+curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=ride-api' --data 'strip_uri=false' --data 'uris=/api/ride' --data 'upstream_url=http://_lagom._tcp.bikeride-ride-.default.svc.cluster.local'
+```
+
+
+
+Note that the `kubernetes/*-service.yml` has hard coded port numbers, if you already have other stuff running on minikube this may badly collide.
 
 
 
