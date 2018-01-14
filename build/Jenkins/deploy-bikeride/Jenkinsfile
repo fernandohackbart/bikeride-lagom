@@ -5,16 +5,16 @@ node('docker') {
     git 'https://github.com/fernandohackbart/bikeride-lagom.git'
   }
   stage('Deploy Bikeride') {
-    sh '/opt/kubernetes/bin/kubectl delete -f deploy/Kubernetes/authentication-impl-statefulset.yml'
-    sh '/opt/kubernetes/bin/kubectl delete -f deploy/Kubernetes/biker-impl-statefulset.yml'
-    sh '/opt/kubernetes/bin/kubectl delete -f deploy/Kubernetes/track-impl-statefulset.yml'
-    sh '/opt/kubernetes/bin/kubectl delete -f deploy/Kubernetes/ride-impl-statefulset.yml'
+    sh '/opt/kubernetes/bin/kubectl delete -f deploy/kubernetes/authentication-impl-statefulset.yml'
+    sh '/opt/kubernetes/bin/kubectl delete -f deploy/kubernetes/biker-impl-statefulset.yml'
+    sh '/opt/kubernetes/bin/kubectl delete -f deploy/kubernetes/track-impl-statefulset.yml'
+    sh '/opt/kubernetes/bin/kubectl delete -f deploy/kubernetes/ride-impl-statefulset.yml'
   }
   stage('Deploy Bikeride') {
-    sh '/opt/kubernetes/bin/kubectl create -f deploy/Kubernetes/authentication-impl-statefulset.yml'
-    sh '/opt/kubernetes/bin/kubectl create -f deploy/Kubernetes/biker-impl-statefulset.yml'
-    sh '/opt/kubernetes/bin/kubectl create -f deploy/Kubernetes/track-impl-statefulset.yml'
-    sh '/opt/kubernetes/bin/kubectl create -f deploy/Kubernetes/ride-impl-statefulset.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f deploy/kubernetes/authentication-impl-statefulset.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f deploy/kubernetes/biker-impl-statefulset.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f deploy/kubernetes/track-impl-statefulset.yml'
+    sh '/opt/kubernetes/bin/kubectl create -f deploy/kubernetes/ride-impl-statefulset.yml'
   }
   stage('Deploy Bikeride') {
     sh '/opt/kubernetes/bin/kubectl get all -n default'
