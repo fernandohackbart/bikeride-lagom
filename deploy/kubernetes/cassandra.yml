@@ -94,7 +94,7 @@ spec:
   - metadata:
       name: cassandra-data
       annotations:
-        volume.beta.kubernetes.io/storage-class: cassandra-fast
+        volume.beta.kubernetes.io/storage-class: cassandra-gluster
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
@@ -102,9 +102,14 @@ spec:
           storage: 1Gi
 ---
 kind: StorageClass
-apiVersion: storage.k8s.io/v1beta1
+apiVersion: storage.k8s.io/v1
 metadata:
-  name: cassandra-fast
-provisioner: k8s.io/minikube-hostpath
+  name: cassandra-gluster
+provisioner: kubernetes.io/glusterfs
 parameters:
-  type: pd-ssd
+  resturl: "http://10.102.50.61:8080"
+  restauthenabled: "true"
+  restuser: "admin"
+  restuserkey: "Welcome1"
+  volumetype: "replicate:2"
+allowVolumeExpansion: true 
