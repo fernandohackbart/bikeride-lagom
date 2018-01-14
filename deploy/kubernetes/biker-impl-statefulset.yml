@@ -58,27 +58,18 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: bikeride-biker-lagom
-  name: bikeride-biker-lagom
+    app: bikeride-biker
+  name: bikeride-biker
 spec:
   clusterIP: None
   ports:
     - name: lagom
       port: 9000
+      targetPort: 9000
       protocol: TCP
-  selector:
-    app: biker-lagom-impl
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: bikeride-biker-akka-remoting
-  name: bikeride-biker-akka-remoting
-spec:
-  ports:
     - name: akka-remote
       port: 2551
+      targetPort: 2551
       protocol: TCP
   selector:
     app: biker-lagom-impl

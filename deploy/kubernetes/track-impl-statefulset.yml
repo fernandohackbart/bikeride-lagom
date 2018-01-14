@@ -66,17 +66,6 @@ spec:
     - name: lagom
       port: 9000
       protocol: TCP
-  selector:
-    app: track-lagom-impl
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: bikeride-track-akka-remoting
-  name: bikeride-track-akka-remoting
-spec:
-  ports:
     - name: akka-remote
       port: 2551
       protocol: TCP
