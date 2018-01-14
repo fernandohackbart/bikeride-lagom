@@ -98,28 +98,26 @@ Deploy bikeride will deploy the Bikeride components into minikube, there are som
  
 After Kong (Deploy Kong: `Kubernetes/kong_cassandra.yml`) is configured you can create the Kong routes ( that are not yet automated but sometime in  the future will be)
 
+
+If using Minikube
 ```
-export KONG_IP=`minikube ip`
-curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=authentication-api' --data 'strip_uri=false' --data 'uris=/api/authn' --data 'upstream_url=http://_lagom._tcp.bikeride-authentication-lagom.default.svc.cluster.local'
-curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=biker-api' --data 'strip_uri=false' --data 'uris=/api/biker,/api/bikers' --data 'upstream_url=http://_lagom._tcp.bikeride-biker-lagom.default.svc.cluster.local'
-curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=track-api' --data 'strip_uri=false' --data 'uris=/api/track' --data 'upstream_url=http://_lagom._tcp.bikeride-track-lagom.default.svc.cluster.local'
-curl -i -X POST --url http://${KONG_IP}:30022/apis/ --data 'name=ride-api' --data 'strip_uri=false' --data 'uris=/api/ride' --data 'upstream_url=http://_lagom._tcp.bikeride-ride-lagom.default.svc.cluster.local'
+export KONG_URL=http://`minikube ip`:30022
 ```
 
 Running over LoadBalancer
 ```
 export KONG_URL=http://`kubectl get services|grep "kong-service "|awk '{print $4}'`:`kubectl get service |grep "kong-service " |awk '{print $5}' |awk '{split($0,a,":"); print a[1]}'`
+```
+
+Create the API into Kong
+```
 curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=authentication-api' --data 'strip_uri=false' --data 'uris=/api/authn' --data 'upstream_url=http://_lagom._tcp.bikeride-authentication.default.svc.cluster.local'
 curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=biker-api' --data 'strip_uri=false' --data 'uris=/api/biker,/api/bikers' --data 'upstream_url=http://_lagom._tcp.bikeride-biker.default.svc.cluster.local'
 curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=track-api' --data 'strip_uri=false' --data 'uris=/api/track' --data 'upstream_url=http://_lagom._tcp.bikeride-track.default.svc.cluster.local'
 curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=ride-api' --data 'strip_uri=false' --data 'uris=/api/ride' --data 'upstream_url=http://_lagom._tcp.bikeride-ride-.default.svc.cluster.local'
 ```
 
-
-
 Note that the `kubernetes/*-service.yml` has hard coded port numbers, if you already have other stuff running on minikube this may badly collide.
-
-
 
 ## Some documentation used during the setup of Kubernetes and minikube
 
