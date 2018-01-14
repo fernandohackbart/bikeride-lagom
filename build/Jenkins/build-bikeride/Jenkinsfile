@@ -18,25 +18,25 @@ node('docker') {
       sh 'rm -rf build/Docker/authentication-lagom-impl/files'
       sh 'mkdir -p build/Docker/authentication-lagom-impl/files'
       sh 'unzip -q authentication-lagom-impl/target/universal/authentication-lagom-impl-${BUNDLE_VERSION}.zip -d build/Docker/authentication-lagom-impl/files'
-      sh 'mv Docker/authentication-lagom-impl/files/authentication-lagom-impl-${BUNDLE_VERSION} build/Docker/authentication-lagom-impl/files/authentication-lagom-impl'
+      sh 'mv build/Docker/authentication-lagom-impl/files/authentication-lagom-impl-${BUNDLE_VERSION} build/Docker/authentication-lagom-impl/files/authentication-lagom-impl'
     }
     builds['biker'] = {
       sh 'rm -rf build/Docker/biker-lagom-impl/files'
       sh 'mkdir -p build/Docker/biker-lagom-impl/files'
       sh 'unzip -q biker-lagom-impl/target/universal/biker-lagom-impl-${BUNDLE_VERSION}.zip -d build/Docker/biker-lagom-impl/files'
-      sh 'mv Docker/biker-lagom-impl/files/biker-lagom-impl-${BUNDLE_VERSION} build/Docker/biker-lagom-impl/files/biker-lagom-impl'
+      sh 'mv build/Docker/biker-lagom-impl/files/biker-lagom-impl-${BUNDLE_VERSION} build/Docker/biker-lagom-impl/files/biker-lagom-impl'
     }
     builds['track'] = {
       sh 'rm -rf build/Docker/track-lagom-impl/files'
       sh 'mkdir -p build/Docker/track-lagom-impl/files'
       sh 'unzip -q track-lagom-impl/target/universal/track-lagom-impl-${BUNDLE_VERSION}.zip -d build/Docker/track-lagom-impl/files'
-      sh 'mv Docker/track-lagom-impl/files/track-lagom-impl-${BUNDLE_VERSION} build/Docker/track-lagom-impl/files/track-lagom-impl'
+      sh 'mv build/Docker/track-lagom-impl/files/track-lagom-impl-${BUNDLE_VERSION} build/Docker/track-lagom-impl/files/track-lagom-impl'
     }
     builds['ride'] = {
       sh 'rm -rf build/Docker/ride-lagom-impl/files'
       sh 'mkdir -p build/Docker/ride-lagom-impl/files'
       sh 'unzip -q ride-lagom-impl/target/universal/ride-lagom-impl-${BUNDLE_VERSION}.zip -d build/Docker/ride-lagom-impl/files'
-      sh 'mv Docker/ride-lagom-impl/files/ride-lagom-impl-${BUNDLE_VERSION} build/Docker/ride-lagom-impl/files/ride-lagom-impl'
+      sh 'mv build/Docker/ride-lagom-impl/files/ride-lagom-impl-${BUNDLE_VERSION} build/Docker/ride-lagom-impl/files/ride-lagom-impl'
     }
     parallel builds
   }
