@@ -1,0 +1,24 @@
+bikeride:
+  cassandra:
+    service: "_casnative._tcp.db-bikeride-cassandra.default.svc.cluster.local"
+  kafka:
+    service: "_kafka._tcp.kafka-kafka.default.svc.cluster.local"
+  ride:
+    debug: "-d"
+    servicedomain: "default.svc.cluster.local"
+    secret: "changeme!"
+    bindIP: "0.0.0.0"
+    #serviceLocatorDNSNameTranslators: [{ "^_.+$"   = "$0" },{ "^[^.]+$" = "_lagom._tcp.bikeride-$0.default.svc.cluster.local" },{ "^.*$" = "$0"}]
+    #serviceLocatorDNSSRVTranslators: [{"^_lagom[.]_tcp[.](.+)$" = "_lagom._http.$1","^.*$" = "$0"}]    
+replicaCount: 1
+image:
+  repository: bikeride/ride-lagom-impl
+  tag: 0.0.1-SNAPSHOT
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  lagomExternalPort: 9000
+  lagomInternalPort: 9000
+  akkaExternalPort: 2551
+  akkaInternalPort: 2551
+resources: {}

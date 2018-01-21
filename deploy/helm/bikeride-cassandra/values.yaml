@@ -1,0 +1,38 @@
+---
+cassandra:
+  replicaCount: 1
+  intraNodePort: 7000
+  intraNodeTLSPort: 7001
+  JMXPort: 7199
+  CQLPort: 9042
+  maxHeapSize: 512M
+  heapNewSize: 100M
+  clusterName: K8Demo
+  datacenterName: DC1-K8Demo
+  rackName: Rack1-K8Demo
+  autoBootstrap: false
+  initialDelaySeconds: 15
+  timeoutSeconds: 5
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  image:
+    repository: gcr.io/google-samples/cassandra
+    tag: v12
+    pullPolicy: IfNotPresent
+  storage:
+    storageClassName: bikeride-storage
+    size: 1G
+    resturl: "http://10.97.24.181:8080"
+    restauthenabled: "true"
+    restuser: "admin"
+    restuserkey: "Welcome1"
+    volumetype: "replicate:2"
+  service:
+    serviceDomain: "default.svc.cluster.local"
+    type: ClusterPort
+    externalPort: 9042
+    internalPort: 9042

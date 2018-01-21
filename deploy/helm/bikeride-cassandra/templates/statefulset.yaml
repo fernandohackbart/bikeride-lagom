@@ -1,0 +1,81 @@
+apiVersion: "apps/v1beta1"
+kind: StatefulSet
+metadata:
+  name: {{ template "bikeride-cassandra.fullname" . }}
+spec:
+  serviceName: {{ template "bikeride-cassandra.fullname" . }}
+  replicas: {{ .Values.cassandra.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "bikeride-cassandra.fullname" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.cassandra.image.repository }}:{{ .Values.cassandra.image.tag }}"
+        imagePullPolicy: {{ .Values.cassandra.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.cassandra.intraNodePort }}
+          name: intra-node
+        - containerPort: {{ .Values.cassandra.intraNodeTLSPort }}
+          name: tls-intra-node
+        - containerPort: {{ .Values.cassandra.JMXPort }}
+          name: jmx
+        - containerPort: {{ .Values.cassandra.CQLPort }}
+          name: cql
+        resources:
+          limits:
+            cpu: "{{ .Values.cassandra.limits.cpu }}"
+            memory: {{ .Values.cassandra.limits.memory }}
+          requests:
+           cpu: "{{ .Values.cassandra.requests.cpu }}"
+           memory: {{ .Values.cassandra.requests.memory }}
+        securityContext:
+          capabilities:
+            add:
+              - IPC_LOCK
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "PID=$(pidof java) && kill $PID && while ps -p $PID > /dev/null; do sleep 1; done"]
+        env:
+          - name: MAX_HEAP_SIZE
+            value: {{ .Values.cassandra.maxHeapSize }}
+          - name: HEAP_NEWSIZE
+            value: {{ .Values.cassandra.heapNewSize }}
+          - name: CASSANDRA_SEEDS
+            value: "{{ .Release.Name }}-{{ .Chart.Name }}-0.{{ .Release.Name }}-{{ .Chart.Name }}.{{ .Values.cassandra.service.serviceDomain }}"
+          - name: CASSANDRA_CLUSTER_NAME
+            value: "{{ .Values.cassandra.clusterName }}"
+          - name: CASSANDRA_DC
+            value: "{{ .Values.cassandra.datacenterName }}"
+          - name: CASSANDRA_RACK
+            value: "{{ .Values.cassandra.rackName }}"
+          - name: CASSANDRA_AUTO_BOOTSTRAP
+            value: "{{ .Values.cassandra.autoBootstrap }}"
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - /ready-probe.sh
+          initialDelaySeconds: {{ .Values.cassandra.initialDelaySeconds }}
+          timeoutSeconds: {{ .Values.cassandra.timeoutSeconds }}
+        volumeMounts:
+        - name: cassandra-data
+          mountPath: /cassandra_data
+  volumeClaimTemplates:
+  - metadata:
+      name: cassandra-data
+      annotations:
+        volume.beta.kubernetes.io/storage-class: {{ .Values.cassandra.storage.storageClassName }}
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: {{ .Values.cassandra.storage.size }}

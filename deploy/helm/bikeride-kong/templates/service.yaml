@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "bikeride-kong.fullname" . }}-service
+  labels:
+    app: {{ template "bikeride-kong.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}  
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - name: proxy-plain
+    port: {{ .Values.service.externalProxyPlainPort }}
+    targetPort: {{ .Values.service.internalProxyPlainPort }}
+    protocol: TCP
+  - name: proxy-ssl
+    port: {{ .Values.service.externalProxySSLPort }}
+    targetPort: {{ .Values.service.internalProxySSLPort }}
+    protocol: TCP
+  - name: admin-plain
+    port: {{ .Values.service.externalAdminPlainPort }}
+    targetPort: {{ .Values.service.internalAdminPlainPort }}
+    protocol: TCP
+  - name: admin-ssl
+    port: {{ .Values.service.externalAdminSSLPort }}
+    targetPort: {{ .Values.service.internalAdminSSLPort }}
+    protocol: TCP
+  selector:
+    app: {{ template "bikeride-kong.name" . }}
+    release: {{ .Release.Name }}

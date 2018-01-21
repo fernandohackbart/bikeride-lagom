@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "bikeride-cassandra.fullname" . }}
+  labels:
+    app: {{ template "bikeride-cassandra.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}  
+spec:
+  clusterIP: None
+  ports:
+  - name: casnative
+    port: {{ .Values.cassandra.service.externalPort }}
+    targetPort: {{ .Values.cassandra.service.internalPort }}
+    protocol: TCP
+  selector:
+    app: {{ template "bikeride-cassandra.fullname" . }}
+    release: {{ .Release.Name }}

@@ -1,0 +1,13 @@
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: {{ .Values.cassandra.storage.storageClassName }}
+provisioner: kubernetes.io/glusterfs
+parameters:
+  resturl: "{{ .Values.cassandra.storage.resturl }}"
+  restauthenabled: "{{ .Values.cassandra.storage.restauthenabled }}"
+  restuser: "{{ .Values.cassandra.storage.restuser }}"
+  restuserkey: "{{ .Values.cassandra.storage.restuserkey }}"
+  volumetype: "{{ .Values.cassandra.storage.volumetype }}"
+allowVolumeExpansion: true  

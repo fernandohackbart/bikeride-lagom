@@ -1,0 +1,4 @@
+apiVersion: v1
+description: BikeRide biker Helm chart for Kubernetes
+name: bikeride-biker
+version: 0.0.1-SNAPSHOT

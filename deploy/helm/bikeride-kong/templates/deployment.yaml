@@ -1,0 +1,51 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "bikeride-kong.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        name: {{ template "bikeride-kong.name" . }}
+        app: {{ template "bikeride-kong.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: proxy-plain
+          containerPort: {{ .Values.service.internalProxyPlainPort }}
+          protocol: TCP
+        - name: proxy-ssl
+          containerPort: {{ .Values.service.internalProxySSLPort }}
+          protocol: TCP
+        - name: admin-plain
+          containerPort: {{ .Values.service.internalAdminPlainPort }}
+          protocol: TCP          
+        - name: admin-ssl
+          containerPort: {{ .Values.service.internalAdminSSLPort }}
+          protocol: TCP        
+        env:
+          - name: KONG_DATABASE
+            value: {{ .Values.kong.database }}
+          - name: KONG_CASSANDRA_CONTACT_POINTS
+            value: {{ .Values.kong.contactPoints }}
+          - name: KONG_CASSANDRA_KEYSPACE
+            value: {{ .Values.kong.cassandraKeyspace }}
+          - name: KONG_CASSANDRA_REPL_FACTOR
+            value: "{{ .Values.kong.cassandraReplFactor }}"
+          - name: KONG_DB_UPDATE_PROPAGATION
+            value: "{{ .Values.kong.cassandraDBUpdateFactor }}"
+          - name: KONG_PROXY_ACCESS_LOG
+            value:  {{ .Values.kong.proxyAccessLog }}
+          - name: KONG_ADMIN_ACCESS_LOG
+            value: {{ .Values.kong.adminAccessLog }}
+          - name: KONG_PROXY_ERROR_LOG
+            value: {{ .Values.kong.proxyErrorLog }}
+          - name: KONG_ADMIN_LISTEN
+            value: "{{ .Values.service.bindAddress }}:{{ .Values.service.internalAdminPlainPort }}"
+          - name: KONG_ADMIN_LISTEN_SSL
+            value: "{{ .Values.service.bindAddress }}:{{ .Values.service.internalAdminSSLPort }}"

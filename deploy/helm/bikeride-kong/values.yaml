@@ -1,0 +1,41 @@
+---
+replicaCount: 1
+kong: 
+  database: cassandra
+  contactPoints: db-bikeride-cassandra
+  cassandraKeyspace: kong
+  cassandraReplFactor: 1
+  cassandraDBUpdateFactor: 1
+  proxyAccessLog: "/dev/stdout"
+  adminAccessLog: "/dev/stdout"
+  proxyErrorLog: "/dev/stderr"
+  adminErrorLog: "/dev/stderr"
+image:
+  repository: kong
+  tag: 0.12.1-centos
+  pullPolicy: IfNotPresent
+service:
+  type: LoadBalancer
+  bindAddress: 0.0.0.0
+  externalProxyPlainPort: 8000
+  internalProxyPlainPort: 8000
+  externalProxySSLPort: 8443
+  internalProxySSLPort: 8443
+  externalAdminPlainPort: 8001
+  internalAdminPlainPort: 8001
+  externalAdminSSLPort: 8444
+  internalAdminSSLPort: 8444
+ingress:
+  enabled: false
+  hosts:
+    - chart-example.local
+  annotations:
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  tls:
+    # Secrets must be manually created in the namespace.
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
+
+

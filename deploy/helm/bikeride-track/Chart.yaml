@@ -1,0 +1,4 @@
+apiVersion: v1
+description: BikeRide track Helm chart for Kubernetes
+name: bikeride-track
+version: 0.0.1-SNAPSHOT

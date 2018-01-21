@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "bikeride-kong.fullname" . }}-migration
+spec:
+  template:
+    metadata:
+      name: {{ template "bikeride-kong.fullname" . }}-migration
+    spec:
+      containers:
+      - name: {{ template "bikeride-kong.fullname" . }}-migration
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        env:
+          - name: KONG_NGINX_DAEMON
+            value: 'off'
+          - name: KONG_DATABASE
+            value: {{ .Values.kong.database }}
+          - name: KONG_CASSANDRA_CONTACT_POINTS
+            value: {{ .Values.kong.contactPoints }}
+          - name: KONG_CASSANDRA_KEYSPACE
+            value: {{ .Values.kong.cassandraKeyspace }}
+        command: [ "/bin/sh", "-c", "kong migrations up" ]
+      restartPolicy: Never
+ 

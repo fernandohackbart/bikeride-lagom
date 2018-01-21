@@ -1,0 +1,63 @@
+apiVersion: "apps/v1beta1"
+kind: StatefulSet
+metadata:
+  name: {{ template "bikeride-track.fullname" . }}
+spec:
+  serviceName: {{ template "bikeride-track.fullname" . }}
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        name: {{ template "bikeride-track.name" . }}
+        app: {{ template "bikeride-track.fullname" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: lagom
+          containerPort: {{ .Values.service.lagomInternalPort }}
+          protocol: TCP
+        - name: akka-remote
+          containerPort: {{ .Values.service.akkaInternalPort }}
+          protocol: TCP
+        env:
+          - name: SERVICE_DEBUG
+            value: "{{ .Values.bikeride.track.debug }}"
+          - name: BIKERIDE_SERVICE_DOMAIN
+            value: "{{ .Values.bikeride.track.servicedomain }}"
+          - name: BIKERIDE_SERVICE_RELEASE
+            value: "{{ .Release.Name }}"
+          - name: APPLICATION_SECRET
+            value: "{{ .Values.bikeride.track.secret }}"
+          - name: CASSANDRA_SERVICE_NAME
+            value: "{{ .Values.bikeride.cassandra.service }}"
+          - name: SERVICE_BIND_PORT
+            value: "{{ .Values.service.lagomInternalPort }}"
+          - name: SERVICE_BIND_IP
+            value: "{{ .Values.bikeride.track.bindIP }}"
+          - name: KAFKA_SERVICE_NAME
+            value: "{{ .Values.bikeride.kafka.service }}"
+          - name: AKKA_REMOTING_PORT
+            value: "{{ .Values.service.akkaInternalPort }}"
+          - name: AKKA_REMOTING_BIND_PORT
+            value: "{{ .Values.service.akkaInternalPort }}"
+          - name: AKKA_REMOTING_HOST
+            value: "$HOSTNAME.{{ .Release.Name }}-{{ .Chart.Name }}.{{ .Values.bikeride.track.servicedomain }}"
+          - name: AKKA_REMOTING_BIND_HOST
+            value: "$HOSTNAME.{{ .Release.Name }}-{{ .Chart.Name }}.{{ .Values.bikeride.track.servicedomain }}"
+          - name: AKKA_SEED_NODES
+            value: "{{ .Release.Name }}-{{ .Chart.Name }}-0.{{ .Release.Name }}-{{ .Chart.Name }}.{{ .Values.bikeride.track.servicedomain }}:{{ .Values.service.akkaInternalPort }},{{ .Release.Name }}-{{ .Chart.Name }}-1.{{ .Release.Name }}-{{ .Chart.Name }}.{{ .Values.bikeride.track.servicedomain }}:{{ .Values.service.akkaInternalPort }},{{ .Release.Name }}-{{ .Chart.Name }}-2.{{ .Release.Name }}-{{ .Chart.Name }}.{{ .Values.bikeride.track.servicedomain }}:{{ .Values.service.akkaInternalPort }}"
+          #- name: SERVICE_LOCATOR_DNS_NAME_TRANSLATORS
+          #  value: {{ .Values.bikeride.track.serviceLocatorDNSNameTranslators | quote  }}            
+          #- name: SERVICE_LOCATOR_DNS_SRV_TRANSLATORS
+          #  value: {{ .Values.bikeride.track.serviceLocatorDNSSRVTranslators | quote }} 
+#        readinessProbe:
+#          httpGet:
+#            path: "/_status/circuit-breaker/current"
+#            port: 9000
+#          initialDelaySeconds: 15
+#          timeoutSeconds: 5
+
