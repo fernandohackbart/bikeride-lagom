@@ -94,22 +94,10 @@ spec:
   - metadata:
       name: cassandra-data
       annotations:
-        volume.beta.kubernetes.io/storage-class: cassandra-gluster
+        volume.beta.kubernetes.io/storage-class: gluster-storage
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
           storage: 1Gi
----
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: cassandra-gluster
-provisioner: kubernetes.io/glusterfs
-parameters:
-  resturl: "http://10.102.50.61:8080"
-  restauthenabled: "true"
-  restuser: "admin"
-  restuserkey: "Welcome1"
-  volumetype: "replicate:2"
-allowVolumeExpansion: true 
+

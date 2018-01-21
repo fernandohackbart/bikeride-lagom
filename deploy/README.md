@@ -104,17 +104,17 @@ If using Minikube
 export KONG_URL=http://`minikube ip`:30022
 ```
 
-Running over LoadBalancer
+Running over LoadBalancer (NOT WORKING!!!! It is returning the service port and not the administration port)
 ```
 export KONG_URL=http://`kubectl get services|grep "kong-service "|awk '{print $4}'`:`kubectl get service |grep "kong-service " |awk '{print $5}' |awk '{split($0,a,":"); print a[1]}'`
 ```
 
 Create the API into Kong
 ```
-curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=authentication-api' --data 'strip_uri=false' --data 'uris=/api/authn' --data 'upstream_url=http://_lagom._tcp.bikeride-authentication.default.svc.cluster.local'
-curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=biker-api' --data 'strip_uri=false' --data 'uris=/api/biker,/api/bikers' --data 'upstream_url=http://_lagom._tcp.bikeride-biker.default.svc.cluster.local'
-curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=track-api' --data 'strip_uri=false' --data 'uris=/api/track' --data 'upstream_url=http://_lagom._tcp.bikeride-track.default.svc.cluster.local'
-curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=ride-api' --data 'strip_uri=false' --data 'uris=/api/ride' --data 'upstream_url=http://_lagom._tcp.bikeride-ride-.default.svc.cluster.local'
+curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=authentication-api' --data 'strip_uri=false' --data 'uris=/api/authn' --data 'upstream_url=http://_lagom._tcp.auth-bikeride-authentication.default.svc.cluster.local'
+curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=biker-api' --data 'strip_uri=false' --data 'uris=/api/biker,/api/bikers' --data 'upstream_url=http://_lagom._tcp.biker-bikeride-biker.default.svc.cluster.local'
+curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=track-api' --data 'strip_uri=false' --data 'uris=/api/track' --data 'upstream_url=http://_lagom._tcp.track-bikeride-track.default.svc.cluster.local'
+curl -i -X POST --url ${KONG_URL}/apis/ --data 'name=ride-api' --data 'strip_uri=false' --data 'uris=/api/ride' --data 'upstream_url=http://_lagom._tcp.ride-bikeride-ride-.default.svc.cluster.local'
 ```
 
 Note that the `kubernetes/*-service.yml` has hard coded port numbers, if you already have other stuff running on minikube this may badly collide.
