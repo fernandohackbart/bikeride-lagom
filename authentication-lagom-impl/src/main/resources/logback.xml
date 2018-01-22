@@ -6,13 +6,13 @@
         </encoder>
     </appender>
     <logger name="play" level="ERROR" />
-    <logger name="akka" level="ERROR" />
-    <logger name="com.lightbend.lagom" level="ERROR" />
-    <logger name="ru.smslv.akka.dns" level="ERROR" />
-    <logger name="org.apache.cassandra" level="ERROR" />
-    <logger name="com.datastax.driver" level="ERROR" />
-    <logger name="com.datastax.driver.core.ControlConnection" level="ERROR" />
-    <logger name="com.bikeride.authentication.impl" level="ERROR" />
+    <logger name="akka" level="ALL" />
+    <logger name="com.lightbend.lagom" level="ALL" />
+    <logger name="ru.smslv.akka.dns" level="ALL" />
+    <logger name="org.apache.cassandra" level="ALL" />
+    <logger name="com.datastax.driver" level="ALL" />
+    <logger name="com.datastax.driver.core.ControlConnection" level="ALL" />
+    <logger name="com.bikeride.authentication.impl" level="ALL" />
     <logger name="org.apache.kafka" level="ERROR" />
     <root level="ERROR">
         <appender-ref ref="STDOUT" />
