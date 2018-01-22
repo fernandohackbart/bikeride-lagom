@@ -8,7 +8,7 @@
     <logger name="play" level="ERROR" />
     <logger name="akka" level="ERROR" />
     <logger name="com.lightbend.lagom" level="ERROR" />
-    <logger name="ru.smslv.akka.dns" level="ERROR" />
+    <logger name="ru.smslv.akka.dns" level="ALL" />
     <logger name="org.apache.cassandra" level="ERROR" />
     <logger name="com.datastax.driver" level="ERROR" />
     <logger name="com.datastax.driver.core.ControlConnection" level="ERROR" />
