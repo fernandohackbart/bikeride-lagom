@@ -26,7 +26,7 @@ cassandra:
   storage:
     storageClassName: bikeride-storage
     size: 1G
-    resturl: "http://10.97.24.181:8080"
+    resturl: "http://10.105.249.20:8080"
     restauthenabled: "true"
     restuser: "admin"
     restuserkey: "Welcome1"

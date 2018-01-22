@@ -32,12 +32,12 @@ spec:
             value: "{{ .Values.bikeride.authentication.secret }}"
           - name: CASSANDRA_SERVICE_NAME
             value: "{{ .Values.bikeride.cassandra.service }}"
+          - name: KAFKA_SERVICE_NAME
+            value: "{{ .Values.bikeride.kafka.service }}"
           - name: SERVICE_BIND_PORT
             value: "{{ .Values.service.lagomInternalPort }}"
           - name: SERVICE_BIND_IP
             value: "{{ .Values.bikeride.authentication.bindIP }}"
-          - name: KAFKA_SERVICE_NAME
-            value: "{{ .Values.bikeride.kafka.service }}"
           - name: AKKA_REMOTING_PORT
             value: "{{ .Values.service.akkaInternalPort }}"
           - name: AKKA_REMOTING_BIND_PORT
