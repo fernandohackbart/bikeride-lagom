@@ -28,8 +28,6 @@ spec:
             value: "{{ .Values.bikeride.authentication.debug }}"
           - name: BIKERIDE_SERVICE_DOMAIN
             value: "{{ .Values.bikeride.authentication.servicedomain }}"
-          - name: BIKERIDE_SERVICE_RELEASE
-            value: "{{ .Release.Name }}"
           - name: APPLICATION_SECRET
             value: "{{ .Values.bikeride.authentication.secret }}"
           - name: CASSANDRA_SERVICE_NAME

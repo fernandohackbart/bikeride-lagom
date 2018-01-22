@@ -1,7 +1,6 @@
 bikeride:
   cassandra:
-    #service: "_casnative._tcp.db-bikeride-cassandra.default.svc.cluster.local"
-    service: "cassandra"
+    service: "db-bikeride-cassandra"
   kafka:
     service: "_kafka._tcp.kafka-kafka.default.svc.cluster.local"
   authentication:
