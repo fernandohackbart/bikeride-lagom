@@ -1,8 +1,8 @@
 bikeride:
   cassandra:
-    service: "_casnative._tcp.db-bikeride-cassandra.default.svc.cluster.local"
+    service: "db-bikeride-cassandra"
   kafka:
-    service: "_kafka._tcp.kafka-kafka.default.svc.cluster.local"
+    service: "msg-bikeride-kafka"
   track:
     debug: "-d"
     servicedomain: "default.svc.cluster.local"

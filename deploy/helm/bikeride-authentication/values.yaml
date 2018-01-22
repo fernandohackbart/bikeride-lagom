@@ -2,7 +2,7 @@ bikeride:
   cassandra:
     service: "db-bikeride-cassandra"
   kafka:
-    service: "_kafka._tcp.kafka-kafka.default.svc.cluster.local"
+    service: "msg-bikeride-kafka"
   authentication:
     debug: "-d"
     servicedomain: "default.svc.cluster.local"
