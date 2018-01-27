@@ -44,18 +44,6 @@ spec:
     - name: zookeeper
       port: 2181
       protocol: TCP
-  selector:
-    app: kafka
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: kafka-kafka
-  name: kafka-kafka
-spec:
-  clusterIP: None
-  ports:
     - name: kafka
       port: 9092
       protocol: TCP

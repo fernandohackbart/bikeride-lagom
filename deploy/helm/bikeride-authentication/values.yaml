@@ -1,6 +1,6 @@
 bikeride:
   cassandra:
-    service: "db-bikeride-cassandra"
+    service: "_casnative._tcp.db-bikeride-cassandra"
   kafka:
     service: "msg-bikeride-kafka"
   authentication:
