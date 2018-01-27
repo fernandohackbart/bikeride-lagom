@@ -1,7 +1,6 @@
 env.BUNDLE_VERSION="0.0.1-SNAPSHOT"
 
 node('docker') {
-
   stage('GIT') {
     git 'https://github.com/fernandohackbart/bikeride-lagom.git'
   }
@@ -10,10 +9,12 @@ node('docker') {
     sh 'docker login -u $USERNAME -p $PASSWORD'
   }
   stage('Build') {
-    def builds = [:]
-    builds['scala'] = {
-      sh "${tool name: 'SBT at docker', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt clean docker:clean docker:publish"
-    }
-    parallel builds
+    sh "${tool name: 'SBT at docker', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt clean docker:clean docker:publishLocal"
+  }
+  stage('Push images') {
+    sh 'docker push bikeride/authentication-lagom-impl:${BUNDLE_VERSION}'
+    sh 'docker push bikeride/biker-lagom-impl:${BUNDLE_VERSION}'
+    sh 'docker push bikeride/track-lagom-impl:${BUNDLE_VERSION}'
+    sh 'docker push bikeride/ride-lagom-impl:${BUNDLE_VERSION}'
   }
 }
