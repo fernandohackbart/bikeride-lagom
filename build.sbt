@@ -26,6 +26,7 @@ lazy val `bikeride-lagom` = (project in file("."))
     `utils`)
 //#########################################################################
 lazy val utils = (project in file("utils"))
+  .disablePlugins(DockerPlugin)
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslApi,
@@ -37,6 +38,7 @@ lazy val utils = (project in file("utils"))
   )
 
 lazy val `authentication-lagom-api` = (project in file("authentication-lagom-api"))
+  .disablePlugins(DockerPlugin)
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslApi
@@ -46,6 +48,7 @@ lazy val `authentication-lagom-api` = (project in file("authentication-lagom-api
 
 lazy val `authentication-lagom-impl` = (project in file("authentication-lagom-impl"))
   .enablePlugins(LagomScala)
+  .enablePlugins(DockerPlugin)
   .settings(
     dockerUpdateLatest := false,
     dockerRepository := Some("index.docker.io"),
@@ -66,6 +69,7 @@ lazy val `authentication-lagom-impl` = (project in file("authentication-lagom-im
   .dependsOn(`authentication-lagom-api`,`biker-lagom-api`,`utils`)
 
 lazy val `biker-lagom-api` = (project in file("biker-lagom-api"))
+  .disablePlugins(DockerPlugin)
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslApi
@@ -75,6 +79,7 @@ lazy val `biker-lagom-api` = (project in file("biker-lagom-api"))
 
 lazy val `biker-lagom-impl` = (project in file("biker-lagom-impl"))
   .enablePlugins(LagomScala)
+  .enablePlugins(DockerPlugin)
   .settings(
     dockerUpdateLatest := false,
     dockerRepository := Some("index.docker.io"),
@@ -95,6 +100,7 @@ lazy val `biker-lagom-impl` = (project in file("biker-lagom-impl"))
   .dependsOn(`biker-lagom-api`,`utils`)
 
 lazy val `track-lagom-api` = (project in file("track-lagom-api"))
+  .disablePlugins(DockerPlugin)
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslApi
@@ -104,6 +110,7 @@ lazy val `track-lagom-api` = (project in file("track-lagom-api"))
 
 lazy val `track-lagom-impl` = (project in file("track-lagom-impl"))
   .enablePlugins(LagomScala)
+  .enablePlugins(DockerPlugin)
   .settings(
     dockerUpdateLatest := false,
     dockerRepository := Some("index.docker.io"),
@@ -125,6 +132,7 @@ lazy val `track-lagom-impl` = (project in file("track-lagom-impl"))
 
 
 lazy val `ride-lagom-api` = (project in file("ride-lagom-api"))
+  .disablePlugins(DockerPlugin)
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslApi
@@ -134,6 +142,7 @@ lazy val `ride-lagom-api` = (project in file("ride-lagom-api"))
 
 lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
   .enablePlugins(LagomScala)
+  .enablePlugins(DockerPlugin)
   .settings(
     dockerUpdateLatest := false,
     dockerRepository := Some("index.docker.io"),
@@ -154,6 +163,7 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
   .dependsOn(`ride-lagom-api`,`track-lagom-api`,`biker-lagom-api`)
 
 lazy val `analytics-lagom-api` = (project in file("analytics-lagom-api"))
+  .disablePlugins(DockerPlugin)
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslApi
@@ -163,8 +173,8 @@ lazy val `analytics-lagom-api` = (project in file("analytics-lagom-api"))
 
 lazy val `analytics-lagom-impl` = (project in file("analytics-lagom-impl"))
   .enablePlugins(LagomScala)
+  .enablePlugins(DockerPlugin)
   .settings(
-    //dockerRepository := Some(BuildTarget.dockerRepository),
     dockerUpdateLatest := false,
     dockerRepository := Some("index.docker.io"),
     dockerUsername := Some("bikeride"),
