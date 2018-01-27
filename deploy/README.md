@@ -1,16 +1,16 @@
 # Kubernetes deployment instructions
 
-Currently the deployment was only done on Kubernetes (minikube), the plans are to support Mesosphere as well.
+Currently the deployment was only done on Kubernetes, the plans are to support Mesosphere as well.
 
-The minikube should be configured prior the deployments, also Jenkins is being configured to support development environment. The instructions contained in this document follow the kubernetes documentation for minikube available at 
-https://github.com/kubernetes/minikube
-
-The issues raised for those tasks can be found at:
+To install Kubernetes:
 * https://github.com/fernandohackbart/bikeride-lagom/issues/155
 * https://github.com/fernandohackbart/bikeride-lagom/issues/162
+* https://github.com/fernandohackbart/ansible-k8s-centos
 
-After setting up minikube the customized setup can be started
+After setting up Kubernetes the customized setup can be started
 
+
+## Minikube setup
 ```
 virsh list --all
 virsh net-list
@@ -27,7 +27,6 @@ https://github.com/fernandohackbart/bikeride-lagom/issues/162)
 generate-minikube-proxy.sh
 ```
 
-
 To clean up and rebuild from scratch:
 ```
 minikube delete
@@ -43,7 +42,7 @@ virsh undefine minikube
 
 For the example the kubectl was installed at `/opt/kubernetes/bin/kubectl`.
 
-nexte step is to deploy Jenkins:
+### Deploy Jenkins on Minikube:
 ```
 mkdir -p /opt/kubernetes
 cd /opt/kubernetes
@@ -55,9 +54,13 @@ cd bikeride-lagom
 
 Should take some time to be in the `running` state, after in running state
 
+### Get access to Jenkins (if using Minikube)
 * `kubectl get po` to get the Jenkins pod id
 * `kubectl logs <Jenkins pod id>` to get the key to unlock Jenkins
 * browser to `http://<minikube machine>:30010` to unlock Jenkins
+
+## Configure Jenkins pipelines
+
 * Install suggested plugins
 * Install sbt plugin
 * Create ssh credentials for the docker build machine
