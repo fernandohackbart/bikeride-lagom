@@ -48,7 +48,9 @@ lazy val `authentication-lagom-impl` = (project in file("authentication-lagom-im
   .enablePlugins(LagomScala)
   .settings(
     //dockerRepository := Some(BuildTarget.dockerRepository),
-    //dockerUpdateLatest := true,
+    dockerUpdateLatest := false,
+    //dockerUsername := Some("bikeride"),
+    dockerRepository := Some("registry.hub.docker.com:5000/bikeride"),
     dockerExposedPorts := Seq(9000,2551),
     dockerEntrypoint ++=
       """ $(eval "echo $SERVICE_DEBUG")
@@ -84,7 +86,9 @@ lazy val `biker-lagom-impl` = (project in file("biker-lagom-impl"))
   .enablePlugins(LagomScala)
   .settings(
     //dockerRepository := Some(BuildTarget.dockerRepository),
-    //dockerUpdateLatest := true,
+    dockerUpdateLatest := false,
+    //dockerUsername := Some("bikeride"),
+    dockerRepository := Some("registry.hub.docker.com:5000/bikeride"),
     dockerExposedPorts := Seq(9000,2551),
     dockerEntrypoint ++=
       """ $(eval "echo $SERVICE_DEBUG")
@@ -120,7 +124,9 @@ lazy val `track-lagom-impl` = (project in file("track-lagom-impl"))
   .enablePlugins(LagomScala)
   .settings(
     //dockerRepository := Some(BuildTarget.dockerRepository),
-    //dockerUpdateLatest := true,
+    dockerUpdateLatest := false,
+    //dockerUsername := Some("bikeride"),
+    dockerRepository := Some("registry.hub.docker.com:5000/bikeride"),
     dockerExposedPorts := Seq(9000,2551),
     dockerEntrypoint ++=
       """ $(eval "echo $SERVICE_DEBUG")
@@ -157,7 +163,9 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
   .enablePlugins(LagomScala)
   .settings(
     //dockerRepository := Some(BuildTarget.dockerRepository),
-    //dockerUpdateLatest := true,
+    dockerUpdateLatest := false,
+    //dockerUsername := Some("bikeride"),
+    dockerRepository := Some("registry.hub.docker.com:5000/bikeride"),
     dockerExposedPorts := Seq(9000,2551),
     dockerEntrypoint ++=
       """ $(eval "echo $SERVICE_DEBUG")
@@ -193,7 +201,9 @@ lazy val `analytics-lagom-impl` = (project in file("analytics-lagom-impl"))
   .enablePlugins(LagomScala)
   .settings(
     //dockerRepository := Some(BuildTarget.dockerRepository),
-    //dockerUpdateLatest := true,
+    dockerUpdateLatest := false,
+    //dockerUsername := Some("bikeride"),
+    dockerRepository := Some("registry.hub.docker.com:5000/bikeride"),
     dockerExposedPorts := Seq(9000,2551),
     dockerEntrypoint ++=
       """ $(eval "echo $SERVICE_DEBUG")
