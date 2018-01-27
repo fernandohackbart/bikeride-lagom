@@ -48,7 +48,7 @@ lazy val `authentication-lagom-impl` = (project in file("authentication-lagom-im
   .enablePlugins(LagomScala)
   .settings(
     dockerUpdateLatest := false,
-    dockerRepository := Some("github.io"),
+    dockerRepository := Some("index.docker.io"),
     dockerUsername := Some("bikeride"),
     dockerExposedPorts := Seq(9000,2551),
     dockerEntrypoint ++= """ $(eval "echo $SERVICE_DEBUG") -Dhttp.address="$(eval "echo $SERVICE_BIND_IP")" -Dhttp.port="$(eval "echo $EVENTINGESTIONSERVICE_BIND_PORT")" -Dakka.remote.netty.tcp.hostname="$(eval "echo $AKKA_REMOTING_HOST")" -Dakka.remote.netty.tcp.bind-hostname="$(eval "echo $AKKA_REMOTING_BIND_HOST")" -Dakka.remote.netty.tcp.port="$(eval "echo $AKKA_REMOTING_PORT")" -Dakka.remote.netty.tcp.bind-port="$(eval "echo $AKKA_REMOTING_BIND_PORT")" $(IFS=','; I=0; for NODE in $AKKA_SEED_NODES; do echo "-Dakka.cluster.seed-nodes.$I=akka.tcp://bikeride-authentication@$NODE"; I=$(expr $I + 1); done)""".split(" ").toSeq,
@@ -77,7 +77,7 @@ lazy val `biker-lagom-impl` = (project in file("biker-lagom-impl"))
   .enablePlugins(LagomScala)
   .settings(
     dockerUpdateLatest := false,
-    dockerRepository := Some("github.io"),
+    dockerRepository := Some("index.docker.io"),
     dockerUsername := Some("bikeride"),
     dockerExposedPorts := Seq(9000,2551),
     dockerEntrypoint ++= """ $(eval "echo $SERVICE_DEBUG") -Dhttp.address="$(eval "echo $SERVICE_BIND_IP")" -Dhttp.port="$(eval "echo $EVENTINGESTIONSERVICE_BIND_PORT")" -Dakka.remote.netty.tcp.hostname="$(eval "echo $AKKA_REMOTING_HOST")" -Dakka.remote.netty.tcp.bind-hostname="$(eval "echo $AKKA_REMOTING_BIND_HOST")" -Dakka.remote.netty.tcp.port="$(eval "echo $AKKA_REMOTING_PORT")" -Dakka.remote.netty.tcp.bind-port="$(eval "echo $AKKA_REMOTING_BIND_PORT")" $(IFS=','; I=0; for NODE in $AKKA_SEED_NODES; do echo "-Dakka.cluster.seed-nodes.$I=akka.tcp://bikeride-biker@$NODE"; I=$(expr $I + 1); done)""".split(" ").toSeq,
@@ -106,7 +106,7 @@ lazy val `track-lagom-impl` = (project in file("track-lagom-impl"))
   .enablePlugins(LagomScala)
   .settings(
     dockerUpdateLatest := false,
-    dockerRepository := Some("github.io"),
+    dockerRepository := Some("index.docker.io"),
     dockerUsername := Some("bikeride"),
     dockerExposedPorts := Seq(9000,2551),
     dockerEntrypoint ++= """ $(eval "echo $SERVICE_DEBUG") -Dhttp.address="$(eval "echo $SERVICE_BIND_IP")" -Dhttp.port="$(eval "echo $EVENTINGESTIONSERVICE_BIND_PORT")" -Dakka.remote.netty.tcp.hostname="$(eval "echo $AKKA_REMOTING_HOST")" -Dakka.remote.netty.tcp.bind-hostname="$(eval "echo $AKKA_REMOTING_BIND_HOST")" -Dakka.remote.netty.tcp.port="$(eval "echo $AKKA_REMOTING_PORT")" -Dakka.remote.netty.tcp.bind-port="$(eval "echo $AKKA_REMOTING_BIND_PORT")" $(IFS=','; I=0; for NODE in $AKKA_SEED_NODES; do echo "-Dakka.cluster.seed-nodes.$I=akka.tcp://bikeride-track@$NODE"; I=$(expr $I + 1); done)""".split(" ").toSeq,
@@ -136,7 +136,7 @@ lazy val `ride-lagom-impl` = (project in file("ride-lagom-impl"))
   .enablePlugins(LagomScala)
   .settings(
     dockerUpdateLatest := false,
-    dockerRepository := Some("github.io"),
+    dockerRepository := Some("index.docker.io"),
     dockerUsername := Some("bikeride"),
     dockerExposedPorts := Seq(9000,2551),
     dockerEntrypoint ++= """ $(eval "echo $SERVICE_DEBUG") -Dhttp.address="$(eval "echo $SERVICE_BIND_IP")" -Dhttp.port="$(eval "echo $EVENTINGESTIONSERVICE_BIND_PORT")" -Dakka.remote.netty.tcp.hostname="$(eval "echo $AKKA_REMOTING_HOST")" -Dakka.remote.netty.tcp.bind-hostname="$(eval "echo $AKKA_REMOTING_BIND_HOST")" -Dakka.remote.netty.tcp.port="$(eval "echo $AKKA_REMOTING_PORT")" -Dakka.remote.netty.tcp.bind-port="$(eval "echo $AKKA_REMOTING_BIND_PORT")" $(IFS=','; I=0; for NODE in $AKKA_SEED_NODES; do echo "-Dakka.cluster.seed-nodes.$I=akka.tcp://bikeride-ride@$NODE"; I=$(expr $I + 1); done)""".split(" ").toSeq,
@@ -166,7 +166,7 @@ lazy val `analytics-lagom-impl` = (project in file("analytics-lagom-impl"))
   .settings(
     //dockerRepository := Some(BuildTarget.dockerRepository),
     dockerUpdateLatest := false,
-    dockerRepository := Some("github.io"),
+    dockerRepository := Some("index.docker.io"),
     dockerUsername := Some("bikeride"),
     dockerExposedPorts := Seq(9000,2551),
     dockerEntrypoint ++= """ $(eval "echo $SERVICE_DEBUG") -Dhttp.address="$(eval "echo $SERVICE_BIND_IP")" -Dhttp.port="$(eval "echo $EVENTINGESTIONSERVICE_BIND_PORT")" -Dakka.remote.netty.tcp.hostname="$(eval "echo $AKKA_REMOTING_HOST")" -Dakka.remote.netty.tcp.bind-hostname="$(eval "echo $AKKA_REMOTING_BIND_HOST")" -Dakka.remote.netty.tcp.port="$(eval "echo $AKKA_REMOTING_PORT")" -Dakka.remote.netty.tcp.bind-port="$(eval "echo $AKKA_REMOTING_BIND_PORT")" $(IFS=','; I=0; for NODE in $AKKA_SEED_NODES; do echo "-Dakka.cluster.seed-nodes.$I=akka.tcp://bikeride-analytics@$NODE"; I=$(expr $I + 1); done)""".split(" ").toSeq,
