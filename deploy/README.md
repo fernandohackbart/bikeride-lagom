@@ -79,6 +79,7 @@ Should take some time to be in the `running` state, after in running state
     * Tools Locations:
       * (Sbt) `SBT at docker`
       * Home: `/opt/sbt`
+* Create a credential called `bikerideATdockerhub` with the credentials to connect to the Docker registry
 * Create Pipelines (https://jenkins.io/doc/book/pipeline) using GIT based Jenkinsfile (FIX PATHS !!)
   * build-bikeride
     * https://github.com/fernandohackbart/bikeride-lagom.git
